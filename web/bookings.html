@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bookings · SolarGrid</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="css/app.css" rel="stylesheet">
+</head>
+<body>
+  <main class="container pb-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+      <div>
+        <h1 class="h3 sg-page-title mb-0">Energy Slot Bookings</h1>
+        <p class="text-body-secondary mb-0">Bookings can be made up to 7 days ahead; changes need 12 hours' notice.</p>
+      </div>
+      <button class="btn btn-primary" id="newBookingBtn" data-role="Backoffice"><i class="bi bi-calendar-plus me-1"></i>New booking</button>
+    </div>
+
+    <form class="card sg-card mb-3" id="filterForm">
+      <div class="card-body row g-2 align-items-end">
+        <div class="col-6 col-md-2">
+          <label class="form-label small mb-1" for="fStatus">Status</label>
+          <select class="form-select form-select-sm" id="fStatus">
+            <option value="">Any</option>
+            <option>Pending</option><option>Approved</option><option>Completed</option><option>Cancelled</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="form-label small mb-1" for="fNode">Node</label>
+          <select class="form-select form-select-sm" id="fNode"><option value="">Any node</option></select>
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label small mb-1" for="fNic">Prosumer NIC</label>
+          <input class="form-control form-control-sm" id="fNic">
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label small mb-1" for="fFrom">From</label>
+          <input class="form-control form-control-sm" id="fFrom" type="date">
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label small mb-1" for="fTo">To</label>
+          <input class="form-control form-control-sm" id="fTo" type="date">
+        </div>
+        <div class="col-6 col-md-1 d-grid">
+          <button class="btn btn-sm btn-outline-secondary" type="reset" title="Clear filters"><i class="bi bi-x-lg"></i></button>
+        </div>
+      </div>
+    </form>
+
+    <div class="card sg-card">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr><th>Slot</th><th>Node</th><th>Prosumer NIC</th><th>Status</th><th>Booked</th><th class="text-end">Actions</th></tr>
+          </thead>
+          <tbody id="bookingRows"></tbody>
+        </table>
+      </div>
+      <div class="card-footer bg-white small text-body-secondary" id="bookingCount"></div>
+    </div>
+  </main>
+
+  <!-- Create / reschedule -->
+  <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+      <form class="modal-content" id="bookingForm" novalidate>
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="bookingModalTitle">New booking</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="bId">
+          <div class="mb-3" id="bNicGroup">
+            <label class="form-label" for="bNic">Prosumer NIC</label>
+            <input class="form-control" id="bNic" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="bNode">Microgrid node</label>
+            <select class="form-select" id="bNode" required></select>
+          </div>
+          <div class="mb-1">
+            <label class="form-label" for="bSlot">Slot date &amp; time</label>
+            <input class="form-control" id="bSlot" type="datetime-local" required>
+            <div class="form-text">Within the next 7 days.</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="bookingSaveBtn">Save booking</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- QR display -->
+  <div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content text-center">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="qrModalTitle">Transaction QR</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="sg-qr mb-2" id="qrCanvas"></div>
+          <p class="small mb-1" id="qrInfo"></p>
+          <code class="sg-token small" id="qrToken"></code>
+          <p class="small text-body-secondary mt-2 mb-0">The Grid Operator scans this in the mobile app's Operator Mode.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/services/services.js"></script>
+  <script src="js/pages/bookings.js"></script>
+</body>
+</html>
