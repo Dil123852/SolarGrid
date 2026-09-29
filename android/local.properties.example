@@ -1,0 +1,11 @@
+# Copy to local.properties (git-ignored). Android Studio adds sdk.dir automatically.
+# sdk.dir=C\:\\Users\\<you>\\AppData\\Local\\Android\\Sdk
+
+# SolarGrid API base URL (must end with /). 10.0.2.2 is the host PC as seen from the emulator.
+#   dotnet run          -> http://10.0.2.2:5093/
+#   IIS on port 8080    -> http://10.0.2.2:8080/
+#   Real phone on Wi-Fi -> http://<PC LAN IP>:<port>/
+solargrid.apiBaseUrl=http://10.0.2.2:5093/
+
+# Google Maps SDK for Android key (Google Cloud Console -> APIs & Services -> Credentials).
+MAPS_API_KEY=your-google-maps-api-key
