@@ -1,0 +1,19 @@
+@SolarGrid_HostAddress = http://localhost:5093
+
+# 1) Log in as the seeded Backoffice user and paste the token below.
+POST {{SolarGrid_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{ "username": "admin", "password": "see appsettings.Local.json" }
+
+###
+@token = paste-token-here
+
+GET {{SolarGrid_HostAddress}}/api/dashboard
+Authorization: Bearer {{token}}
+
+###
+GET {{SolarGrid_HostAddress}}/api/nodes
+Authorization: Bearer {{token}}
+
+###
