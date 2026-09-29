@@ -67,3 +67,15 @@ desktop.ini
 
 # Logs
 *.log
+
+# SolarGrid: real secrets live here, never committed
+appsettings.Local.json
+publish/
+
+# Android
+.gradle/
+local.properties
+captures/
+*.iml
+*.apk
+*.aab
