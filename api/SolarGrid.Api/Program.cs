@@ -65,8 +65,18 @@ namespace SolarGrid.Api
             builder.Services.AddAuthorization();
 
             // Enums travel as strings ("Pending", "Backoffice") so clients never deal with magic numbers.
-            builder.Services.AddControllers()
-                .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+            // Field validation lives in the services, so MVC's implicit [Required] is switched off and
+            // malformed bodies (bad JSON, unparseable dates) get the same { message } shape as rule failures.
+            builder.Services.AddControllers(o => o.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true)
+                .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
+                .ConfigureApiBehaviorOptions(o => o.InvalidModelStateResponseFactory = context =>
+                {
+                    var first = context.ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault()?.ErrorMessage;
+                    return new BadRequestObjectResult(new
+                    {
+                        message = string.IsNullOrWhiteSpace(first) ? "The request is invalid." : $"Invalid request: {first}"
+                    });
+                });
 
             // Swagger UI at /swagger, with an Authorize button for pasting a JWT.
             builder.Services.AddEndpointsApiExplorer();
