@@ -11,7 +11,7 @@ Android application, diagrams and report) is 100% my own (Dilsara).
 | Folder | Contents |
 |---|---|
 | `api/` | ASP.NET Core Web API (.NET 10), clean architecture, MongoDB Atlas, hosted on IIS |
-| `web/` | Backoffice / Grid Operator web app: static HTML, Bootstrap 5, vanilla JS. It is a UI layer only and calls the API |
+| `web/` | Backoffice / Grid Operator web app: React 19 + TypeScript (Vite), React Router, Bootstrap 5. It is a UI layer only and calls the API |
 | `android/` | Native Android app (Kotlin, Jetpack Compose): Retrofit, SQLite, Google Maps, ZXing QR |
 | `docs/` | Architecture, use case, DFD and database design diagrams |
 | `scripts/` | `smoke-test.ps1`: end-to-end check of role locks and business rules against a running API |
@@ -25,7 +25,7 @@ SolarGrid/
 │   ├── SolarGrid.Infrastructure/  Persistence/ (Mongo) Security/ (JWT, hashing)
 │   ├── SolarGrid.Api/             Controllers/ Extensions/ Security/ Program.cs
 │   └── SolarGrid.Tests/           Domain/ Application/ Fakes/ ArchitectureTests.cs
-├── web/                           *.html · css/ · js/{config,api,auth,layout}.js · js/services/ · js/pages/
+├── web/src/                       api/ (client, endpoints, types) auth/ components/ hooks/ pages/ styles/
 ├── android/app/src/main/java/com/solargrid/app/
 │   ├── domain/                    model/ repository/ (interfaces)
 │   ├── data/                      remote/ (Retrofit) local/ (SQLite) repository/ (implementations)
@@ -41,7 +41,7 @@ SolarGrid/
 |---|---|
 | **FAT service**: all business logic in the central API | Every rule lives in `SolarGrid.Application/Services` and `SolarGrid.Domain/Rules`. `ArchitectureTests` fail the build if those layers ever reference MongoDB, ASP.NET or Infrastructure |
 | **C# Web API on IIS with a NoSQL database** | ASP.NET Core (.NET 10) published to IIS; MongoDB Atlas through `SolarGrid.Infrastructure/Persistence` |
-| **Web client is a UI layer only** | `web/js/api.js` is the only file that makes HTTP calls; pages render API data and show the API's own error messages |
+| **Web client is a UI layer only** | `web/src/api/client.ts` is the only module that makes HTTP calls; React pages render API data and show the API's own error messages |
 | **Pure native Android client with SQLite** | Kotlin + Jetpack Compose (no cross-platform framework); `data/local/SolarGridDbHelper` (SQLiteOpenHelper) caches the session and node list |
 | **Communication only via RESTful calls** | Both clients call the JSON endpoints under `/api/*` with a JWT bearer token; neither touches the database |
 
@@ -107,10 +107,20 @@ publish, and delete the file afterwards. Then check the deployment with
 `appsettings.Local.json` is copied into the output automatically when it exists.
 
 ## Running the web app
-Open `web/index.html` in a browser, or host the `web/` folder as a second IIS site.
-The API URL defaults to the IIS site at `http://localhost:8081`. To use another URL (e.g. `dotnet run` on 5093), run this once in the browser console:
+React 19 + TypeScript, built with Vite. Requires Node.js 20+.
+```
+cd web
+npm install
+npm run dev        # http://localhost:5173 with hot reload
+npm run build      # type-checks, then writes the production build to web/dist
+```
+**Hosting on IIS:** point a second IIS site (or virtual directory) at `web/dist`. The build includes a
+`web.config`, and routing uses `#/` URLs, so no rewrite rules are needed.
+
+The API URL defaults to the IIS site at `http://localhost:8081`. To change it, set `VITE_API_BASE_URL` in
+`web/.env.local` before building (see `.env.example`), or run this once in the browser console:
 ```js
-localStorage.setItem('sg.apiBaseUrl', 'http://localhost:<iis-port>')
+localStorage.setItem('sg.apiBaseUrl', 'http://localhost:5093')
 ```
 
 ## Running the Android app
