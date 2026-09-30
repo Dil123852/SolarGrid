@@ -17,9 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +30,9 @@ import com.solargrid.app.di.ServiceLocator
 import com.solargrid.app.domain.model.MicrogridNode
 import com.solargrid.app.ui.common.CircumIcons
 import com.solargrid.app.ui.common.CenteredLoading
+import com.solargrid.app.ui.common.Eyebrow
+import com.solargrid.app.ui.common.SgOutlinedButton
+import com.solargrid.app.ui.common.SgPageHeader
 import com.solargrid.app.ui.common.ErrorText
 import com.solargrid.app.ui.common.LoadingButton
 import com.solargrid.app.ui.common.SgCard
@@ -61,25 +62,31 @@ fun BookingFormScreen(
             return@Scaffold
         }
         Column(
-            Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+            Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            SgPageHeader(
+                eyebrow = if (vm.isEdit) "Reschedule" else "New booking",
+                title = if (vm.isEdit) "Change your slot" else "Reserve an energy slot",
+                subtitle = "Choose a microgrid node and a time within the next 7 days."
+            )
             SgCard {
-                Text("Microgrid node", style = MaterialTheme.typography.titleSmall)
                 SimpleDropdown(
-                    label = "Node",
+                    label = "Microgrid node",
                     options = vm.nodeOptions,
                     selected = vm.selectedNode ?: vm.nodeOptions.firstOrNull() ?: placeholderNode,
                     optionLabel = { if (it === placeholderNode) "No active nodes" else "${it.name} · ${it.batterySlots} slots" },
                     onSelected = { vm.selectedNode = it },
-                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
 
             SgCard {
-                Text("Slot date & time", style = MaterialTheme.typography.titleSmall)
-                Row(Modifier.fillMaxWidth().padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(
+                Eyebrow("Slot date & time", modifier = Modifier.padding(bottom = 6.dp))
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    SgOutlinedButton(
+                        text = vm.date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
+                        icon = CircumIcons.Calendar,
                         onClick = {
                             DatePickerDialog(
                                 context,
@@ -92,11 +99,10 @@ fun BookingFormScreen(
                             }.show()
                         },
                         modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(CircumIcons.Calendar, contentDescription = null)
-                        Text(" " + vm.date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)))
-                    }
-                    OutlinedButton(
+                    )
+                    SgOutlinedButton(
+                        text = vm.time.format(DateTimeFormatter.ofPattern("HH:mm")),
+                        icon = CircumIcons.Clock,
                         onClick = {
                             TimePickerDialog(
                                 context,
@@ -105,16 +111,13 @@ fun BookingFormScreen(
                             ).show()
                         },
                         modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(CircumIcons.Clock, contentDescription = null)
-                        Text(" " + vm.time.format(DateTimeFormatter.ofPattern("HH:mm")))
-                    }
+                    )
                 }
                 Text(
                     "Bookings can be made up to 7 days ahead. Changes and cancellations need 12 hours' notice.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 8.dp)
+                    modifier = Modifier.padding(top = 12.dp)
                 )
             }
 

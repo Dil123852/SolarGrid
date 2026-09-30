@@ -8,7 +8,9 @@
 package com.solargrid.app
 
 import android.os.Bundle
+import android.graphics.Color
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.solargrid.app.ui.navigation.SolarGridNavGraph
@@ -17,8 +19,12 @@ import com.solargrid.app.ui.theme.SolarGridTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Android 15 draws behind system bars; Scaffold screens pad themselves, others use systemBarsPadding().
-        enableEdgeToEdge()
+        // Draw behind the system bars. Every screen starts with the dark ink bar, so the status bar
+        // uses light icons; the navigation bar follows the light paper background.
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+        )
         setContent {
             SolarGridTheme {
                 SolarGridNavGraph()

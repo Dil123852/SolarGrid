@@ -10,26 +10,23 @@ package com.solargrid.app.ui.auth
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solargrid.app.di.ServiceLocator
 import com.solargrid.app.ui.common.ErrorText
 import com.solargrid.app.ui.common.LoadingButton
+import com.solargrid.app.ui.common.SgPageHeader
+import com.solargrid.app.ui.common.SgTextField
 import com.solargrid.app.ui.common.SgTopBar
 import com.solargrid.app.ui.common.factoryOf
 
@@ -48,37 +45,30 @@ fun RegisterScreen(
                 .fillMaxSize()
                 .imePadding()
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
-            Field("NIC number", vm.nic, { vm.nic = it })
-            Field("Full name", vm.name, { vm.name = it })
-            Field("Email", vm.email, { vm.email = it }, KeyboardType.Email)
-            Field("Phone", vm.phone, { vm.phone = it }, KeyboardType.Phone)
-            Field("Address", vm.address, { vm.address = it })
-            Field("Password", vm.password, { vm.password = it }, KeyboardType.Password, secret = true)
-            Field("Confirm password", vm.confirmPassword, { vm.confirmPassword = it }, KeyboardType.Password, secret = true)
+            SgPageHeader(
+                eyebrow = "New prosumer",
+                title = "Create your account",
+                subtitle = "Your NIC is your account ID - you will sign in with it."
+            )
+            SgTextField("NIC number", vm.nic, { vm.nic = it }, placeholder = "200012345678 or 991234567V")
+            SgTextField("Full name", vm.name, { vm.name = it })
+            SgTextField("Email", vm.email, { vm.email = it }, keyboardType = KeyboardType.Email)
+            SgTextField("Phone", vm.phone, { vm.phone = it }, keyboardType = KeyboardType.Phone)
+            SgTextField("Address", vm.address, { vm.address = it })
+            SgTextField("Password", vm.password, { vm.password = it }, keyboardType = KeyboardType.Password, secret = true)
+            SgTextField(
+                "Confirm password",
+                vm.confirmPassword,
+                { vm.confirmPassword = it },
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done,
+                secret = true
+            )
             ErrorText(vm.error)
-            LoadingButton(text = "Register", loading = vm.loading, onClick = vm::submit)
+            LoadingButton(text = "Create account", loading = vm.loading, onClick = vm::submit)
         }
     }
-}
-
-@Composable
-private fun Field(
-    label: String,
-    value: String,
-    onChange: (String) -> Unit,
-    keyboardType: KeyboardType = KeyboardType.Text,
-    secret: Boolean = false
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onChange,
-        label = { Text(label) },
-        singleLine = true,
-        visualTransformation = if (secret) PasswordVisualTransformation() else VisualTransformation.None,
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        modifier = Modifier.fillMaxWidth()
-    )
 }

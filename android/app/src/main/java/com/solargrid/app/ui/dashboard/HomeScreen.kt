@@ -1,26 +1,29 @@
 /*
  * File: HomeScreen.kt
- * Purpose: Prosumer dashboard - live reservation counts, the next upcoming bookings,
- *          and shortcuts to booking, history, the node map and profile.
+ * Purpose: Prosumer dashboard, styled like the web dashboard - live reservation counts in
+ *          bordered stat tiles, square shortcut tiles, and the next upcoming bookings.
  * Project: Smart Solar Microgrid Trading System - Android App
  * Module: SE4040 Enterprise Application Development - Assignment 1
  */
 
 package com.solargrid.app.ui.dashboard
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -29,23 +32,26 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solargrid.app.di.ServiceLocator
 import com.solargrid.app.ui.booking.ReservationRow
 import com.solargrid.app.ui.common.CircumIcons
 import com.solargrid.app.ui.common.EmptyState
 import com.solargrid.app.ui.common.ErrorText
-import com.solargrid.app.ui.common.SgCard
+import com.solargrid.app.ui.common.Eyebrow
+import com.solargrid.app.ui.common.SgPageHeader
 import com.solargrid.app.ui.common.SgTopBar
 import com.solargrid.app.ui.common.factoryOf
-import com.solargrid.app.ui.theme.StatusApproved
-import com.solargrid.app.ui.theme.StatusPending
+import com.solargrid.app.ui.theme.Border
+import com.solargrid.app.ui.theme.BorderSoft
+import com.solargrid.app.ui.theme.Ink
+import com.solargrid.app.ui.theme.SpaceGrotesk
+import com.solargrid.app.ui.theme.White
 
 @Composable
 fun HomeScreen(
@@ -69,18 +75,19 @@ fun HomeScreen(
         })
     }) { padding ->
         Column(
-            Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+            Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            if (vm.loading) LinearProgressIndicator(Modifier.fillMaxWidth())
-            Text("Hello, ${vm.displayName}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+            if (vm.loading) LinearProgressIndicator(Modifier.fillMaxWidth().height(2.dp), color = Ink, trackColor = BorderSoft)
+            SgPageHeader(eyebrow = "Overview", title = "Hello, ${vm.displayName}", subtitle = "Your live reservation overview.")
             ErrorText(vm.error)
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                StatCard("Pending", vm.counts?.pending, CircumIcons.Timer, StatusPending)
-                StatCard("Approved upcoming", vm.counts?.approvedFuture, CircumIcons.Calendar, StatusApproved)
+                StatTile("Pending approval", vm.counts?.pending, CircumIcons.Timer)
+                StatTile("Approved upcoming", vm.counts?.approvedFuture, CircumIcons.Calendar)
             }
 
+            Eyebrow("Quick actions", modifier = Modifier.padding(top = 8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 ActionTile("New booking", CircumIcons.Plus, onNewBooking)
                 ActionTile("My bookings", CircumIcons.List, onBookings)
@@ -90,41 +97,54 @@ fun HomeScreen(
                 ActionTile("My profile", CircumIcons.User, onProfile)
             }
 
-            SgCard {
-                Text("Upcoming bookings", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                if (vm.upcoming.isEmpty() && !vm.loading) {
-                    EmptyState("No upcoming bookings. Tap New booking to reserve an energy slot.")
+            // Upcoming bookings, as a bordered card with a header strip (like the web dashboard table).
+            Column(Modifier.fillMaxWidth().background(White).border(1.dp, Border)) {
+                Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp)) {
+                    Eyebrow("Upcoming bookings", modifier = Modifier.weight(1f))
+                    Eyebrow("View all", color = Ink, modifier = Modifier.clickable(onClick = onBookings))
                 }
-                vm.upcoming.forEach { r -> ReservationRow(r, onClick = { onBookingClick(r.id) }) }
+                HorizontalDivider(color = BorderSoft)
+                Column(Modifier.padding(horizontal = 16.dp)) {
+                    if (vm.upcoming.isEmpty() && !vm.loading) {
+                        EmptyState("No upcoming bookings. Tap New booking to reserve an energy slot.")
+                    }
+                    vm.upcoming.forEach { r -> ReservationRow(r, onClick = { onBookingClick(r.id) }) }
+                }
             }
         }
     }
 }
 
 @Composable
-private fun RowScope.StatCard(label: String, value: Long?, icon: ImageVector, color: Color) {
-    Card(
-        modifier = Modifier.weight(1f),
-        colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.12f))
+private fun RowScope.StatTile(label: String, value: Long?, icon: ImageVector) {
+    Column(
+        Modifier.weight(1f).background(White).border(1.dp, Border).padding(16.dp)
     ) {
-        Column(Modifier.padding(16.dp)) {
-            Icon(icon, contentDescription = null, tint = color)
-            Text(value?.toString() ?: "–", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold, color = color)
-            Text(label, style = MaterialTheme.typography.bodySmall)
-        }
+        Icon(icon, contentDescription = null, tint = Ink, modifier = Modifier.size(30.dp))
+        Spacer(Modifier.height(12.dp))
+        Text(
+            value?.toString() ?: "–",
+            fontFamily = SpaceGrotesk,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 38.sp,
+            lineHeight = 40.sp
+        )
+        Text(label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
 @Composable
 private fun RowScope.ActionTile(label: String, icon: ImageVector, onClick: () -> Unit) {
-    Card(
-        modifier = Modifier.weight(1f).clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    Column(
+        Modifier
+            .weight(1f)
+            .background(White)
+            .border(1.dp, Border)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 18.dp)
     ) {
-        Column(Modifier.fillMaxWidth().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(32.dp))
-            Text(label, fontWeight = FontWeight.Medium)
-        }
+        Icon(icon, contentDescription = null, tint = Ink, modifier = Modifier.size(28.dp))
+        Spacer(Modifier.height(14.dp))
+        Text(label, style = MaterialTheme.typography.titleSmall)
     }
 }

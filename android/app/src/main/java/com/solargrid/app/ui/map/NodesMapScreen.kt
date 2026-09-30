@@ -11,6 +11,7 @@ package com.solargrid.app.ui.map
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -24,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -38,6 +38,7 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.solargrid.app.di.ServiceLocator
 import com.solargrid.app.ui.common.ErrorText
+import com.solargrid.app.ui.common.Eyebrow
 import com.solargrid.app.ui.common.LabelValue
 import com.solargrid.app.ui.common.SgCard
 import com.solargrid.app.ui.common.SgTopBar
@@ -97,11 +98,12 @@ fun NodesMapScreen(
                 }
             }
 
-            Box(Modifier.align(Alignment.BottomCenter).padding(16.dp).fillMaxWidth()) {
+            Box(Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(16.dp).fillMaxWidth()) {
                 val node = vm.selected
                 when {
                     node != null -> SgCard {
-                        Text(node.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                        Eyebrow("Microgrid node")
+                        Text(node.name, style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(top = 4.dp, bottom = 6.dp))
                         LabelValue("Capacity", "${node.capacityKWh} kWh")
                         LabelValue("Battery slots", node.batterySlots.toString())
                         LabelValue("Status", if (node.isActive) "Accepting bookings" else "Inactive")

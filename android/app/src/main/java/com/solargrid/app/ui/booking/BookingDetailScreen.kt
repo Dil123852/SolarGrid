@@ -11,19 +11,17 @@ package com.solargrid.app.ui.booking
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -33,11 +31,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solargrid.app.di.ServiceLocator
 import com.solargrid.app.ui.common.CenteredLoading
+import com.solargrid.app.ui.common.CircumIcons
+import com.solargrid.app.ui.common.Eyebrow
+import com.solargrid.app.ui.common.SgConfirmDialog
+import com.solargrid.app.ui.common.SgOutlinedButton
+import com.solargrid.app.ui.common.SgPageHeader
 import com.solargrid.app.ui.common.ErrorText
 import com.solargrid.app.ui.common.LabelValue
 import com.solargrid.app.ui.common.LoadingButton
@@ -46,6 +48,9 @@ import com.solargrid.app.ui.common.SgTopBar
 import com.solargrid.app.ui.common.StatusChip
 import com.solargrid.app.ui.common.factoryOf
 import com.solargrid.app.ui.common.formatLocal
+import com.solargrid.app.ui.theme.BorderSoft
+import com.solargrid.app.ui.theme.ErrorRed
+import com.solargrid.app.ui.theme.Muted
 
 @Composable
 fun BookingDetailScreen(
@@ -64,32 +69,39 @@ fun BookingDetailScreen(
     Scaffold(topBar = { SgTopBar("Booking details", onBack = onBack) }) { padding ->
         val r = vm.reservation
         if (r == null) {
-            Column(Modifier.padding(padding).padding(16.dp)) {
+            Column(Modifier.padding(padding).padding(20.dp)) {
                 if (vm.loading) CenteredLoading() else ErrorText(vm.error ?: "Booking not found.")
             }
             return@Scaffold
         }
 
         Column(
-            Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+            Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            SgPageHeader(eyebrow = "Booking", title = r.nodeName)
             SgCard {
-                Text(r.nodeName, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Eyebrow("Status", modifier = Modifier.weight(1f))
+                    StatusChip(r.status)
+                }
+                HorizontalDivider(Modifier.padding(vertical = 10.dp), color = BorderSoft)
                 LabelValue("Slot", r.slotTime.formatLocal())
                 LabelValue("Booked on", r.createdAt.formatLocal())
-                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End) { StatusChip(r.status) }
+                LabelValue("Reference", r.id.takeLast(8).uppercase())
             }
 
             val qr = vm.qrBitmap
             if (qr != null) {
                 SgCard {
-                    Text("Transaction QR", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Eyebrow("Transaction QR")
                     Text(
                         "Show this to the Grid Operator at the node to finalise the energy transfer.",
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Muted,
+                        modifier = Modifier.padding(top = 6.dp)
                     )
-                    Column(Modifier.fillMaxWidth().padding(top = 12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(Modifier.fillMaxWidth().padding(top = 16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         Image(qr.asImageBitmap(), contentDescription = "Booking QR code", modifier = Modifier.size(240.dp))
                     }
                 }
@@ -98,33 +110,34 @@ fun BookingDetailScreen(
             ErrorText(vm.error)
 
             if (r.isLive && r.isUpcoming) {
-                LoadingButton(text = "Reschedule", loading = false, onClick = onEdit)
-                OutlinedButton(
+                LoadingButton(text = "Reschedule", loading = false, onClick = onEdit, icon = CircumIcons.Repeat)
+                SgOutlinedButton(
+                    text = if (vm.cancelling) "Cancelling…" else "Cancel booking",
                     onClick = { confirmCancel = true },
                     enabled = !vm.cancelling,
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
-                    modifier = Modifier.fillMaxWidth()
-                ) { Text(if (vm.cancelling) "Cancelling…" else "Cancel booking") }
+                    contentColor = ErrorRed,
+                    icon = CircumIcons.Remove
+                )
                 Text(
                     "Changes and cancellations need at least 12 hours' notice.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = Muted
                 )
             }
         }
 
         if (confirmCancel) {
-            AlertDialog(
-                onDismissRequest = { confirmCancel = false },
-                title = { Text("Cancel booking?") },
-                text = { Text("Cancel your slot at ${r.nodeName} on ${r.slotTime.formatLocal()}?") },
-                confirmButton = {
-                    TextButton(onClick = {
-                        confirmCancel = false
-                        vm.cancel()
-                    }) { Text("Cancel booking") }
+            SgConfirmDialog(
+                title = "Cancel booking?",
+                text = "Cancel your slot at ${r.nodeName} on ${r.slotTime.formatLocal()}?",
+                confirmLabel = "Cancel booking",
+                dismissLabel = "Keep it",
+                destructive = true,
+                onConfirm = {
+                    confirmCancel = false
+                    vm.cancel()
                 },
-                dismissButton = { TextButton(onClick = { confirmCancel = false }) { Text("Keep it") } }
+                onDismiss = { confirmCancel = false }
             )
         }
     }

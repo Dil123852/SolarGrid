@@ -7,6 +7,8 @@
 
 package com.solargrid.app.ui.booking
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +20,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,8 +33,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.solargrid.app.domain.model.Reservation
 import com.solargrid.app.ui.common.CircumIcons
+import com.solargrid.app.ui.common.Eyebrow
 import com.solargrid.app.ui.common.StatusChip
 import com.solargrid.app.ui.common.formatLocal
+import com.solargrid.app.ui.theme.Border
+import com.solargrid.app.ui.theme.BorderSoft
+import com.solargrid.app.ui.theme.Ink
+import com.solargrid.app.ui.theme.Muted
+import com.solargrid.app.ui.theme.White
 
 @Composable
 fun ReservationRow(reservation: Reservation, onClick: () -> Unit) {
@@ -42,14 +49,14 @@ fun ReservationRow(reservation: Reservation, onClick: () -> Unit) {
             Modifier.fillMaxWidth().clickable(onClick = onClick).padding(vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(CircumIcons.Node, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            Icon(CircumIcons.Node, contentDescription = null, tint = Ink)
             Column(Modifier.weight(1f).padding(horizontal = 12.dp)) {
                 Text(reservation.nodeName, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(reservation.slotTime.formatLocal(), style = MaterialTheme.typography.bodySmall)
             }
             StatusChip(reservation.status)
         }
-        HorizontalDivider()
+        HorizontalDivider(color = BorderSoft)
     }
 }
 
@@ -65,14 +72,29 @@ fun <T> SimpleDropdown(
 ) {
     var expanded by remember { mutableStateOf(false) }
     Box(modifier) {
-        OutlinedButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth()) {
-            Column(Modifier.weight(1f)) {
-                Text(label, style = MaterialTheme.typography.labelSmall)
-                Text(optionLabel(selected), maxLines = 1, overflow = TextOverflow.Ellipsis)
+        // Square select box: uppercase label above, current value and a chevron inside.
+        Column(Modifier.fillMaxWidth()) {
+            Eyebrow(label, modifier = Modifier.padding(bottom = 6.dp))
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .background(White)
+                    .border(1.dp, Border)
+                    .clickable { expanded = true }
+                    .padding(horizontal = 12.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    optionLabel(selected),
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Icon(CircumIcons.ChevronDown, contentDescription = null, tint = Muted)
             }
-            Icon(CircumIcons.ChevronDown, contentDescription = null)
         }
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }, containerColor = White) {
             options.forEach { option ->
                 DropdownMenuItem(
                     text = { Text(optionLabel(option)) },
