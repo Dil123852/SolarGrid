@@ -5,6 +5,7 @@
  * Module: SE4040 Enterprise Application Development - Assignment 1
  */
 
+import type { IconType } from "react-icons";
 import { Link } from "react-router-dom";
 import { dashboardApi, reservationsApi } from "../api/endpoints";
 import { useAuth } from "../auth/AuthContext";
@@ -13,16 +14,17 @@ import { BusyButton } from "../components/BusyButton";
 import { PageHeader } from "../components/PageHeader";
 import { useApiData } from "../hooks/useApiData";
 import { formatDateTime, roleLabel } from "../utils/format";
+import { CiBatteryFull, CiCalendarDate, CiRepeat, CiTimer } from "react-icons/ci";
 
 const NEXT_PENDING_LIMIT = 5;
 
-function StatCard({ value, label, icon, color }: { value: number | undefined; label: string; icon: string; color: string }) {
+function StatCard({ value, label, icon: Icon, color }: { value: number | undefined; label: string; icon: IconType; color: string }) {
   return (
     <div className="col-md-4">
       <div className="card sg-card h-100">
         <div className="card-body d-flex align-items-center gap-3">
           <div className={`sg-stat-icon text-bg-${color}`}>
-            <i className={`bi ${icon}`} />
+            <Icon />
           </div>
           <div>
             <div className="sg-stat">{value ?? "–"}</div>
@@ -53,7 +55,7 @@ export function DashboardPage() {
         subtitle={session ? `Signed in as ${session.displayName} (${roleLabel(session.role)})` : "Live reservation overview"}
         actions={
           <BusyButton className="btn btn-outline-secondary btn-sm" onClick={reload}>
-            <i className="bi bi-arrow-clockwise me-1" />
+            <CiRepeat className="me-1" />
             Refresh
           </BusyButton>
         }
@@ -62,9 +64,9 @@ export function DashboardPage() {
       {error && <div className="alert alert-danger">{error}</div>}
 
       <div className="row g-3 mb-4">
-        <StatCard value={data?.counts.pendingCount} label="Pending approval" icon="bi-hourglass-split" color="warning" />
-        <StatCard value={data?.counts.approvedFutureCount} label="Approved upcoming" icon="bi-calendar-check" color="success" />
-        <StatCard value={data?.counts.completedCount} label="Transfers completed" icon="bi-lightning-charge-fill" color="primary" />
+        <StatCard value={data?.counts.pendingCount} label="Pending approval" icon={CiTimer} color="warning" />
+        <StatCard value={data?.counts.approvedFutureCount} label="Approved upcoming" icon={CiCalendarDate} color="success" />
+        <StatCard value={data?.counts.completedCount} label="Transfers completed" icon={CiBatteryFull} color="primary" />
       </div>
 
       <div className="card sg-card">

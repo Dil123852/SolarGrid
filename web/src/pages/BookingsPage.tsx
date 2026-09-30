@@ -20,6 +20,7 @@ import { PageHeader } from "../components/PageHeader";
 import { useToast } from "../components/Toasts";
 import { useApiData } from "../hooks/useApiData";
 import { dayEndIso, dayStartIso, formatDateTime, fromLocalInput, plural, toLocalInput } from "../utils/format";
+import { CiBarcode, CiCircleCheck, CiCirclePlus, CiCircleRemove, CiEdit } from "react-icons/ci";
 
 const STATUSES: ReservationStatus[] = ["Pending", "Approved", "Completed", "Cancelled"];
 const BOOKING_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
@@ -152,7 +153,7 @@ export function BookingsPage() {
         actions={
           canEdit && (
             <button className="btn btn-primary" onClick={() => openForm()}>
-              <i className="bi bi-calendar-plus me-1" />
+              <CiCirclePlus className="me-1" />
               New booking
             </button>
           )
@@ -233,7 +234,7 @@ export function BookingsPage() {
           </div>
           <div className="col-6 col-md-1 d-grid">
             <button className="btn btn-sm btn-outline-secondary" title="Clear filters" onClick={clearFilters}>
-              <i className="bi bi-x-lg" />
+              <CiCircleRemove />
             </button>
           </div>
         </div>
@@ -275,21 +276,21 @@ export function BookingsPage() {
                         <div className="d-inline-flex gap-1">
                           {r.qrToken && (
                             <button className="btn btn-sm btn-outline-secondary" onClick={() => setQrBooking(r)}>
-                              <i className="bi bi-qr-code" /> QR
+                              <CiBarcode /> QR
                             </button>
                           )}
                           {canEdit && r.status === "Pending" && (
                             <BusyButton className="btn btn-sm btn-outline-success" onClick={() => approve(r)}>
-                              <i className="bi bi-check2-circle" /> Approve
+                              <CiCircleCheck /> Approve
                             </BusyButton>
                           )}
                           {canEdit && live && (
                             <>
                               <button className="btn btn-sm btn-outline-primary" onClick={() => openForm(r)}>
-                                <i className="bi bi-pencil" /> Reschedule
+                                <CiEdit /> Reschedule
                               </button>
                               <BusyButton className="btn btn-sm btn-outline-danger" onClick={() => cancel(r)}>
-                                <i className="bi bi-x-circle" /> Cancel
+                                <CiCircleRemove /> Cancel
                               </BusyButton>
                             </>
                           )}

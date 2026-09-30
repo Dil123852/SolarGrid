@@ -10,6 +10,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { roleLabel } from "../utils/format";
+import { CiCircleChevDown, CiClock2, CiLogout } from "react-icons/ci";
 
 function initials(name: string): string {
   const parts = name.split(/[\s._-]+/).filter(Boolean);
@@ -55,7 +56,7 @@ export function UserMenu() {
           <span className="sg-user-name">{session.displayName}</span>
           <span className="sg-user-role">{roleLabel(session.role)}</span>
         </span>
-        <i className={`bi bi-chevron-down sg-chevron${open ? " open" : ""}`} aria-hidden="true" />
+        <CiCircleChevDown className={`sg-chevron${open ? " open" : ""}`} />
       </button>
 
       {open && (
@@ -70,11 +71,11 @@ export function UserMenu() {
             </div>
           </div>
           <div className="sg-user-panel-meta">
-            <i className="bi bi-clock me-2" aria-hidden="true" />
+            <CiClock2 className="me-2" />
             Session active until {expires}
           </div>
           <button type="button" className="sg-user-panel-action" role="menuitem" onClick={() => logout()}>
-            <i className="bi bi-box-arrow-right me-2" aria-hidden="true" />
+            <CiLogout className="me-2" />
             Sign out
           </button>
         </div>

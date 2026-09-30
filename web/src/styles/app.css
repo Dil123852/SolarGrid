@@ -59,6 +59,60 @@ a {
   text-underline-offset: 3px;
 }
 
+/* ---- Circum Icons: one size and baseline everywhere ---- */
+
+.sg-ci {
+  width: 1.25em;
+  height: 1.25em;
+  vertical-align: -0.28em;
+  flex-shrink: 0;
+}
+
+.btn .sg-ci {
+  margin-top: -2px;
+}
+
+.sg-stat-icon .sg-ci {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+}
+
+/* Icon-only close buttons (dialogs, toasts). */
+.sg-icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin: -6px -8px -6px auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--sg-muted);
+  font-size: 18px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.sg-icon-btn:hover {
+  color: var(--sg-ink);
+  background: var(--sg-paper);
+}
+
+.sg-icon-btn:focus-visible {
+  outline: 2px solid var(--sg-ink);
+  outline-offset: 1px;
+}
+
+.sg-icon-btn-light {
+  margin: 0 8px 0 auto;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sg-icon-btn-light:hover {
+  color: var(--sg-white);
+  background: rgba(255, 255, 255, 0.12);
+}
+
 /* ---- Micro-label used above titles and in table headers ---- */
 
 .sg-eyebrow,
@@ -142,8 +196,8 @@ a {
   transition: color 0.2s ease, background-color 0.2s ease;
 }
 
-.sg-nav-link .bi {
-  font-size: 15px;
+.sg-nav-link .sg-ci {
+  font-size: 18px;
   opacity: 0.85;
 }
 
@@ -157,7 +211,7 @@ a {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.sg-navbar .sg-nav-link.active .bi {
+.sg-navbar .sg-nav-link.active .sg-ci {
   opacity: 1;
 }
 
@@ -287,7 +341,7 @@ a {
 }
 
 .sg-chevron {
-  font-size: 11px;
+  font-size: 16px;
   color: var(--sg-nav-text);
   transition: transform 0.2s ease;
 }

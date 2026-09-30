@@ -15,6 +15,7 @@ import { PageHeader } from "../components/PageHeader";
 import { useToast } from "../components/Toasts";
 import { useApiData } from "../hooks/useApiData";
 import { formatDateTime } from "../utils/format";
+import { CiCircleCheck, CiTimer } from "react-icons/ci";
 
 type Tab = "pending" | "all";
 
@@ -50,7 +51,7 @@ export function ProsumersPage() {
       <ul className="nav nav-pills mb-3">
         <li className="nav-item">
           <button className={`nav-link${tab === "pending" ? " active" : ""}`} onClick={() => setTab("pending")}>
-            <i className="bi bi-hourglass-split me-1" />
+            <CiTimer className="me-1" />
             Pending activation <span className="badge text-bg-warning ms-1">{data?.pendingCount ?? 0}</span>
           </button>
         </li>
@@ -101,7 +102,7 @@ export function ProsumersPage() {
                         className={`btn btn-sm ${p.isActive ? "btn-outline-danger" : "btn-success"}`}
                         onClick={() => toggle(p)}
                       >
-                        {!p.isActive && <i className="bi bi-person-check me-1" />}
+                        {!p.isActive && <CiCircleCheck className="me-1" />}
                         {p.isActive ? "Deactivate" : "Reactivate"}
                       </BusyButton>
                     </td>

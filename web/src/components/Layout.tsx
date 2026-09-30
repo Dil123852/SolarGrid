@@ -8,26 +8,28 @@
  */
 
 import { useEffect, useState } from "react";
+import type { IconType } from "react-icons";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { dashboardApi } from "../api/endpoints";
 import type { Role } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 import { UserMenu } from "./UserMenu";
+import { CiBatteryCharging, CiCalendarDate, CiCircleRemove, CiGrid41, CiHome, CiMenuBurger, CiUser } from "react-icons/ci";
 
 interface NavItem {
   to: string;
   label: string;
-  icon: string;
+  icon: IconType;
   roles: Role[];
   showPendingBadge?: boolean;
 }
 
 const NAV: NavItem[] = [
-  { to: "/dashboard", label: "Dashboard", icon: "bi-grid-1x2", roles: ["Backoffice", "GridOperator"] },
-  { to: "/bookings", label: "Bookings", icon: "bi-calendar-check", roles: ["Backoffice", "GridOperator"], showPendingBadge: true },
-  { to: "/nodes", label: "Nodes", icon: "bi-lightning-charge", roles: ["Backoffice", "GridOperator"] },
-  { to: "/prosumers", label: "Prosumers", icon: "bi-house", roles: ["Backoffice"] },
-  { to: "/users", label: "Staff", icon: "bi-people", roles: ["Backoffice"] },
+  { to: "/dashboard", label: "Dashboard", icon: CiGrid41, roles: ["Backoffice", "GridOperator"] },
+  { to: "/bookings", label: "Bookings", icon: CiCalendarDate, roles: ["Backoffice", "GridOperator"], showPendingBadge: true },
+  { to: "/nodes", label: "Nodes", icon: CiBatteryCharging, roles: ["Backoffice", "GridOperator"] },
+  { to: "/prosumers", label: "Prosumers", icon: CiHome, roles: ["Backoffice"] },
+  { to: "/users", label: "Staff", icon: CiUser, roles: ["Backoffice"] },
 ];
 
 export function Layout() {
@@ -77,7 +79,7 @@ export function Layout() {
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             onClick={() => setMenuOpen((open) => !open)}
           >
-            <i className={`bi ${menuOpen ? "bi-x-lg" : "bi-list"}`} aria-hidden="true" />
+            {menuOpen ? <CiCircleRemove /> : <CiMenuBurger />}
           </button>
 
           <div className={`collapse navbar-collapse${menuOpen ? " show" : ""}`} id="sgNav">
@@ -85,7 +87,7 @@ export function Layout() {
               {links.map((n) => (
                 <li className="nav-item" key={n.to}>
                   <NavLink className="nav-link sg-nav-link" to={n.to} onClick={() => setMenuOpen(false)}>
-                    <i className={`bi ${n.icon}`} aria-hidden="true" />
+                    <n.icon />
                     <span>{n.label}</span>
                     {n.showPendingBadge && pendingCount !== null && pendingCount > 0 && (
                       <span className="sg-nav-count" aria-label={`${pendingCount} pending`}>

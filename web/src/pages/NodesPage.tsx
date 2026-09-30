@@ -16,6 +16,7 @@ import { Modal } from "../components/Modal";
 import { PageHeader } from "../components/PageHeader";
 import { useToast } from "../components/Toasts";
 import { useApiData } from "../hooks/useApiData";
+import { CiCirclePlus, CiEdit, CiMapPin } from "react-icons/ci";
 
 type ActiveFilter = "" | "true" | "false";
 
@@ -128,7 +129,7 @@ export function NodesPage() {
             </select>
             {canEdit && (
               <button className="btn btn-primary" onClick={() => openForm()}>
-                <i className="bi bi-plus-lg me-1" />
+                <CiCirclePlus className="me-1" />
                 New node
               </button>
             )}
@@ -162,7 +163,7 @@ export function NodesPage() {
                     <td className="fw-medium">{n.name}</td>
                     <td>
                       <a target="_blank" rel="noopener noreferrer" href={`https://www.google.com/maps?q=${n.latitude},${n.longitude}`}>
-                        {n.latitude.toFixed(5)}, {n.longitude.toFixed(5)} <i className="bi bi-box-arrow-up-right small" />
+                        {n.latitude.toFixed(5)}, {n.longitude.toFixed(5)} <CiMapPin />
                       </a>
                     </td>
                     <td className="text-end">{n.capacityKWh}</td>
@@ -173,7 +174,7 @@ export function NodesPage() {
                     {canEdit && (
                       <td className="text-end text-nowrap">
                         <button className="btn btn-sm btn-outline-primary me-1" onClick={() => openForm(n)}>
-                          <i className="bi bi-pencil" /> Edit
+                          <CiEdit /> Edit
                         </button>
                         <BusyButton
                           className={`btn btn-sm ${n.isActive ? "btn-outline-danger" : "btn-outline-success"}`}

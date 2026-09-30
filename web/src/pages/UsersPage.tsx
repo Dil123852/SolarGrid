@@ -16,6 +16,7 @@ import { PageHeader } from "../components/PageHeader";
 import { useToast } from "../components/Toasts";
 import { useApiData } from "../hooks/useApiData";
 import { formatDateTime, roleLabel } from "../utils/format";
+import { CiCirclePlus } from "react-icons/ci";
 
 const EMPTY_FORM: RegisterStaffRequest = { username: "", email: "", password: "", role: "GridOperator" };
 
@@ -73,7 +74,7 @@ export function UsersPage() {
         subtitle="Backoffice officers and Grid Operators who can use this portal and operator mode."
         actions={
           <button className="btn btn-primary" onClick={() => setShowForm(true)}>
-            <i className="bi bi-person-plus me-1" />
+            <CiCirclePlus className="me-1" />
             New user
           </button>
         }

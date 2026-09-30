@@ -7,6 +7,7 @@
  */
 
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import { CiCircleRemove } from "react-icons/ci";
 
 type ToastKind = "success" | "danger" | "warning" | "info";
 
@@ -57,10 +58,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               <div className="toast-body">{t.message}</div>
               <button
                 type="button"
-                className="btn-close btn-close-white me-2 m-auto"
+                className="sg-icon-btn sg-icon-btn-light me-2 m-auto"
                 aria-label="Close"
                 onClick={() => dismiss(t.id)}
-              />
+              >
+                <CiCircleRemove />
+              </button>
             </div>
           </div>
         ))}

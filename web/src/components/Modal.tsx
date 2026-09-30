@@ -9,6 +9,7 @@
 
 import { useEffect, useId, type FormEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { CiCircleRemove } from "react-icons/ci";
 
 interface ModalProps {
   show: boolean;
@@ -64,7 +65,9 @@ export function Modal({ show, title, onClose, onSubmit, footer, size, centered, 
               <h2 className="modal-title h5" id={titleId}>
                 {title}
               </h2>
-              <button type="button" className="btn-close" aria-label="Close" onClick={onClose} />
+              <button type="button" className="sg-icon-btn" aria-label="Close" onClick={onClose}>
+                <CiCircleRemove />
+              </button>
             </div>
             <div className="modal-body">{children}</div>
             {footer && <div className="modal-footer">{footer}</div>}
