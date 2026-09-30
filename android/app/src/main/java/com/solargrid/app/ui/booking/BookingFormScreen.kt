@@ -17,9 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -33,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solargrid.app.di.ServiceLocator
 import com.solargrid.app.domain.model.MicrogridNode
+import com.solargrid.app.ui.common.CircumIcons
 import com.solargrid.app.ui.common.CenteredLoading
 import com.solargrid.app.ui.common.ErrorText
 import com.solargrid.app.ui.common.LoadingButton
@@ -95,7 +93,7 @@ fun BookingFormScreen(
                         },
                         modifier = Modifier.weight(1f)
                     ) {
-                        Icon(Icons.Filled.CalendarMonth, contentDescription = null)
+                        Icon(CircumIcons.Calendar, contentDescription = null)
                         Text(" " + vm.date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)))
                     }
                     OutlinedButton(
@@ -108,7 +106,7 @@ fun BookingFormScreen(
                         },
                         modifier = Modifier.weight(1f)
                     ) {
-                        Icon(Icons.Filled.Schedule, contentDescription = null)
+                        Icon(CircumIcons.Clock, contentDescription = null)
                         Text(" " + vm.time.format(DateTimeFormatter.ofPattern("HH:mm")))
                     }
                 }

@@ -19,12 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Error
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -45,6 +39,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import com.solargrid.app.di.ServiceLocator
+import com.solargrid.app.ui.common.CircumIcons
 import com.solargrid.app.ui.common.LabelValue
 import com.solargrid.app.ui.common.SgCard
 import com.solargrid.app.ui.common.SgTopBar
@@ -67,8 +62,8 @@ fun OperatorScreen(
 
     Scaffold(topBar = {
         SgTopBar("Operator Mode", actions = {
-            IconButton(onClick = onMap) { Icon(Icons.Filled.Map, contentDescription = "Node map") }
-            IconButton(onClick = onLogout) { Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = "Sign out") }
+            IconButton(onClick = onMap) { Icon(CircumIcons.Map, contentDescription = "Node map") }
+            IconButton(onClick = onLogout) { Icon(CircumIcons.Logout, contentDescription = "Sign out") }
         })
     }) { padding ->
         Column(
@@ -79,7 +74,7 @@ fun OperatorScreen(
 
             SgCard {
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(Icons.Filled.QrCodeScanner, contentDescription = null, tint = SolarGreen, modifier = Modifier.size(72.dp))
+                    Icon(CircumIcons.Scan, contentDescription = null, tint = SolarGreen, modifier = Modifier.size(72.dp))
                     Text("Scan the prosumer's booking QR to finalise the energy transfer.", modifier = Modifier.padding(vertical = 8.dp))
                     Button(
                         onClick = {
@@ -139,7 +134,7 @@ private fun ResultCard(success: Boolean, title: String, content: @Composable () 
     Card(colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.1f)), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(if (success) Icons.Filled.CheckCircle else Icons.Filled.Error, contentDescription = null, tint = color)
+                Icon(if (success) CircumIcons.Check else CircumIcons.Alert, contentDescription = null, tint = color)
                 Text("  $title", color = color, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.titleMedium)
             }
             content()

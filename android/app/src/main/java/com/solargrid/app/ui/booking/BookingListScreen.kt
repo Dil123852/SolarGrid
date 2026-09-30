@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -32,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solargrid.app.di.ServiceLocator
 import com.solargrid.app.domain.model.MicrogridNode
 import com.solargrid.app.domain.model.ReservationStatus
+import com.solargrid.app.ui.common.CircumIcons
 import com.solargrid.app.ui.common.EmptyState
 import com.solargrid.app.ui.common.ErrorText
 import com.solargrid.app.ui.common.SgTopBar
@@ -51,7 +50,7 @@ fun BookingListScreen(
     Scaffold(
         topBar = { SgTopBar("My bookings", onBack = onBack) },
         floatingActionButton = {
-            FloatingActionButton(onClick = onNewBooking) { Icon(Icons.Filled.Add, contentDescription = "New booking") }
+            FloatingActionButton(onClick = onNewBooking) { Icon(CircumIcons.Plus, contentDescription = "New booking") }
         }
     ) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {

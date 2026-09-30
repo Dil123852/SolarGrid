@@ -22,8 +22,6 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -47,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solargrid.app.di.ServiceLocator
 import com.solargrid.app.domain.model.Role
+import com.solargrid.app.ui.common.CircumIcons
 import com.solargrid.app.ui.common.ErrorText
 import com.solargrid.app.ui.common.LoadingButton
 import com.solargrid.app.ui.common.SgCard
@@ -84,7 +83,7 @@ fun LoginScreen(
             Modifier.verticalScroll(rememberScrollState()).padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(Icons.Filled.WbSunny, contentDescription = null, tint = SolarAmber, modifier = Modifier.size(56.dp))
+            Icon(CircumIcons.Sun, contentDescription = null, tint = SolarAmber, modifier = Modifier.size(56.dp))
             Text("SolarGrid", style = MaterialTheme.typography.headlineMedium, color = Color.White, fontWeight = FontWeight.Bold)
             Text("Smart Solar Microgrid Trading", color = Color.White.copy(alpha = 0.8f))
             Spacer(Modifier.height(24.dp))

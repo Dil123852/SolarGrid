@@ -19,15 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.HourglassTop
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -47,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solargrid.app.di.ServiceLocator
 import com.solargrid.app.ui.booking.ReservationRow
+import com.solargrid.app.ui.common.CircumIcons
 import com.solargrid.app.ui.common.EmptyState
 import com.solargrid.app.ui.common.ErrorText
 import com.solargrid.app.ui.common.SgCard
@@ -72,8 +64,8 @@ fun HomeScreen(
 
     Scaffold(topBar = {
         SgTopBar("SolarGrid", actions = {
-            IconButton(onClick = vm::load) { Icon(Icons.Filled.Refresh, contentDescription = "Refresh") }
-            IconButton(onClick = onLogout) { Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = "Sign out") }
+            IconButton(onClick = vm::load) { Icon(CircumIcons.Repeat, contentDescription = "Refresh") }
+            IconButton(onClick = onLogout) { Icon(CircumIcons.Logout, contentDescription = "Sign out") }
         })
     }) { padding ->
         Column(
@@ -85,17 +77,17 @@ fun HomeScreen(
             ErrorText(vm.error)
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                StatCard("Pending", vm.counts?.pending, Icons.Filled.HourglassTop, StatusPending)
-                StatCard("Approved upcoming", vm.counts?.approvedFuture, Icons.Filled.CalendarMonth, StatusApproved)
+                StatCard("Pending", vm.counts?.pending, CircumIcons.Timer, StatusPending)
+                StatCard("Approved upcoming", vm.counts?.approvedFuture, CircumIcons.Calendar, StatusApproved)
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                ActionTile("New booking", Icons.Filled.AddCircle, onNewBooking)
-                ActionTile("My bookings", Icons.AutoMirrored.Filled.List, onBookings)
+                ActionTile("New booking", CircumIcons.Plus, onNewBooking)
+                ActionTile("My bookings", CircumIcons.List, onBookings)
             }
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                ActionTile("Nearby nodes", Icons.Filled.Map, onMap)
-                ActionTile("My profile", Icons.Filled.Person, onProfile)
+                ActionTile("Nearby nodes", CircumIcons.Map, onMap)
+                ActionTile("My profile", CircumIcons.User, onProfile)
             }
 
             SgCard {

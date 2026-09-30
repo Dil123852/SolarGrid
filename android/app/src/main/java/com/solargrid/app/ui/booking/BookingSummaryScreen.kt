@@ -14,10 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.EventBusy
-import androidx.compose.material.icons.filled.EventRepeat
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -31,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solargrid.app.di.ServiceLocator
+import com.solargrid.app.ui.common.CircumIcons
 import com.solargrid.app.ui.common.CenteredLoading
 import com.solargrid.app.ui.common.ErrorText
 import com.solargrid.app.ui.common.LabelValue
@@ -55,9 +52,9 @@ fun BookingSummaryScreen(
     })
 ) {
     val (title, icon, tint) = when (action) {
-        SummaryAction.Created -> Triple("Booking confirmed", Icons.Filled.CheckCircle, SolarGreen)
-        SummaryAction.Updated -> Triple("Booking updated", Icons.Filled.EventRepeat, SolarGreen)
-        SummaryAction.Cancelled -> Triple("Booking cancelled", Icons.Filled.EventBusy, StatusCancelled)
+        SummaryAction.Created -> Triple("Booking confirmed", CircumIcons.Check, SolarGreen)
+        SummaryAction.Updated -> Triple("Booking updated", CircumIcons.Repeat, SolarGreen)
+        SummaryAction.Cancelled -> Triple("Booking cancelled", CircumIcons.Remove, StatusCancelled)
     }
 
     Scaffold(topBar = { SgTopBar("Summary") }) { padding ->

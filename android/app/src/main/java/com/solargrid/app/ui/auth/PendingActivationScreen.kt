@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.HourglassTop
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.solargrid.app.ui.common.CircumIcons
 import com.solargrid.app.ui.common.LoadingButton
 import com.solargrid.app.ui.theme.SolarAmber
 
@@ -37,7 +36,7 @@ fun PendingActivationScreen(message: String, onBackToLogin: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Icon(Icons.Filled.HourglassTop, contentDescription = null, tint = SolarAmber, modifier = Modifier.size(64.dp))
+        Icon(CircumIcons.Timer, contentDescription = null, tint = SolarAmber, modifier = Modifier.size(64.dp))
         Spacer(Modifier.height(16.dp))
         Text("Account pending activation", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
         Spacer(Modifier.height(8.dp))

@@ -13,9 +13,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -34,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.solargrid.app.domain.model.Reservation
+import com.solargrid.app.ui.common.CircumIcons
 import com.solargrid.app.ui.common.StatusChip
 import com.solargrid.app.ui.common.formatLocal
 
@@ -44,7 +42,7 @@ fun ReservationRow(reservation: Reservation, onClick: () -> Unit) {
             Modifier.fillMaxWidth().clickable(onClick = onClick).padding(vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(Icons.Filled.Bolt, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            Icon(CircumIcons.Node, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
             Column(Modifier.weight(1f).padding(horizontal = 12.dp)) {
                 Text(reservation.nodeName, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(reservation.slotTime.formatLocal(), style = MaterialTheme.typography.bodySmall)
@@ -72,7 +70,7 @@ fun <T> SimpleDropdown(
                 Text(label, style = MaterialTheme.typography.labelSmall)
                 Text(optionLabel(selected), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
-            Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
+            Icon(CircumIcons.ChevronDown, contentDescription = null)
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             options.forEach { option ->
