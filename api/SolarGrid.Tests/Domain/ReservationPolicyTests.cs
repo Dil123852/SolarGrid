@@ -11,7 +11,7 @@ using SolarGrid.Domain.Entities;
 using SolarGrid.Domain.Enums;
 using SolarGrid.Domain.Rules;
 
-namespace SolarGrid.Tests
+namespace SolarGrid.Tests.Domain
 {
     public class ReservationPolicyTests
     {

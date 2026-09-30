@@ -1,0 +1,21 @@
+# Builds the SolarGrid API and runs the unit and architecture tests on every push and pull request.
+name: API build and tests
+
+on:
+  push:
+    branches: [main]
+    paths: ["api/**", "SolarGrid.sln", "Directory.Build.props", ".github/workflows/api.yml"]
+  pull_request:
+    paths: ["api/**", "SolarGrid.sln", "Directory.Build.props"]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - run: dotnet restore SolarGrid.sln
+      - run: dotnet build SolarGrid.sln --no-restore -c Release
+      - run: dotnet test SolarGrid.sln --no-build -c Release --logger "console;verbosity=normal"

@@ -1,0 +1,172 @@
+/*
+ * File: ReservationServiceTests.cs
+ * Purpose: Reservation workflow rules - booking window, battery-slot capacity, 12-hour notice,
+ *          approval eligibility, ownership, and one-time QR verification.
+ * Project: Smart Solar Microgrid Trading System - Web Service (SolarGrid API)
+ * Module: SE4040 Enterprise Application Development - Assignment 1
+ */
+
+using SolarGrid.Application.Common;
+using SolarGrid.Application.DTOs;
+using SolarGrid.Application.Services;
+using SolarGrid.Domain.Entities;
+using SolarGrid.Domain.Enums;
+using SolarGrid.Tests.Fakes;
+
+namespace SolarGrid.Tests.Application
+{
+    public class ReservationServiceTests
+    {
+        private static readonly DateTime Now = new(2026, 9, 29, 12, 0, 0, DateTimeKind.Utc);
+        private const string Nic = "991234567V";
+
+        private readonly InMemoryReservationRepository _reservations = new();
+        private readonly InMemoryNodeRepository _nodes = new();
+        private readonly InMemoryProsumerRepository _prosumers = new();
+        private readonly FakeCurrentUser _user = new() { Role = UserRole.Prosumer, Nic = Nic };
+
+        public ReservationServiceTests()
+        {
+            _nodes.Items.Add(new MicrogridNode { Id = "node1", Name = "Kandy Hub", BatterySlots = 1, IsActive = true });
+            _prosumers.Items.Add(new Prosumer { NIC = Nic, Name = "Test", IsActive = true });
+        }
+
+        private ReservationService Service() => new(_reservations, _nodes, _prosumers, new FixedClock(Now), _user);
+
+        [Fact]
+        public async Task Create_WithinWindow_IsPendingWithNodeName()
+        {
+            var result = await Service().CreateAsync(new CreateReservationRequest("node1", Now.AddDays(2)));
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(ReservationStatus.Pending, result.Value!.Status);
+            Assert.Equal("Kandy Hub", result.Value.NodeName);
+        }
+
+        [Fact]
+        public async Task Create_EightDaysOut_IsRejected()
+        {
+            var result = await Service().CreateAsync(new CreateReservationRequest("node1", Now.AddDays(8)));
+            Assert.Equal(ErrorType.Validation, result.Error);
+        }
+
+        [Fact]
+        public async Task Create_AtInactiveNode_IsRejected()
+        {
+            _nodes.Items[0].IsActive = false;
+            var result = await Service().CreateAsync(new CreateReservationRequest("node1", Now.AddDays(2)));
+            Assert.Equal(ErrorType.Validation, result.Error);
+        }
+
+        [Fact]
+        public async Task Create_ByDeactivatedProsumer_IsRejected()
+        {
+            _prosumers.Items[0].IsActive = false;
+            var result = await Service().CreateAsync(new CreateReservationRequest("node1", Now.AddDays(2)));
+            Assert.Equal(ErrorType.Validation, result.Error);
+        }
+
+        [Fact]
+        public async Task Create_WhenBatterySlotsFull_IsConflict()
+        {
+            var slot = Now.AddDays(1);
+            await Service().CreateAsync(new CreateReservationRequest("node1", slot));
+
+            var second = await Service().CreateAsync(new CreateReservationRequest("node1", slot));
+            Assert.Equal(ErrorType.Conflict, second.Error);
+        }
+
+        [Fact]
+        public async Task Update_NewSlotBeyondSevenDays_IsRejected()
+        {
+            _reservations.Items.Add(Reservation("r1", Now.AddDays(2), ReservationStatus.Pending));
+            var result = await Service().UpdateAsync("r1", new UpdateReservationRequest(Now.AddDays(9)));
+            Assert.Equal(ErrorType.Validation, result.Error);
+        }
+
+        [Fact]
+        public async Task Update_ApprovedReservation_ReturnsToPendingAndDropsQr()
+        {
+            var r = Reservation("r1", Now.AddDays(2), ReservationStatus.Approved);
+            r.QrToken = "abc";
+            _reservations.Items.Add(r);
+
+            var result = await Service().UpdateAsync("r1", new UpdateReservationRequest(Now.AddDays(3)));
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(ReservationStatus.Pending, result.Value!.Status);
+            Assert.Null(result.Value.QrToken);
+        }
+
+        [Fact]
+        public async Task Cancel_InsideTwelveHours_IsRejected()
+        {
+            _reservations.Items.Add(Reservation("r1", Now.AddHours(6), ReservationStatus.Pending));
+            var result = await Service().CancelAsync("r1");
+            Assert.Equal(ErrorType.Validation, result.Error);
+        }
+
+        [Fact]
+        public async Task Approve_CancelledReservation_IsRejected()
+        {
+            _reservations.Items.Add(Reservation("r1", Now.AddDays(2), ReservationStatus.Cancelled));
+            _user.Role = UserRole.Backoffice;
+
+            var result = await Service().ApproveAsync("r1");
+            Assert.Equal(ErrorType.Validation, result.Error);
+        }
+
+        [Fact]
+        public async Task Approve_Pending_IssuesQrToken()
+        {
+            _reservations.Items.Add(Reservation("r1", Now.AddDays(2), ReservationStatus.Pending));
+            _user.Role = UserRole.Backoffice;
+
+            var result = await Service().ApproveAsync("r1");
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(ReservationStatus.Approved, result.Value!.Status);
+            Assert.False(string.IsNullOrEmpty(result.Value.QrToken));
+        }
+
+        [Fact]
+        public async Task Prosumer_CannotCancelSomeoneElsesReservation()
+        {
+            var r = Reservation("r1", Now.AddDays(2), ReservationStatus.Pending);
+            r.ProsumerNIC = "200012345678";
+            _reservations.Items.Add(r);
+
+            var result = await Service().CancelAsync("r1");
+            Assert.Equal(ErrorType.Forbidden, result.Error);
+        }
+
+        [Fact]
+        public async Task Prosumer_ListOnlyReturnsOwnReservations()
+        {
+            _reservations.Items.Add(Reservation("mine", Now.AddDays(2), ReservationStatus.Pending));
+            var other = Reservation("theirs", Now.AddDays(2), ReservationStatus.Pending);
+            other.ProsumerNIC = "200012345678";
+            _reservations.Items.Add(other);
+
+            // Asking for another NIC is ignored for prosumers.
+            var list = await Service().GetAsync(new ReservationQuery("200012345678", null, null, null, null));
+
+            Assert.Equal("mine", Assert.Single(list).Id);
+        }
+
+        [Fact]
+        public async Task VerifyQr_SecondScan_Fails()
+        {
+            var r = Reservation("r1", Now.AddDays(1), ReservationStatus.Approved);
+            r.QrToken = "token";
+            _reservations.Items.Add(r);
+            _user.Role = UserRole.GridOperator;
+
+            Assert.True((await Service().VerifyQrAsync(new VerifyQrRequest("token"))).IsSuccess);
+            Assert.False((await Service().VerifyQrAsync(new VerifyQrRequest("token"))).IsSuccess);
+        }
+
+        private static EnergyReservation Reservation(string id, DateTime slot, ReservationStatus status) =>
+            new() { Id = id, ProsumerNIC = Nic, NodeId = "node1", SlotTime = slot, Status = status };
+    }
+}
