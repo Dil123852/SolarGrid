@@ -79,3 +79,6 @@ captures/
 *.iml
 *.apk
 *.aab
+
+# TypeScript incremental build cache
+*.tsbuildinfo
