@@ -1,0 +1,337 @@
+/*
+ * File: login.css
+ * Purpose: Split-screen staff sign-in page - dark gridded brand panel and a light form panel.
+ *          Self-contained (no Bootstrap) so the page matches the design exactly.
+ * Project: Smart Solar Microgrid Trading System - Web Application
+ * Module: SE4040 Enterprise Application Development - Assignment 1
+ */
+
+:root {
+  --ink: #0b0b0b;
+  --ink-soft: #1c1c1c;
+  --paper: #f5f5f3;
+  --white: #ffffff;
+  --line-dark: rgba(255, 255, 255, 0.08);
+  --text-dark-muted: rgba(255, 255, 255, 0.62);
+  --text-muted: #6b6b6b;
+  --border: #d4d4d1;
+  --error: #b42318;
+  --error-bg: #fdecea;
+  --warning: #8a5a00;
+  --warning-bg: #fff5dc;
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "DM Sans", "Segoe UI", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body.login-page {
+  margin: 0;
+  height: 100%;
+  background: var(--paper);
+  font-family: var(--font-body);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.login {
+  display: grid;
+  grid-template-columns: 46% 54%;
+  min-height: 100vh;
+}
+
+/* ---- Brand panel ---- */
+
+.login-brand {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 46px 46px 48px;
+  background-color: var(--ink);
+  background-image:
+    linear-gradient(var(--line-dark) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-dark) 1px, transparent 1px);
+  background-size: 52px 52px;
+  background-position: -1px -1px;
+  color: var(--white);
+  overflow: hidden;
+}
+
+.brand-mark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.eyebrow-dark {
+  margin-top: 18px;
+  color: var(--text-dark-muted);
+}
+
+.brand-body {
+  position: relative;
+  margin-top: 48px;
+}
+
+/* Thin rule that runs from the panel's left edge above the headline. */
+.brand-rule {
+  position: absolute;
+  top: -14px;
+  left: -46px;
+  width: 188px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.brand-rule::after {
+  content: "";
+  position: absolute;
+  left: 188px;
+  top: 0;
+  width: 100vw;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.brand-title {
+  margin: 0;
+  max-width: 370px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(34px, 3.6vw, 46px);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.brand-lead {
+  margin: 26px 0 0;
+  max-width: 330px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.brand-roles {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 56px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-dark-muted);
+}
+
+.role-dash {
+  width: 24px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* ---- Sign-in panel ---- */
+
+.login-panel {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  background: var(--paper);
+}
+
+.login-form-wrap {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-title {
+  margin: 18px 0 40px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 24px;
+  letter-spacing: -0.01em;
+}
+
+.field-label {
+  display: block;
+  margin: 0 0 9px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.field-input {
+  display: block;
+  width: 100%;
+  height: 48px;
+  margin-bottom: 26px;
+  padding: 0 13px;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--white);
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field-input::placeholder {
+  color: #8a8a8a;
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 1px var(--ink);
+}
+
+.btn-signin {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 0;
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-signin:hover {
+  background: #2a2a2a;
+}
+
+.btn-signin:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.btn-signin:disabled {
+  opacity: 0.75;
+  cursor: progress;
+}
+
+/* Spinner used by SG.ui.busy() while signing in. */
+.spinner-border {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.login-divider {
+  margin: 32px 0 20px;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.login-note {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #555;
+}
+
+.notice {
+  margin: -8px 0 22px;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  border-left: 3px solid;
+}
+
+.notice-error {
+  color: var(--error);
+  background: var(--error-bg);
+  border-color: var(--error);
+}
+
+.notice-warning {
+  margin: 0 0 24px;
+  color: var(--warning);
+  background: var(--warning-bg);
+  border-color: var(--warning);
+}
+
+/* ---- Small screens: stack the panels ---- */
+
+@media (max-width: 860px) {
+  .login {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .login-brand {
+    padding: 28px 24px 32px;
+  }
+
+  .brand-body {
+    margin-top: 40px;
+  }
+
+  .brand-rule {
+    left: -24px;
+  }
+
+  .brand-roles {
+    margin-top: 36px;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .login-panel {
+    padding: 40px 24px 56px;
+  }
+}
