@@ -150,8 +150,13 @@ export function UsersPage() {
           <label className="form-label" htmlFor="uUsername">
             Username
           </label>
+          {/* Unique names + autocomplete hints stop password managers filling in the admin's own login. */}
           <input
             id="uUsername"
+            name="new-staff-username"
+            autoComplete="off"
+            autoCapitalize="none"
+            spellCheck={false}
             className={`form-control${invalid(!form.username.trim())}`}
             value={form.username}
             onChange={(e) => setField("username", e.target.value)}
@@ -164,7 +169,9 @@ export function UsersPage() {
           </label>
           <input
             id="uEmail"
+            name="new-staff-email"
             type="email"
+            autoComplete="off"
             className={`form-control${invalid(!form.email.trim())}`}
             value={form.email}
             onChange={(e) => setField("email", e.target.value)}
@@ -176,7 +183,9 @@ export function UsersPage() {
           </label>
           <input
             id="uPassword"
+            name="new-staff-password"
             type="password"
+            autoComplete="new-password"
             className={`form-control${invalid(form.password.length < 6)}`}
             value={form.password}
             onChange={(e) => setField("password", e.target.value)}

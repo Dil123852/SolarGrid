@@ -53,6 +53,8 @@ export function Modal({ show, title, onClose, onSubmit, footer, size, centered, 
           <form
             className="modal-content"
             noValidate
+            // Dialogs are data-entry forms, never sign-in: keep browser autofill out of them.
+            autoComplete="off"
             onSubmit={(e) => {
               e.preventDefault();
               onSubmit?.(e);
