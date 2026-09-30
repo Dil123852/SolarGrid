@@ -1,6 +1,6 @@
 /*
  * File: AuthService.cs
- * Purpose: Login for staff (username) and prosumers (NIC), staff registration, and first-run
+ * Purpose: Login for staff (username), prosumers (NIC) and the mobile app (either), staff registration, and first-run
  *          seeding of a Backoffice account. Deactivated prosumers are refused with a
  *          "pending activation" message so the mobile app can show that state.
  * Project: Smart Solar Microgrid Trading System - Web Service (SolarGrid API)
@@ -19,6 +19,8 @@ namespace SolarGrid.Application.Services
     {
         public const string PendingActivationMessage =
             "Your account is deactivated and pending activation by a Backoffice officer.";
+
+        public const string BackofficeUsesWebMessage = "Backoffice officers sign in on the web portal.";
 
         private readonly IUserRepository _users;
         private readonly IProsumerRepository _prosumers;
@@ -44,7 +46,7 @@ namespace SolarGrid.Application.Services
                 return Result.Fail<AuthResponse>(ErrorType.Unauthorized, "Invalid username or password.");
 
             if (!user.IsActive)
-                return Result.Fail<AuthResponse>(ErrorType.Forbidden, "This staff account has been disabled.");
+                return Result.Fail<AuthResponse>(ErrorType.AccountInactive, "This staff account has been disabled.");
 
             var (token, expires) = _tokens.CreateToken(user.Id, user.Username, user.Role, null);
             return Result.Ok(new AuthResponse(token, expires, user.Role, user.Username, null));
@@ -62,10 +64,28 @@ namespace SolarGrid.Application.Services
                 return Result.Fail<AuthResponse>(ErrorType.Unauthorized, "Invalid NIC or password.");
 
             if (!prosumer.IsActive)
-                return Result.Fail<AuthResponse>(ErrorType.Forbidden, PendingActivationMessage);
+                return Result.Fail<AuthResponse>(ErrorType.AccountInactive, PendingActivationMessage);
 
             var (token, expires) = _tokens.CreateToken(prosumer.NIC, prosumer.Name, UserRole.Prosumer, prosumer.NIC);
             return Result.Ok(new AuthResponse(token, expires, UserRole.Prosumer, prosumer.Name, prosumer.NIC));
+        }
+
+        // Mobile app sign-in: one form for everyone who uses the app. The API - not the client - decides
+        // the account type: a NIC-shaped identifier is a prosumer, anything else a staff username.
+        // Backoffice officers work in the web portal, so they are refused here.
+        public async Task<Result<AuthResponse>> LoginMobileAsync(MobileLoginRequest request)
+        {
+            var identifier = request.Identifier?.Trim() ?? string.Empty;
+            if (identifier.Length == 0 || string.IsNullOrWhiteSpace(request.Password))
+                return Result.Invalid<AuthResponse>("Enter your NIC or username and your password.");
+
+            if (Validation.IsValidNic(identifier))
+                return await LoginProsumerAsync(new ProsumerLoginRequest(identifier, request.Password));
+
+            var staff = await LoginStaffAsync(new LoginRequest(identifier, request.Password));
+            if (staff.IsSuccess && staff.Value!.Role == UserRole.Backoffice)
+                return Result.Fail<AuthResponse>(ErrorType.Forbidden, BackofficeUsesWebMessage);
+            return staff;
         }
 
         // Creates a Backoffice or GridOperator account (caller must be Backoffice - enforced at the API).
@@ -75,6 +95,9 @@ namespace SolarGrid.Application.Services
                 return Result.Invalid<UserResponse>("Prosumers register through the mobile app.");
             if (string.IsNullOrWhiteSpace(request.Username))
                 return Result.Invalid<UserResponse>("Username is required.");
+            // Keeps mobile sign-in unambiguous: NIC-shaped identifiers always mean prosumers.
+            if (Validation.IsValidNic(request.Username.Trim()))
+                return Result.Invalid<UserResponse>("Usernames cannot be in NIC format.");
             if (!Validation.IsValidEmail(request.Email?.Trim()))
                 return Result.Invalid<UserResponse>("A valid email is required.");
             if (string.IsNullOrEmpty(request.Password) || request.Password.Length < Validation.MinPasswordLength)

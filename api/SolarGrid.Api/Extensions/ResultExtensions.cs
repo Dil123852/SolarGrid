@@ -1,7 +1,7 @@
 /*
  * File: ResultExtensions.cs
- * Purpose: Maps application Results to HTTP responses. Failures always return { message } so
- *          both clients can show the API's business-rule message verbatim.
+ * Purpose: Maps application Results to HTTP responses. Failures always return { message, code }:
+ *          clients show the message verbatim and may branch on the code (e.g. AccountInactive).
  * Project: Smart Solar Microgrid Trading System - Web Service (SolarGrid API)
  * Module: SE4040 Enterprise Application Development - Assignment 1
  */
@@ -20,13 +20,13 @@ namespace SolarGrid.Api.Extensions
             result.IsSuccess ? new OkObjectResult(result.Value) : Failure(result);
 
         private static IActionResult Failure(Result result) =>
-            new ObjectResult(new { message = result.Message })
+            new ObjectResult(new { message = result.Message, code = result.Error.ToString() })
             {
                 StatusCode = result.Error switch
                 {
                     ErrorType.Validation => StatusCodes.Status400BadRequest,
                     ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
-                    ErrorType.Forbidden => StatusCodes.Status403Forbidden,
+                    ErrorType.Forbidden or ErrorType.AccountInactive => StatusCodes.Status403Forbidden,
                     ErrorType.NotFound => StatusCodes.Status404NotFound,
                     ErrorType.Conflict => StatusCodes.Status409Conflict,
                     _ => StatusCodes.Status500InternalServerError

@@ -15,7 +15,10 @@ namespace SolarGrid.Application.Common
         NotFound,
         Conflict,
         Unauthorized,
-        Forbidden
+        Forbidden,
+
+        // Deactivated prosumer or disabled staff account (403, but distinguishable by clients).
+        AccountInactive
     }
 
     public class Result

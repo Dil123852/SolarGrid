@@ -42,13 +42,13 @@ namespace SolarGrid.Tests.Application
         }
 
         [Fact]
-        public async Task ProsumerLogin_DeactivatedAccount_IsForbiddenWithPendingMessage()
+        public async Task ProsumerLogin_DeactivatedAccount_IsInactiveWithPendingMessage()
         {
             _prosumers.Items.Add(new Prosumer { NIC = "991234567V", Name = "Nimal", PasswordHash = "hashed:pw", IsActive = false });
 
             var result = await Service().LoginProsumerAsync(new ProsumerLoginRequest("991234567v", "pw"));
 
-            Assert.Equal(ErrorType.Forbidden, result.Error);
+            Assert.Equal(ErrorType.AccountInactive, result.Error);
             Assert.Equal(AuthService.PendingActivationMessage, result.Message);
         }
 
@@ -85,6 +85,67 @@ namespace SolarGrid.Tests.Application
             Assert.True(await Service().SeedBackofficeAsync("admin", "admin@solargrid.lk", "secret1"));
             Assert.False(await Service().SeedBackofficeAsync("admin2", "admin2@solargrid.lk", "secret1"));
             Assert.Single(_users.Items);
+        }
+
+        // ---- Mobile sign-in: one form, the service decides the account type ----
+
+        [Fact]
+        public async Task MobileLogin_NicIdentifier_SignsInProsumer()
+        {
+            _prosumers.Items.Add(new Prosumer { NIC = "991234567V", Name = "Nimal", PasswordHash = "hashed:pw", IsActive = true });
+
+            var result = await Service().LoginMobileAsync(new MobileLoginRequest(" 991234567v ", "pw"));
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(UserRole.Prosumer, result.Value!.Role);
+            Assert.Equal("991234567V", result.Value.Nic);
+        }
+
+        [Fact]
+        public async Task MobileLogin_Username_SignsInGridOperator()
+        {
+            _users.Items.Add(new User { Id = "u1", Username = "operator1", PasswordHash = "hashed:pw", Role = UserRole.GridOperator });
+
+            var result = await Service().LoginMobileAsync(new MobileLoginRequest("operator1", "pw"));
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(UserRole.GridOperator, result.Value!.Role);
+        }
+
+        [Fact]
+        public async Task MobileLogin_Backoffice_IsSentToWebPortal()
+        {
+            _users.Items.Add(new User { Id = "u1", Username = "admin", PasswordHash = "hashed:pw", Role = UserRole.Backoffice });
+
+            var result = await Service().LoginMobileAsync(new MobileLoginRequest("admin", "pw"));
+
+            Assert.Equal(ErrorType.Forbidden, result.Error);
+            Assert.Equal(AuthService.BackofficeUsesWebMessage, result.Message);
+        }
+
+        [Fact]
+        public async Task MobileLogin_DeactivatedProsumer_IsAccountInactive()
+        {
+            _prosumers.Items.Add(new Prosumer { NIC = "200012345678", Name = "Kamal", PasswordHash = "hashed:pw", IsActive = false });
+
+            var result = await Service().LoginMobileAsync(new MobileLoginRequest("200012345678", "pw"));
+
+            Assert.Equal(ErrorType.AccountInactive, result.Error);
+        }
+
+        [Fact]
+        public async Task MobileLogin_WrongPassword_IsUnauthorized()
+        {
+            _users.Items.Add(new User { Id = "u1", Username = "operator1", PasswordHash = "hashed:pw", Role = UserRole.GridOperator });
+            var result = await Service().LoginMobileAsync(new MobileLoginRequest("operator1", "nope"));
+            Assert.Equal(ErrorType.Unauthorized, result.Error);
+        }
+
+        [Fact]
+        public async Task RegisterStaff_NicShapedUsername_IsRejected()
+        {
+            var result = await Service().RegisterStaffAsync(new RegisterStaffRequest("200012345678", "x@example.com", "secret1", UserRole.GridOperator));
+            Assert.Equal(ErrorType.Validation, result.Error);
         }
     }
 }

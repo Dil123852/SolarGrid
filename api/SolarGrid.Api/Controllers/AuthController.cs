@@ -37,6 +37,12 @@ namespace SolarGrid.Api.Controllers
         public async Task<IActionResult> ProsumerLogin([FromBody] ProsumerLoginRequest request) =>
             (await _service.LoginProsumerAsync(request)).ToActionResult();
 
+        // POST /api/auth/mobile-login - single mobile sign-in (NIC or username); the API decides the account type.
+        [AllowAnonymous]
+        [HttpPost("mobile-login")]
+        public async Task<IActionResult> MobileLogin([FromBody] MobileLoginRequest request) =>
+            (await _service.LoginMobileAsync(request)).ToActionResult();
+
         // POST /api/auth/register - creates a Backoffice or GridOperator account.
         [Authorize(Roles = Roles.Backoffice)]
         [HttpPost("register")]

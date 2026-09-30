@@ -91,6 +91,12 @@ Expect "Register prosumer (NIC $nic)" (Invoke-Api POST "/api/prosumers" @{ nic =
 $pLogin = Expect "Prosumer login" (Invoke-Api POST "/api/auth/prosumer-login" @{ nic = $nic; password = "Prosumer1!" }) 200
 $pToken = $pLogin.Body.token
 
+Write-Host "`nMobile sign-in (one form: NIC or username)"
+Expect "Mobile: prosumer NIC -> 200" (Invoke-Api POST "/api/auth/mobile-login" @{ identifier = $nic; password = "Prosumer1!" }) 200 | Out-Null
+$mOp = Expect "Mobile: operator username -> 200" (Invoke-Api POST "/api/auth/mobile-login" @{ identifier = $opName; password = "Operator1!" }) 200
+if ($mOp.Body.role -ne "GridOperator") { $script:failed++; Write-Host "  FAIL  mobile operator role was $($mOp.Body.role)" -ForegroundColor Red }
+Expect "Mobile: Backoffice sent to web portal -> 403" (Invoke-Api POST "/api/auth/mobile-login" @{ identifier = $AdminUser; password = $AdminPassword }) 403 | Out-Null
+
 Write-Host "`nReservation rules"
 Expect "Book 8 days out -> 400" (Invoke-Api POST "/api/reservations" @{ nodeId = $nodeId; slotTime = (Slot 8) } $pToken) 400 | Out-Null
 $r1 = Expect "Book 2 days out" (Invoke-Api POST "/api/reservations" @{ nodeId = $nodeId; slotTime = (Slot 2) } $pToken) 200
@@ -115,6 +121,9 @@ if ($dash.Status -eq 200) { Write-Host ("        pending={0} approvedFuture={1} 
 Write-Host "`nAccount deactivation / reactivation"
 Expect "Prosumer deactivates self" (Invoke-Api PUT "/api/prosumers/$nic/deactivate" $null $pToken) 200 | Out-Null
 Expect "Deactivated login -> 403 (pending activation)" (Invoke-Api POST "/api/auth/prosumer-login" @{ nic = $nic; password = "Prosumer1!" }) 403 | Out-Null
+$mInactive = Expect "Mobile: deactivated -> 403" (Invoke-Api POST "/api/auth/mobile-login" @{ identifier = $nic; password = "Prosumer1!" }) 403
+if ($mInactive.Body.code -eq "AccountInactive") { $script:passed++; Write-Host "  PASS  error code is AccountInactive" -ForegroundColor Green }
+else { $script:failed++; Write-Host "  FAIL  expected code AccountInactive, got $($mInactive.Body.code)" -ForegroundColor Red }
 Expect "Backoffice reactivates" (Invoke-Api PUT "/api/prosumers/$nic/reactivate" $null $adminToken) 200 | Out-Null
 $pLogin2 = Expect "Login works again" (Invoke-Api POST "/api/auth/prosumer-login" @{ nic = $nic; password = "Prosumer1!" }) 200
 

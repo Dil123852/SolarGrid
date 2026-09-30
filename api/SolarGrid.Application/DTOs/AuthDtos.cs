@@ -13,6 +13,9 @@ namespace SolarGrid.Application.DTOs
 
     public record ProsumerLoginRequest(string Nic, string Password);
 
+    // Mobile sign-in: Identifier is a prosumer NIC or a Grid Operator username.
+    public record MobileLoginRequest(string Identifier, string Password);
+
     public record AuthResponse(string Token, DateTime ExpiresAt, UserRole Role, string DisplayName, string? Nic);
 
     public record RegisterStaffRequest(string Username, string Email, string Password, UserRole Role);
