@@ -18,8 +18,8 @@ import java.time.Instant
 
 interface AuthRepository {
     fun currentSession(): Session?
-    suspend fun loginProsumer(nic: String, password: String): Result<Session>
-    suspend fun loginOperator(username: String, password: String): Result<Session>
+    // One sign-in for the app: identifier is a prosumer NIC or a Grid Operator username.
+    suspend fun login(identifier: String, password: String): Result<Session>
     suspend fun registerProsumer(
         nic: String, name: String, email: String, phone: String, address: String, password: String
     ): Result<Session>

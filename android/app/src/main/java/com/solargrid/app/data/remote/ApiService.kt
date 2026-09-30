@@ -12,6 +12,7 @@ import com.solargrid.app.data.remote.dto.CreateReservationRequest
 import com.solargrid.app.data.remote.dto.DashboardDto
 import com.solargrid.app.data.remote.dto.LoginRequest
 import com.solargrid.app.data.remote.dto.MessageDto
+import com.solargrid.app.data.remote.dto.MobileLoginRequest
 import com.solargrid.app.data.remote.dto.NodeDto
 import com.solargrid.app.data.remote.dto.ProsumerDto
 import com.solargrid.app.data.remote.dto.ProsumerLoginRequest
@@ -37,6 +38,10 @@ interface ApiService {
 
     @POST("api/auth/prosumer-login")
     suspend fun prosumerLogin(@Body body: ProsumerLoginRequest): Response<AuthResponseDto>
+
+    // Single sign-in for the app; the API decides whether the identifier is a NIC or a username.
+    @POST("api/auth/mobile-login")
+    suspend fun mobileLogin(@Body body: MobileLoginRequest): Response<AuthResponseDto>
 
     // ---- Prosumer account ----
     @POST("api/prosumers")

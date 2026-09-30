@@ -14,6 +14,9 @@ data class LoginRequest(val username: String, val password: String)
 
 data class ProsumerLoginRequest(val nic: String, val password: String)
 
+// One mobile sign-in form: identifier is a prosumer NIC or a Grid Operator username.
+data class MobileLoginRequest(val identifier: String, val password: String)
+
 data class RegisterProsumerRequest(
     val nic: String,
     val name: String,
@@ -33,7 +36,8 @@ data class VerifyQrRequest(val qrToken: String)
 
 // ---- Responses ----
 
-data class MessageDto(val message: String?)
+// Error bodies carry a machine-readable code (e.g. "AccountInactive") next to the message.
+data class MessageDto(val message: String?, val code: String? = null)
 
 data class AuthResponseDto(
     val token: String?,

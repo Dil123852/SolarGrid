@@ -15,7 +15,8 @@ import retrofit2.Response
 import java.io.IOException
 import kotlin.coroutines.cancellation.CancellationException
 
-class ApiException(val code: Int, message: String) : Exception(message)
+// httpCode is the HTTP status; errorCode is the API's machine-readable code (e.g. "AccountInactive").
+class ApiException(val httpCode: Int, message: String, val errorCode: String? = null) : Exception(message)
 
 private val gson = Gson()
 
@@ -26,7 +27,8 @@ suspend fun <T> apiCall(call: suspend () -> Response<T>): Result<T> =
         if (response.isSuccessful && body != null) {
             Result.success(body)
         } else {
-            Result.failure(ApiException(response.code(), errorMessage(response)))
+            val error = errorBody(response)
+            Result.failure(ApiException(response.code(), error?.message ?: fallbackMessage(response.code()), error?.code))
         }
     } catch (e: IOException) {
         Result.failure(ApiException(0, "Cannot reach the SolarGrid server. Check your connection and try again."))
@@ -38,16 +40,16 @@ suspend fun <T> apiCall(call: suspend () -> Response<T>): Result<T> =
         Result.failure(ApiException(-1, e.message ?: "Unexpected error."))
     }
 
-private fun errorMessage(response: Response<*>): String {
-    val serverMessage = try {
-        response.errorBody()?.string()?.let { gson.fromJson(it, MessageDto::class.java)?.message }
+private fun errorBody(response: Response<*>): MessageDto? =
+    try {
+        response.errorBody()?.string()?.let { gson.fromJson(it, MessageDto::class.java) }
     } catch (e: Exception) {
         null
     }
-    return serverMessage ?: when (response.code()) {
-        401 -> "Your session has expired. Please sign in again."
-        403 -> "You are not allowed to do that."
-        404 -> "Not found."
-        else -> "Request failed (${response.code()})."
-    }
+
+private fun fallbackMessage(httpCode: Int): String = when (httpCode) {
+    401 -> "Your session has expired. Please sign in again."
+    403 -> "You are not allowed to do that."
+    404 -> "Not found."
+    else -> "Request failed ($httpCode)."
 }
