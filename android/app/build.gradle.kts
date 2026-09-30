@@ -23,7 +23,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        val apiBaseUrl = localProps.getProperty("solargrid.apiBaseUrl", "http://10.0.2.2:5093/")
+        val apiBaseUrl = localProps.getProperty("solargrid.apiBaseUrl", "http://10.0.2.2:8081/")
         buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
         manifestPlaceholders["MAPS_API_KEY"] = localProps.getProperty("MAPS_API_KEY", "")
     }

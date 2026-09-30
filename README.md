@@ -75,7 +75,7 @@ Point the IIS site at `C:\SolarGridAPI\publish`. The output folder must **not** 
 
 ## Running the web app
 Open `web/index.html` in a browser, or host the `web/` folder as a second IIS site.
-The API URL defaults to `http://localhost:5093`. To point at IIS, run this once in the browser console:
+The API URL defaults to the IIS site at `http://localhost:8081`. To use another URL (e.g. `dotnet run` on 5093), run this once in the browser console:
 ```js
 localStorage.setItem('sg.apiBaseUrl', 'http://localhost:<iis-port>')
 ```
