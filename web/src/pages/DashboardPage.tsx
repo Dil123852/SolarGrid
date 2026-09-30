@@ -48,6 +48,7 @@ export function DashboardPage() {
   return (
     <>
       <PageHeader
+        eyebrow="Overview"
         title="Dashboard"
         subtitle={session ? `Signed in as ${session.displayName} (${roleLabel(session.role)})` : "Live reservation overview"}
         actions={

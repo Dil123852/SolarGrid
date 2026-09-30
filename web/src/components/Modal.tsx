@@ -1,12 +1,14 @@
 /*
  * File: Modal.tsx
  * Purpose: Controlled Bootstrap-styled modal dialog (no Bootstrap JS). Closes on Escape or
- *          backdrop click; the body is a form so Enter submits.
+ *          backdrop click; the body is a form so Enter submits. Rendered into <body> through a
+ *          portal so animated page containers can never clip or offset the overlay.
  * Project: Smart Solar Microgrid Trading System - Web Application
  * Module: SE4040 Enterprise Application Development - Assignment 1
  */
 
 import { useEffect, useId, type FormEvent, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 interface ModalProps {
   show: boolean;
@@ -37,7 +39,7 @@ export function Modal({ show, title, onClose, onSubmit, footer, size, centered, 
 
   const dialogClass = ["modal-dialog", size ? `modal-${size}` : "", centered ? "modal-dialog-centered" : ""].join(" ");
 
-  return (
+  return createPortal(
     <>
       <div
         className="modal fade show d-block"
@@ -68,6 +70,7 @@ export function Modal({ show, title, onClose, onSubmit, footer, size, centered, 
         </div>
       </div>
       <div className="modal-backdrop fade show" />
-    </>
+    </>,
+    document.body,
   );
 }

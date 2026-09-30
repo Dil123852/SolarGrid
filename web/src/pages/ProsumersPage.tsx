@@ -42,6 +42,7 @@ export function ProsumersPage() {
   return (
     <>
       <PageHeader
+        eyebrow="Accounts"
         title="Prosumers"
         subtitle="Solar property owners registered through the mobile app. Only Backoffice can reactivate an account."
       />

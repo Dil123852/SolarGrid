@@ -111,6 +111,7 @@ export function NodesPage() {
   return (
     <>
       <PageHeader
+        eyebrow="Infrastructure"
         title="Microgrid Nodes"
         subtitle="Solar hubs with their GPS location, capacity and battery storage slots."
         actions={

@@ -68,6 +68,7 @@ export function UsersPage() {
   return (
     <>
       <PageHeader
+        eyebrow="Administration"
         title="Staff Users"
         subtitle="Backoffice officers and Grid Operators who can use this portal and operator mode."
         actions={

@@ -1,26 +1,28 @@
 /*
  * File: Layout.tsx
- * Purpose: Shell for signed-in pages - the role-aware navbar and the page container.
+ * Purpose: Shell for signed-in pages - the dark, gridded, role-aware navbar (with the sign-in
+ *          page's scanner light along its base) and the animated page container.
  * Project: Smart Solar Microgrid Trading System - Web Application
  * Module: SE4040 Enterprise Application Development - Assignment 1
  */
 
 import { useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import type { Role } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 import { roleLabel } from "../utils/format";
 
-const NAV: { to: string; label: string; icon: string; roles: Role[] }[] = [
-  { to: "/dashboard", label: "Dashboard", icon: "bi-speedometer2", roles: ["Backoffice", "GridOperator"] },
-  { to: "/bookings", label: "Bookings", icon: "bi-calendar-check", roles: ["Backoffice", "GridOperator"] },
-  { to: "/nodes", label: "Microgrid Nodes", icon: "bi-lightning-charge", roles: ["Backoffice", "GridOperator"] },
-  { to: "/prosumers", label: "Prosumers", icon: "bi-house-gear", roles: ["Backoffice"] },
-  { to: "/users", label: "Staff Users", icon: "bi-people", roles: ["Backoffice"] },
+const NAV: { to: string; label: string; roles: Role[] }[] = [
+  { to: "/dashboard", label: "Dashboard", roles: ["Backoffice", "GridOperator"] },
+  { to: "/bookings", label: "Bookings", roles: ["Backoffice", "GridOperator"] },
+  { to: "/nodes", label: "Nodes", roles: ["Backoffice", "GridOperator"] },
+  { to: "/prosumers", label: "Prosumers", roles: ["Backoffice"] },
+  { to: "/users", label: "Staff", roles: ["Backoffice"] },
 ];
 
 export function Layout() {
   const { session, logout } = useAuth();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   if (!session) return null;
 
@@ -30,8 +32,10 @@ export function Layout() {
     <>
       <nav className="navbar navbar-expand-lg navbar-dark sg-navbar mb-4">
         <div className="container">
-          <NavLink className="navbar-brand fw-semibold" to="/dashboard">
-            <i className="bi bi-sun-fill text-warning me-2" />
+          <NavLink className="sg-brand me-4" to="/dashboard">
+            <span className="sg-brand-logo" aria-hidden="true">
+              S
+            </span>
             SolarGrid
           </NavLink>
           <button
@@ -49,26 +53,27 @@ export function Layout() {
               {links.map((n) => (
                 <li className="nav-item" key={n.to}>
                   <NavLink className="nav-link" to={n.to} onClick={() => setMenuOpen(false)}>
-                    <i className={`bi ${n.icon} me-1`} />
                     {n.label}
                   </NavLink>
                 </li>
               ))}
             </ul>
-            <span className="navbar-text me-3 small">
-              <i className="bi bi-person-circle me-1" />
+            <span className="sg-user me-3">
               {session.displayName}
-              <span className="badge rounded-pill text-bg-light ms-1">{roleLabel(session.role)}</span>
+              <span className="sg-role">{roleLabel(session.role)}</span>
             </span>
-            <button className="btn btn-outline-light btn-sm" onClick={() => logout()}>
-              <i className="bi bi-box-arrow-right me-1" />
+            <button className="btn btn-sm btn-signout" onClick={() => logout()}>
               Sign out
             </button>
           </div>
         </div>
+        <span className="sg-scanline" aria-hidden="true" />
       </nav>
       <main className="container pb-5">
-        <Outlet />
+        {/* Keyed by route so each page plays its entrance animation. */}
+        <div className="sg-page" key={location.pathname}>
+          <Outlet />
+        </div>
       </main>
     </>
   );

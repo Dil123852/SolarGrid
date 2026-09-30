@@ -146,6 +146,7 @@ export function BookingsPage() {
   return (
     <>
       <PageHeader
+        eyebrow="Operations"
         title="Energy Slot Bookings"
         subtitle="Bookings can be made up to 7 days ahead; changes need 12 hours' notice."
         actions={
