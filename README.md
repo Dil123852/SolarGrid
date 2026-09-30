@@ -14,6 +14,36 @@ Android application, diagrams and report) is 100% my own (Dilsara).
 | `web/` | Backoffice / Grid Operator web app: static HTML, Bootstrap 5, vanilla JS. It is a UI layer only and calls the API |
 | `android/` | Native Android app (Kotlin, Jetpack Compose): Retrofit, SQLite, Google Maps, ZXing QR |
 | `docs/` | Architecture, use case, DFD and database design diagrams |
+| `scripts/` | `smoke-test.ps1`: end-to-end check of role locks and business rules against a running API |
+
+```
+SolarGrid/
+├── SolarGrid.sln · Directory.Build.props · .editorconfig
+├── api/
+│   ├── SolarGrid.Domain/          Entities/ Enums/ Rules/            (pure C#)
+│   ├── SolarGrid.Application/     Abstractions/ Services/ DTOs/ Common/
+│   ├── SolarGrid.Infrastructure/  Persistence/ (Mongo) Security/ (JWT, hashing)
+│   ├── SolarGrid.Api/             Controllers/ Extensions/ Security/ Program.cs
+│   └── SolarGrid.Tests/           Domain/ Application/ Fakes/ ArchitectureTests.cs
+├── web/                           *.html · css/ · js/{config,api,auth,layout}.js · js/services/ · js/pages/
+├── android/app/src/main/java/com/solargrid/app/
+│   ├── domain/                    model/ repository/ (interfaces)
+│   ├── data/                      remote/ (Retrofit) local/ (SQLite) repository/ (implementations)
+│   ├── di/                        ServiceLocator
+│   └── ui/                        auth/ dashboard/ booking/ profile/ operator/ map/ navigation/ theme/ common/
+├── docs/diagrams.md
+└── scripts/smoke-test.ps1
+```
+
+## How the specification is met
+
+| Requirement | Where |
+|---|---|
+| **FAT service**: all business logic in the central API | Every rule lives in `SolarGrid.Application/Services` and `SolarGrid.Domain/Rules`. `ArchitectureTests` fail the build if those layers ever reference MongoDB, ASP.NET or Infrastructure |
+| **C# Web API on IIS with a NoSQL database** | ASP.NET Core (.NET 10) published to IIS; MongoDB Atlas through `SolarGrid.Infrastructure/Persistence` |
+| **Web client is a UI layer only** | `web/js/api.js` is the only file that makes HTTP calls; pages render API data and show the API's own error messages |
+| **Pure native Android client with SQLite** | Kotlin + Jetpack Compose (no cross-platform framework); `data/local/SolarGridDbHelper` (SQLiteOpenHelper) caches the session and node list |
+| **Communication only via RESTful calls** | Both clients call the JSON endpoints under `/api/*` with a JWT bearer token; neither touches the database |
 
 ## Architecture
 
@@ -31,7 +61,7 @@ The API follows clean architecture, and dependencies only point inward:
 | `SolarGrid.Application` | Services (all business logic), DTOs, `Result` type, repository/security ports | Domain |
 | `SolarGrid.Infrastructure` | MongoDB repositories and class maps, JWT issuing, password hashing | Application |
 | `SolarGrid.Api` | Thin controllers, role-based `[Authorize]`, Swagger, composition root | Application, Infrastructure |
-| `SolarGrid.Tests` | xUnit tests for the rules and the reservation service (in-memory fakes) | Domain, Application |
+| `SolarGrid.Tests` | 61 xUnit tests: domain rules, every application service (in-memory fakes) and the layer dependency rules | Domain, Application |
 
 The web and Android clients hold no business rules. They show whatever `{ message }` the API returns.
 
