@@ -1,0 +1,13 @@
+# Store text files with LF in the repository; check out with the platform's native endings.
+* text=auto
+
+# Windows-only scripts keep CRLF; the POSIX Gradle wrapper keeps LF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+gradlew text eol=lf
+
+# Binary files.
+*.jar binary
+*.png binary
+*.jpg binary
