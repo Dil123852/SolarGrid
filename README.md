@@ -101,6 +101,9 @@ The web and Android clients hold no business rules. They show whatever `{ messag
 dotnet publish api/SolarGrid.Api -c Release -o C:\SolarGridAPI\publish
 ```
 Point the IIS site at `C:\SolarGridAPI\publish`. The output folder must **not** be inside the project folder.
+If IIS is running, it locks the DLLs. Put an `app_offline.htm` file in the publish folder first (IIS then stops the app),
+publish, and delete the file afterwards. Then check the deployment with
+`powershell -ExecutionPolicy Bypass -File scripts\smoke-test.ps1 -BaseUrl http://localhost:8081`.
 `appsettings.Local.json` is copied into the output automatically when it exists.
 
 ## Running the web app
