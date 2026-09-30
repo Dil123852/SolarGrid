@@ -73,8 +73,8 @@ a {
 }
 
 .sg-stat-icon .sg-ci {
-  width: 24px;
-  height: 24px;
+  width: 34px;
+  height: 34px;
   vertical-align: middle;
 }
 
@@ -584,26 +584,10 @@ a {
 }
 
 .sg-stat-icon {
-  width: 44px;
-  height: 44px;
   display: grid;
   place-items: center;
-  font-size: 1.15rem;
-  border: 1px solid var(--sg-border);
-  background: var(--sg-paper) !important;
   color: var(--sg-ink) !important;
-}
-
-.sg-stat-icon.text-bg-warning {
-  border-left: 3px solid #c98a00;
-}
-
-.sg-stat-icon.text-bg-success {
-  border-left: 3px solid #2f7d4f;
-}
-
-.sg-stat-icon.text-bg-primary {
-  border-left: 3px solid var(--sg-ink);
+  background: none !important;
 }
 
 /* ---- Tables ---- */
