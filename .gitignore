@@ -1,84 +1,145 @@
-# Environment / secrets
-.env
-.env.*
-!.env.example
-*.pem
-*.key
+# =============================================================================
+# SolarGrid - .gitignore
+# API (.NET 10) · web (React + Vite) · Android (Kotlin/Gradle) · scripts
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Secrets and local configuration - NEVER commit
+# -----------------------------------------------------------------------------
+# API secrets (MongoDB connection string, JWT key, seed password)
+appsettings.Local.json
+appsettings.*.Local.json
 appsettings.*.local.json
 secrets.json
+*.secrets.json
+# Environment files (keep the documented template)
+.env
+.env.*
+*.local
+!.env.example
+# Android: SDK path and Google Maps API key, signing material
+local.properties
+keystore.properties
+secrets.properties
+google-services.json
+*.jks
+*.keystore
+# Certificates and private keys
+*.pem
+*.key
+*.pfx
+*.p12
+# Publish / cloud profiles that can carry credentials
+*.publishsettings
+*.pubxml.user
+*.azurePubxml
 
-# .NET
-bin/
-obj/
+# -----------------------------------------------------------------------------
+# .NET / Visual Studio
+# -----------------------------------------------------------------------------
+[Bb]in/
+[Oo]bj/
+.vs/
 *.user
 *.suo
 *.rsuser
 *.userprefs
-[Dd]ebug/
-[Rr]elease/
-x64/
-x86/
-[Ll]og/
-[Ll]ogs/
-TestResults/
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+_ReSharper*/
+artifacts/
+/packages/
 *.nupkg
-packages/
-.vs/
+*.snupkg
+project.lock.json
+*.binlog
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage*.json
+coverage*.xml
+ScaffoldingReadMe.txt
 
-# Node
+# IIS deployment output and the redeploy marker file
+publish/
+app_offline.htm
+
+# -----------------------------------------------------------------------------
+# Web (Node, Vite, TypeScript)
+# -----------------------------------------------------------------------------
 node_modules/
+dist/
+dist-ssr/
+.vite/
+coverage/
+.cache/
+.npm/
+.pnpm-store/
+.eslintcache
+*.tsbuildinfo
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-dist/
+
+# -----------------------------------------------------------------------------
+# Android (Gradle, Kotlin, Android Studio)
+# -----------------------------------------------------------------------------
+.gradle/
+.kotlin/
 build/
-coverage/
-.next/
-.cache/
+captures/
+.externalNativeBuild/
+.cxx/
+.navigation/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.hprof
+output-metadata.json
+*.iml
 
-# Python
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-env/
-*.egg-info/
-.pytest_cache/
-
-# Databases / local data
-*.db
-*.sqlite
-*.sqlite3
-
-# IDE / editor
+# -----------------------------------------------------------------------------
+# Editors and tooling
+# -----------------------------------------------------------------------------
+.idea/
 .vscode/*
 !.vscode/settings.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.idea/
+.fleet/
 *.swp
+*.swo
 *~
+# Extension working folders
+.github/modernize/
+# Local AI-assistant settings
+.claude/settings.local.json
 
-# OS
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Logs
+# -----------------------------------------------------------------------------
+# Local data, logs and temporary files
+# -----------------------------------------------------------------------------
+*.db
+*.sqlite
+*.sqlite3
 *.log
+[Ll]ogs/
+*.tmp
+*.bak
+*.orig
+# Office lock files (e.g. while the report is open in Word)
+~$*
 
-# SolarGrid: real secrets live here, never committed
-appsettings.Local.json
-publish/
-
-# Android
-.gradle/
-local.properties
-captures/
-*.iml
-*.apk
-*.aab
-
-# TypeScript incremental build cache
-*.tsbuildinfo
+# -----------------------------------------------------------------------------
+# Operating systems
+# -----------------------------------------------------------------------------
+.DS_Store
+._*
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+*.lnk
