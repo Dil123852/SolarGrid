@@ -18,14 +18,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
@@ -57,6 +60,7 @@ import com.solargrid.app.ui.common.SgTextField
 import com.solargrid.app.ui.common.factoryOf
 import com.solargrid.app.ui.common.gridBackground
 import com.solargrid.app.ui.theme.Border
+import com.solargrid.app.ui.theme.Ink
 import com.solargrid.app.ui.theme.Muted
 import com.solargrid.app.ui.theme.Paper
 import com.solargrid.app.ui.theme.SpaceGrotesk
@@ -82,10 +86,10 @@ fun LoginScreen(
     var shown by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { shown = true }
 
+    Box(Modifier.fillMaxSize().background(Paper)) {
     Column(
         Modifier
             .fillMaxSize()
-            .background(Paper)
             .imePadding()
             .verticalScroll(rememberScrollState())
     ) {
@@ -186,6 +190,10 @@ fun LoginScreen(
                 }
             }
         }
+    }
+
+    // Solid ink behind the status bar so scrolled content never shows through it.
+    Box(Modifier.fillMaxWidth().windowInsetsTopHeight(WindowInsets.statusBars).background(Ink))
     }
 }
 
