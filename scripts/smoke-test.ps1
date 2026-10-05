@@ -112,6 +112,19 @@ Expect "Prosumer cannot verify QR -> 403" (Invoke-Api POST "/api/reservations/ve
 Expect "Operator scans QR -> 200" (Invoke-Api POST "/api/reservations/verify-qr" @{ qrToken = $qr } $opToken) 200 | Out-Null
 Expect "Same QR again -> 400" (Invoke-Api POST "/api/reservations/verify-qr" @{ qrToken = $qr } $opToken) 400 | Out-Null
 
+Write-Host "`nGrid Operator duties, schedules and search"
+Expect "Operator updates battery slots -> 200" (Invoke-Api PUT "/api/nodes/$nodeId/slots" @{ batterySlots = 4 } $opToken) 200 | Out-Null
+Expect "Prosumer cannot update slots -> 403" (Invoke-Api PUT "/api/nodes/$nodeId/slots" @{ batterySlots = 9 } $pToken) 403 | Out-Null
+$rOp = Expect "Book 6 days out" (Invoke-Api POST "/api/reservations" @{ nodeId = $nodeId; slotTime = (Slot 6) } $pToken) 200
+Expect "Operator cancels on prosumer's behalf -> 200" (Invoke-Api DELETE "/api/reservations/$($rOp.Body.id)" $null $opToken) 200 | Out-Null
+$search = Expect "Search bookings by node name -> 200" (Invoke-Api GET "/api/reservations?search=SMOKE%20Node%20$suffix" $null $adminToken) 200
+if (@($search.Body).Count -ge 1) { $script:passed++; Write-Host "  PASS  search returned $(@($search.Body).Count) booking(s)" -ForegroundColor Green }
+else { $script:failed++; Write-Host "  FAIL  search returned nothing" -ForegroundColor Red }
+# Slots are whole UTC hours = :30 local time, so a 00:00-00:01 schedule is always closed.
+$night = Expect "Create node with opening hours" (Invoke-Api POST "/api/nodes" @{ name = "SMOKE Night $suffix"; latitude = 7.2906; longitude = 80.6337; capacityKWh = 10; batterySlots = 2; openTime = "00:00"; closeTime = "00:01" } $adminToken) 200
+Expect "Book outside opening hours -> 400" (Invoke-Api POST "/api/reservations" @{ nodeId = $night.Body.id; slotTime = (Slot 2) } $pToken) 400 | Out-Null
+Expect "Deactivate schedule test node" (Invoke-Api PUT "/api/nodes/$($night.Body.id)/deactivate" $null $adminToken) 200 | Out-Null
+
 Write-Host "`nNode deactivation rule"
 $r3 = Expect "Book 5 days out (pending)" (Invoke-Api POST "/api/reservations" @{ nodeId = $nodeId; slotTime = (Slot 5) } $pToken) 200
 Expect "Deactivate node with pending booking -> 409" (Invoke-Api PUT "/api/nodes/$nodeId/deactivate" $null $adminToken) 409 | Out-Null

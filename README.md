@@ -72,6 +72,8 @@ The web and Android clients hold no business rules. They show whatever `{ messag
 - Only **Pending** reservations can be approved. Approval issues a one-time QR token.
 - Rescheduling an approved booking sends it back to Pending and invalidates its QR token.
 - A node's **battery slots** cap how many live bookings it accepts for the same time slot.
+- A node's **opening hours** (Sri Lanka time, optional) are enforced: bookings outside them are refused.
+- Grid Operators keep **battery slots** current and may **cancel** a booking on a prosumer's behalf (12-hour rule still applies).
 - A node can't be **deactivated** while it has live (pending/approved) upcoming bookings.
 - A QR scan completes the transfer exactly once, as an atomic find-and-update.
 - Prosumers can only see and change their own records. Only Backoffice can reactivate an account.
@@ -79,9 +81,9 @@ The web and Android clients hold no business rules. They show whatever `{ messag
 ### Roles
 | Role | Signs in via | Can |
 |---|---|---|
-| Backoffice | Web (`/api/auth/login`) | Manage staff users, nodes, all bookings (create/reschedule/cancel/approve), reactivate prosumers |
-| Grid Operator | Web (read-only) and Android Operator Mode | View bookings and nodes, scan and verify QR codes |
-| Prosumer | Android (`/api/auth/prosumer-login`, NIC + password) | Register, edit profile, deactivate account, create/update/cancel own bookings, dashboard, map |
+| Backoffice | Web (`/api/auth/login`) | Manage staff users; create/edit/deactivate/reactivate prosumers; manage nodes and their schedules; create/reschedule/cancel/approve bookings |
+| Grid Operator | Web and Android (one sign-in, username) | Update battery slots, monitor and search bookings, cancel on a prosumer's behalf; on mobile, scan and verify QR codes |
+| Prosumer | Android (one sign-in, NIC + password) | Register, edit profile, deactivate account, create/update/cancel/search own bookings, dashboard, map, booking QR |
 
 ## Running the API
 
