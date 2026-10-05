@@ -1,7 +1,7 @@
 /*
  * File: ReservationService.cs
  * Purpose: Business logic for energy slot reservations - enforces the 7-day scheduling window,
- *          the 12-hour minimum notice for updates/cancellations, node battery-slot capacity,
+ *          the 12-hour minimum notice for updates/cancellations, node operating hours and battery-slot capacity,
  *          prosumer ownership, and QR-token issue/verification for the energy transfer handoff.
  * Project: Smart Solar Microgrid Trading System - Web Service (SolarGrid API)
  * Module: SE4040 Enterprise Application Development - Assignment 1
@@ -48,7 +48,19 @@ namespace SolarGrid.Application.Services
             var filter = new ReservationFilter(nic, query.NodeId, query.Status, query.From?.AsUtc(), query.To?.AsUtc());
             var reservations = await _reservations.FindAsync(filter);
             var nodeNames = await GetNodeNamesAsync();
-            return reservations.Select(r => r.ToResponse(NameOf(nodeNames, r.NodeId))).ToList();
+            var results = reservations.Select(r => r.ToResponse(NameOf(nodeNames, r.NodeId)));
+
+            // Free-text search across node name, NIC, booking reference and status.
+            if (!string.IsNullOrWhiteSpace(query.Search))
+            {
+                var term = query.Search.Trim();
+                results = results.Where(r =>
+                    r.NodeName.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                    r.ProsumerNic.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                    r.Id.EndsWith(term, StringComparison.OrdinalIgnoreCase) ||
+                    r.Status.ToString().Equals(term, StringComparison.OrdinalIgnoreCase));
+            }
+            return results.ToList();
         }
 
         public async Task<Result<ReservationResponse>> GetByIdAsync(string id)
@@ -115,12 +127,12 @@ namespace SolarGrid.Application.Services
             return Result.Ok(await ToResponseAsync(reservation), "Reservation updated and awaiting re-approval.");
         }
 
-        // Cancels a reservation; needs 12h notice before the slot.
+        // Cancels a reservation (prosumer, Backoffice or Grid Operator); needs 12h notice before the slot.
         public async Task<Result<ReservationResponse>> CancelAsync(string id)
         {
             var reservation = await _reservations.GetByIdAsync(id);
             if (reservation == null) return Result.NotFound<ReservationResponse>("Reservation not found.");
-            if (!CanModify(reservation)) return Result.Forbidden<ReservationResponse>();
+            if (!CanCancel(reservation)) return Result.Forbidden<ReservationResponse>();
             if (!ReservationPolicy.IsModifiable(reservation.Status))
                 return Result.Invalid<ReservationResponse>($"A {reservation.Status.ToString().ToLower()} reservation cannot be cancelled.");
 
@@ -175,6 +187,8 @@ namespace SolarGrid.Application.Services
             var node = string.IsNullOrWhiteSpace(nodeId) ? null : await _nodes.GetByIdAsync(nodeId);
             if (node == null) return Result.NotFound<ReservationResponse>("Microgrid node not found.");
             if (!node.IsActive) return Result.Invalid<ReservationResponse>("This microgrid node is not accepting reservations.");
+            if (!NodeSchedule.IsWithinOperatingHours(slotTime, node.OpenTime, node.CloseTime))
+                return Result.Invalid<ReservationResponse>($"{node.Name} is open {node.OpenTime}-{node.CloseTime} (Sri Lanka time). Choose a slot within those hours.");
 
             var sameSlot = await _reservations.FindAsync(new ReservationFilter(NodeId: nodeId, From: slotTime, To: slotTime));
             var taken = sameSlot.Count(r => r.Id != excludeReservationId && ReservationPolicy.IsModifiable(r.Status));
@@ -188,6 +202,9 @@ namespace SolarGrid.Application.Services
             _currentUser.Role is UserRole.Backoffice or UserRole.GridOperator || _currentUser.CanAccessProsumer(r.ProsumerNIC);
 
         private bool CanModify(EnergyReservation r) => _currentUser.CanAccessProsumer(r.ProsumerNIC);
+
+        // Cancellations can also be made with the assistance of a Grid Operator (assignment scenario).
+        private bool CanCancel(EnergyReservation r) => CanModify(r) || _currentUser.Role == UserRole.GridOperator;
 
         private async Task<ReservationResponse> ToResponseAsync(EnergyReservation r)
         {

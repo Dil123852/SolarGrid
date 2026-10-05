@@ -168,5 +168,70 @@ namespace SolarGrid.Tests.Application
 
         private static EnergyReservation Reservation(string id, DateTime slot, ReservationStatus status) =>
             new() { Id = id, ProsumerNIC = Nic, NodeId = "node1", SlotTime = slot, Status = status };
+
+        // Checks a slot outside the node's opening hours is refused (Now = 17:30 Sri Lanka time).
+        [Fact]
+        public async Task Create_OutsideOperatingHours_IsRejected()
+        {
+            _nodes.Items[0].OpenTime = "06:00";
+            _nodes.Items[0].CloseTime = "17:00";
+
+            var result = await Service().CreateAsync(new CreateReservationRequest("node1", Now.AddDays(2)));
+
+            Assert.Equal(ErrorType.Validation, result.Error);
+            Assert.Contains("06:00-17:00", result.Message);
+        }
+
+        // Checks a slot inside the opening hours is accepted.
+        [Fact]
+        public async Task Create_InsideOperatingHours_IsAccepted()
+        {
+            _nodes.Items[0].OpenTime = "06:00";
+            _nodes.Items[0].CloseTime = "18:00";
+
+            var result = await Service().CreateAsync(new CreateReservationRequest("node1", Now.AddDays(2)));
+            Assert.True(result.IsSuccess);
+        }
+
+        // Checks a Grid Operator can cancel a prosumer's booking on their behalf.
+        [Fact]
+        public async Task GridOperator_CanCancelOnBehalfOfProsumer()
+        {
+            _reservations.Items.Add(Reservation("r1", Now.AddDays(2), ReservationStatus.Pending));
+            _user.Role = UserRole.GridOperator;
+            _user.Nic = null;
+
+            var result = await Service().CancelAsync("r1");
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(ReservationStatus.Cancelled, result.Value!.Status);
+        }
+
+        // Checks a Grid Operator still cannot reschedule a prosumer's booking.
+        [Fact]
+        public async Task GridOperator_CannotReschedule()
+        {
+            _reservations.Items.Add(Reservation("r1", Now.AddDays(2), ReservationStatus.Pending));
+            _user.Role = UserRole.GridOperator;
+            _user.Nic = null;
+
+            var result = await Service().UpdateAsync("r1", new UpdateReservationRequest(Now.AddDays(3)));
+            Assert.Equal(ErrorType.Forbidden, result.Error);
+        }
+
+        // Checks free-text search matches the node name, case-insensitively.
+        [Fact]
+        public async Task Search_MatchesNodeName()
+        {
+            _reservations.Items.Add(Reservation("r1", Now.AddDays(2), ReservationStatus.Pending));
+            _nodes.Items.Add(new MicrogridNode { Id = "node2", Name = "Galle Hub", BatterySlots = 1, IsActive = true });
+            var other = Reservation("r2", Now.AddDays(3), ReservationStatus.Pending);
+            other.NodeId = "node2";
+            _reservations.Items.Add(other);
+
+            var list = await Service().GetAsync(new ReservationQuery(null, null, null, null, null, "kandy"));
+
+            Assert.Equal("r1", Assert.Single(list).Id);
+        }
     }
 }

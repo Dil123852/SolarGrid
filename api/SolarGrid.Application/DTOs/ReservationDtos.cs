@@ -16,7 +16,8 @@ namespace SolarGrid.Application.DTOs
     // NodeId is optional - omit it to keep the current node.
     public record UpdateReservationRequest(DateTime SlotTime, string? NodeId = null);
 
-    public record ReservationQuery(string? Nic, string? NodeId, ReservationStatus? Status, DateTime? From, DateTime? To);
+    // Search is free text matched against node name, prosumer NIC, booking reference and status.
+    public record ReservationQuery(string? Nic, string? NodeId, ReservationStatus? Status, DateTime? From, DateTime? To, string? Search = null);
 
     public record ReservationResponse(
         string Id,

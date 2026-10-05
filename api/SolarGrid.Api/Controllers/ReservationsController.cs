@@ -26,7 +26,7 @@ namespace SolarGrid.Api.Controllers
             _service = service;
         }
 
-        // GET /api/reservations?nic=&nodeId=&status=&from=&to= - prosumers only ever get their own.
+        // GET /api/reservations?nic=&nodeId=&status=&from=&to=&search= - prosumers only ever get their own.
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] ReservationQuery query) => Ok(await _service.GetAsync(query));
 
@@ -46,8 +46,8 @@ namespace SolarGrid.Api.Controllers
         public async Task<IActionResult> Update(string id, [FromBody] UpdateReservationRequest request) =>
             (await _service.UpdateAsync(id, request)).ToActionResult();
 
-        // DELETE /api/reservations/{id} - cancels a reservation (12h notice).
-        [Authorize(Roles = Roles.BackofficeOrProsumer)]
+        // DELETE /api/reservations/{id} - cancels a reservation (12h notice); Grid Operators may assist.
+        [Authorize(Roles = Roles.Everyone)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Cancel(string id) => (await _service.CancelAsync(id)).ToActionResult();
 

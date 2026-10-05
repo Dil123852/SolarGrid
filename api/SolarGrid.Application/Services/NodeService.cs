@@ -1,7 +1,8 @@
 /*
  * File: NodeService.cs
- * Purpose: Business logic for managing microgrid nodes, including the rule that a node
- *          cannot be deactivated while it has live (pending/approved, upcoming) reservations.
+ * Purpose: Business logic for managing microgrid nodes - details, operating schedule and battery
+ *          slots - including the rule that a node cannot be deactivated while it has live
+ *          (pending/approved, upcoming) reservations.
  * Project: Smart Solar Microgrid Trading System - Web Service (SolarGrid API)
  * Module: SE4040 Enterprise Application Development - Assignment 1
  */
@@ -74,6 +75,19 @@ namespace SolarGrid.Application.Services
             return Result.Ok("Node deactivated.");
         }
 
+        // Grid Operators keep battery-slot availability current without touching other node details.
+        public async Task<Result<NodeResponse>> UpdateBatterySlotsAsync(string id, UpdateBatterySlotsRequest request)
+        {
+            if (request.BatterySlots < 1) return Result.Invalid<NodeResponse>("A node needs at least one battery slot.");
+
+            var node = await _nodes.GetByIdAsync(id);
+            if (node == null) return Result.NotFound<NodeResponse>("Node not found.");
+
+            node.BatterySlots = request.BatterySlots;
+            await _nodes.ReplaceAsync(node);
+            return Result.Ok(node.ToResponse(), "Battery slots updated.");
+        }
+
         public async Task<Result> ActivateAsync(string id) =>
             await _nodes.SetActiveAsync(id, true)
                 ? Result.Ok("Node activated.")
@@ -86,6 +100,8 @@ namespace SolarGrid.Application.Services
             if (r.Longitude is < -180 or > 180) return "Longitude must be between -180 and 180.";
             if (r.CapacityKWh <= 0) return "Capacity must be greater than zero.";
             if (r.BatterySlots < 1) return "A node needs at least one battery slot.";
+            if (!NodeSchedule.IsValid(r.OpenTime, r.CloseTime))
+                return "Opening hours must be two HH:mm times with opening before closing, or both left empty.";
             return null;
         }
 
@@ -96,6 +112,8 @@ namespace SolarGrid.Application.Services
             node.Longitude = r.Longitude;
             node.CapacityKWh = r.CapacityKWh;
             node.BatterySlots = r.BatterySlots;
+            node.OpenTime = string.IsNullOrWhiteSpace(r.OpenTime) ? null : r.OpenTime.Trim();
+            node.CloseTime = string.IsNullOrWhiteSpace(r.CloseTime) ? null : r.CloseTime.Trim();
         }
     }
 }

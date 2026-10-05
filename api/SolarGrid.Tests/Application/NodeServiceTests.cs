@@ -85,5 +85,43 @@ namespace SolarGrid.Tests.Application
             {
                 Id = Guid.NewGuid().ToString("N"), NodeId = "node1", ProsumerNIC = "991234567V", SlotTime = slot, Status = status
             });
+
+        // Checks a schedule with closing before opening is refused.
+        [Fact]
+        public async Task Create_WithInvertedSchedule_IsRejected()
+        {
+            var result = await Service().CreateAsync(new NodeRequest("Hub", 7, 80, 50, 4, "18:00", "06:00"));
+            Assert.Equal(ErrorType.Validation, result.Error);
+        }
+
+        // Checks a valid schedule is stored on the node.
+        [Fact]
+        public async Task Create_WithSchedule_StoresHours()
+        {
+            var result = await Service().CreateAsync(new NodeRequest("Hub", 7, 80, 50, 4, "06:00", "18:00"));
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal("06:00", result.Value!.OpenTime);
+            Assert.Equal("18:00", result.Value.CloseTime);
+        }
+
+        // Checks Grid Operators can change battery slots and nothing else.
+        [Fact]
+        public async Task UpdateBatterySlots_ChangesOnlySlots()
+        {
+            var result = await Service().UpdateBatterySlotsAsync("node1", new UpdateBatterySlotsRequest(9));
+
+            Assert.True(result.IsSuccess);
+            Assert.Equal(9, _nodes.Items[0].BatterySlots);
+            Assert.Equal("Galle Hub", _nodes.Items[0].Name);
+        }
+
+        // Checks zero battery slots is refused.
+        [Fact]
+        public async Task UpdateBatterySlots_Zero_IsRejected()
+        {
+            var result = await Service().UpdateBatterySlotsAsync("node1", new UpdateBatterySlotsRequest(0));
+            Assert.Equal(ErrorType.Validation, result.Error);
+        }
     }
 }

@@ -1,6 +1,7 @@
 /*
  * File: MicrogridNode.cs
- * Purpose: Domain entity for a solar microgrid hub/node - GPS location, capacity, battery slots.
+ * Purpose: Domain entity for a solar microgrid hub/node - GPS location, capacity, battery slots
+ *          and its daily operating schedule.
  * Project: Smart Solar Microgrid Trading System - Web Service (SolarGrid API)
  * Module: SE4040 Enterprise Application Development - Assignment 1
  */
@@ -19,8 +20,12 @@ namespace SolarGrid.Domain.Entities
         // Capacity in kW/h, per assignment spec.
         public double CapacityKWh { get; set; }
 
-        // Number of available battery storage slots at this node.
+        // Number of available battery storage slots at this node (Grid Operators keep this current).
         public int BatterySlots { get; set; }
+
+        // Operating schedule in Sri Lanka local time, "HH:mm". Null means open around the clock.
+        public string? OpenTime { get; set; }
+        public string? CloseTime { get; set; }
 
         // False once deactivated; blocked by ReservationPolicy while live reservations exist.
         public bool IsActive { get; set; } = true;

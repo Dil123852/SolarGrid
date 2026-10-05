@@ -19,7 +19,7 @@ namespace SolarGrid.Application.Common
             new(p.NIC, p.Name, p.Email, p.Phone, p.Address, p.IsActive, p.CreatedAt);
 
         public static NodeResponse ToResponse(this MicrogridNode n) =>
-            new(n.Id, n.Name, n.Latitude, n.Longitude, n.CapacityKWh, n.BatterySlots, n.IsActive);
+            new(n.Id, n.Name, n.Latitude, n.Longitude, n.CapacityKWh, n.BatterySlots, n.IsActive, n.OpenTime, n.CloseTime);
 
         public static ReservationResponse ToResponse(this EnergyReservation r, string nodeName) =>
             new(r.Id, r.ProsumerNIC, r.NodeId, nodeName, r.SlotTime, r.Status, r.QrToken, r.CreatedAt, r.UpdatedAt);

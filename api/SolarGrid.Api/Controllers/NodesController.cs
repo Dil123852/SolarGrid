@@ -46,6 +46,12 @@ namespace SolarGrid.Api.Controllers
         public async Task<IActionResult> Update(string id, [FromBody] NodeRequest request) =>
             (await _service.UpdateAsync(id, request)).ToActionResult();
 
+        // PUT /api/nodes/{id}/slots - Grid Operators (and Backoffice) keep battery-slot availability current.
+        [Authorize(Roles = Roles.Staff)]
+        [HttpPut("{id}/slots")]
+        public async Task<IActionResult> UpdateSlots(string id, [FromBody] UpdateBatterySlotsRequest request) =>
+            (await _service.UpdateBatterySlotsAsync(id, request)).ToActionResult();
+
         // PUT /api/nodes/{id}/deactivate - 409 while the node has live reservations.
         [Authorize(Roles = Roles.Backoffice)]
         [HttpPut("{id}/deactivate")]

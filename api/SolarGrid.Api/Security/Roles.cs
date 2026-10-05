@@ -17,5 +17,6 @@ namespace SolarGrid.Api.Security
 
         public const string Staff = Backoffice + "," + GridOperator;
         public const string BackofficeOrProsumer = Backoffice + "," + Prosumer;
+        public const string Everyone = Backoffice + "," + GridOperator + "," + Prosumer;
     }
 }

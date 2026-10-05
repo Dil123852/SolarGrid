@@ -7,7 +7,27 @@
 
 namespace SolarGrid.Application.DTOs
 {
-    public record NodeRequest(string Name, double Latitude, double Longitude, double CapacityKWh, int BatterySlots);
+    // OpenTime / CloseTime are "HH:mm" in Sri Lanka time; leave both empty for a 24-hour node.
+    public record NodeRequest(
+        string Name,
+        double Latitude,
+        double Longitude,
+        double CapacityKWh,
+        int BatterySlots,
+        string? OpenTime = null,
+        string? CloseTime = null);
 
-    public record NodeResponse(string Id, string Name, double Latitude, double Longitude, double CapacityKWh, int BatterySlots, bool IsActive);
+    // Grid Operators may only change the available battery slots of a node.
+    public record UpdateBatterySlotsRequest(int BatterySlots);
+
+    public record NodeResponse(
+        string Id,
+        string Name,
+        double Latitude,
+        double Longitude,
+        double CapacityKWh,
+        int BatterySlots,
+        bool IsActive,
+        string? OpenTime,
+        string? CloseTime);
 }
