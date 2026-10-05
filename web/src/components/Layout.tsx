@@ -14,7 +14,7 @@ import { dashboardApi } from "../api/endpoints";
 import type { Role } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 import { UserMenu } from "./UserMenu";
-import { CiBatteryCharging, CiCalendarDate, CiCircleRemove, CiGrid41, CiHome, CiMenuBurger, CiUser } from "react-icons/ci";
+import { CiBatteryCharging, CiCalendarDate, CiCircleRemove, CiClock2, CiGrid41, CiHome, CiMenuBurger, CiUser } from "react-icons/ci";
 
 interface NavItem {
   to: string;
@@ -28,6 +28,7 @@ const NAV: NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: CiGrid41, roles: ["Backoffice", "GridOperator"] },
   { to: "/bookings", label: "Bookings", icon: CiCalendarDate, roles: ["Backoffice", "GridOperator"], showPendingBadge: true },
   { to: "/nodes", label: "Nodes", icon: CiBatteryCharging, roles: ["Backoffice", "GridOperator"] },
+  { to: "/slots", label: "Slots", icon: CiClock2, roles: ["Backoffice", "GridOperator"] },
   { to: "/prosumers", label: "Prosumers", icon: CiHome, roles: ["Backoffice"] },
   { to: "/users", label: "Staff", icon: CiUser, roles: ["Backoffice"] },
 ];

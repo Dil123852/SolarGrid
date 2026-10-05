@@ -19,6 +19,7 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { LoginPage } from "./pages/LoginPage";
 import { NodesPage } from "./pages/NodesPage";
 import { ProsumersPage } from "./pages/ProsumersPage";
+import { SlotsPage } from "./pages/SlotsPage";
 import { UsersPage } from "./pages/UsersPage";
 
 const STAFF: Role[] = ["Backoffice", "GridOperator"];
@@ -42,6 +43,7 @@ export function App() {
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/bookings" element={<BookingsPage />} />
                 <Route path="/nodes" element={<NodesPage />} />
+                <Route path="/slots" element={<SlotsPage />} />
                 <Route path="/prosumers" element={guard(BACKOFFICE, <ProsumersPage />)} />
                 <Route path="/users" element={guard(BACKOFFICE, <UsersPage />)} />
               </Route>

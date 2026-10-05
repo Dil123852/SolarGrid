@@ -83,6 +83,28 @@ export interface Reservation {
   qrToken: string | null;
   createdAt: string;
   updatedAt: string | null;
+  // The energy booking slot this reservation was made in (null when the station publishes none).
+  slotId: string | null;
+}
+
+// A bookable time window published at a solar station, with live booked/available counts.
+export interface BookingSlot {
+  id: string;
+  nodeId: string;
+  nodeName: string;
+  startTime: string;
+  endTime: string;
+  capacity: number;
+  booked: number;
+  available: number;
+  isActive: boolean;
+}
+
+export interface BookingSlotRequest {
+  nodeId: string;
+  startTime: string;
+  endTime: string;
+  capacity: number;
 }
 
 export interface ReservationFilter {

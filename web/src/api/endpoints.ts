@@ -9,6 +9,8 @@
 import { http } from "./client";
 import type {
   AuthResponse,
+  BookingSlot,
+  BookingSlotRequest,
   CreateReservationRequest,
   DashboardCounts,
   MessageResponse,
@@ -61,6 +63,13 @@ export const reservationsApi = {
   update: (id: string, change: UpdateReservationRequest) => http.put<Reservation>(`/api/reservations/${enc(id)}`, change),
   cancel: (id: string) => http.del<Reservation>(`/api/reservations/${enc(id)}`),
   approve: (id: string) => http.post<Reservation>(`/api/reservations/${enc(id)}/approve`),
+};
+
+export const slotsApi = {
+  list: (filter: { nodeId?: string; from?: string; to?: string } = {}) => http.get<BookingSlot[]>("/api/slots", filter),
+  create: (slot: BookingSlotRequest) => http.post<BookingSlot>("/api/slots", slot),
+  update: (id: string, slot: Omit<BookingSlotRequest, "nodeId">) => http.put<BookingSlot>(`/api/slots/${enc(id)}`, slot),
+  remove: (id: string) => http.del<MessageResponse>(`/api/slots/${enc(id)}`),
 };
 
 export const dashboardApi = {
