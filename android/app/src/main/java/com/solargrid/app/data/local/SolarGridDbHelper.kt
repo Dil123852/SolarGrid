@@ -43,7 +43,9 @@ class SolarGridDbHelper(context: Context) :
                 longitude REAL NOT NULL,
                 capacity_kwh REAL NOT NULL,
                 battery_slots INTEGER NOT NULL,
-                is_active INTEGER NOT NULL
+                is_active INTEGER NOT NULL,
+                open_time TEXT,
+                close_time TEXT
             )
             """.trimIndent()
         )
@@ -105,6 +107,8 @@ class SolarGridDbHelper(context: Context) :
                     put("capacity_kwh", n.capacityKWh)
                     put("battery_slots", n.batterySlots)
                     put("is_active", if (n.isActive) 1 else 0)
+                    put("open_time", n.openTime)
+                    put("close_time", n.closeTime)
                 })
             }
             db.setTransactionSuccessful()
@@ -124,7 +128,9 @@ class SolarGridDbHelper(context: Context) :
                     longitude = c.getDouble(c.getColumnIndexOrThrow("longitude")),
                     capacityKWh = c.getDouble(c.getColumnIndexOrThrow("capacity_kwh")),
                     batterySlots = c.getInt(c.getColumnIndexOrThrow("battery_slots")),
-                    isActive = c.getInt(c.getColumnIndexOrThrow("is_active")) == 1
+                    isActive = c.getInt(c.getColumnIndexOrThrow("is_active")) == 1,
+                    openTime = c.getString(c.getColumnIndexOrThrow("open_time")),
+                    closeTime = c.getString(c.getColumnIndexOrThrow("close_time"))
                 )
             }
             nodes
@@ -132,7 +138,8 @@ class SolarGridDbHelper(context: Context) :
 
     companion object {
         private const val DATABASE_NAME = "solargrid.db"
-        private const val DATABASE_VERSION = 1
+        // v2 added node opening hours to node_cache.
+        private const val DATABASE_VERSION = 2
         private const val TABLE_SESSION = "session"
         private const val TABLE_NODES = "node_cache"
     }

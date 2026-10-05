@@ -106,6 +106,7 @@ fun NodesMapScreen(
                         Text(node.name, style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(top = 4.dp, bottom = 6.dp))
                         LabelValue("Capacity", "${node.capacityKWh} kWh")
                         LabelValue("Battery slots", node.batterySlots.toString())
+                        LabelValue("Opening hours", node.hoursLabel)
                         LabelValue("Status", if (node.isActive) "Accepting bookings" else "Inactive")
                         LabelValue("Location", "%.5f, %.5f".format(node.latitude, node.longitude))
                     }

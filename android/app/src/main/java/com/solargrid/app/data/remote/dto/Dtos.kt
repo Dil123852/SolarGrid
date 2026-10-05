@@ -63,7 +63,9 @@ data class NodeDto(
     val longitude: Double?,
     val capacityKWh: Double?,
     val batterySlots: Int?,
-    val isActive: Boolean?
+    val isActive: Boolean?,
+    val openTime: String? = null,
+    val closeTime: String? = null
 )
 
 data class ReservationDto(

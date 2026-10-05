@@ -1,6 +1,6 @@
 /*
  * File: BookingListScreen.kt
- * Purpose: Current bookings and full booking history with node and status filters.
+ * Purpose: Current bookings and full booking history with search plus node and status filters.
  * Project: Smart Solar Microgrid Trading System - Android App
  * Module: SE4040 Enterprise Application Development - Assignment 1
  */
@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solargrid.app.di.ServiceLocator
@@ -35,6 +36,7 @@ import com.solargrid.app.ui.common.CircumIcons
 import com.solargrid.app.ui.common.EmptyState
 import com.solargrid.app.ui.common.ErrorText
 import com.solargrid.app.ui.common.SgTabRow
+import com.solargrid.app.ui.common.SgTextField
 import com.solargrid.app.ui.common.SgTopBar
 import com.solargrid.app.ui.common.factoryOf
 import com.solargrid.app.ui.theme.Border
@@ -67,6 +69,15 @@ fun BookingListScreen(
                 selected = vm.tab.ordinal,
                 onSelect = { vm.selectTab(BookingTab.entries[it]) },
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp)
+            )
+
+            SgTextField(
+                label = "Search bookings",
+                value = vm.search,
+                onValueChange = vm::updateSearch,
+                placeholder = "Node, NIC, reference or status",
+                imeAction = ImeAction.Search,
+                modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp)
             )
 
             Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {

@@ -19,6 +19,8 @@ import com.solargrid.app.domain.model.ReservationFilter
 import com.solargrid.app.domain.model.ReservationStatus
 import com.solargrid.app.domain.repository.NodeRepository
 import com.solargrid.app.domain.repository.ReservationRepository
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 enum class BookingTab { Current, History }
@@ -36,6 +38,11 @@ class BookingListViewModel(
         private set
     var nodeOptions by mutableStateOf<List<MicrogridNode>>(emptyList())
         private set
+
+    // Free-text search (node, NIC, reference, status) - sent to the API after a short pause in typing.
+    var search by mutableStateOf("")
+        private set
+    private var searchJob: Job? = null
 
     private var all by mutableStateOf<List<Reservation>>(emptyList())
 
@@ -55,25 +62,39 @@ class BookingListViewModel(
         viewModelScope.launch { nodes.getNodes().onSuccess { nodeOptions = it } }
     }
 
+    // Switches between Current and History.
     fun selectTab(newTab: BookingTab) {
         tab = newTab
     }
 
+    // Filters by node and reloads.
     fun filterByNode(node: MicrogridNode?) {
         nodeFilter = node
         load()
     }
 
+    // Filters by status and reloads.
     fun filterByStatus(status: ReservationStatus?) {
         statusFilter = status
         load()
     }
 
+    // Updates the search text and reloads once the user stops typing.
+    fun updateSearch(text: String) {
+        search = text
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(400)
+            load()
+        }
+    }
+
+    // Loads bookings from the API with the current node, status and search filters.
     fun load() {
         loading = true
         error = null
         viewModelScope.launch {
-            reservations.list(ReservationFilter(nodeId = nodeFilter?.id, status = statusFilter))
+            reservations.list(ReservationFilter(nodeId = nodeFilter?.id, status = statusFilter, search = search))
                 .onSuccess { all = it }
                 .onFailure { error = it.message }
             loading = false

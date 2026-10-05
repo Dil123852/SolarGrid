@@ -75,7 +75,7 @@ fun BookingFormScreen(
                     label = "Microgrid node",
                     options = vm.nodeOptions,
                     selected = vm.selectedNode ?: vm.nodeOptions.firstOrNull() ?: placeholderNode,
-                    optionLabel = { if (it === placeholderNode) "No active nodes" else "${it.name} · ${it.batterySlots} slots" },
+                    optionLabel = { if (it === placeholderNode) "No active nodes" else "${it.name} · ${it.hoursLabel}" },
                     onSelected = { vm.selectedNode = it },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -114,7 +114,7 @@ fun BookingFormScreen(
                     )
                 }
                 Text(
-                    "Bookings can be made up to 7 days ahead. Changes and cancellations need 12 hours' notice.",
+                    "Bookings can be made up to 7 days ahead, within the node's opening hours (Sri Lanka time). Changes and cancellations need 12 hours' notice.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 12.dp)

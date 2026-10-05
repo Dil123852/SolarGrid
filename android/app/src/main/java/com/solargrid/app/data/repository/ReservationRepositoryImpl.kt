@@ -27,7 +27,8 @@ class ReservationRepositoryImpl(private val api: ApiService) : ReservationReposi
                 nodeId = filter.nodeId,
                 status = filter.status?.name,
                 from = filter.from?.toString(),
-                to = filter.to?.toString()
+                to = filter.to?.toString(),
+                search = filter.search?.takeIf { it.isNotBlank() }?.trim()
             )
         }.map { list -> list.map { it.toDomain() } }
 

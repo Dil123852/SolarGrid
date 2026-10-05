@@ -66,7 +66,8 @@ interface ApiService {
         @Query("nodeId") nodeId: String?,
         @Query("status") status: String?,
         @Query("from") from: String?,
-        @Query("to") to: String?
+        @Query("to") to: String?,
+        @Query("search") search: String?
     ): Response<List<ReservationDto>>
 
     @GET("api/reservations/{id}")

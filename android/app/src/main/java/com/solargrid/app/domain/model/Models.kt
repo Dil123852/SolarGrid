@@ -40,8 +40,13 @@ data class MicrogridNode(
     val longitude: Double,
     val capacityKWh: Double,
     val batterySlots: Int,
-    val isActive: Boolean
-)
+    val isActive: Boolean,
+    // Operating hours, "HH:mm" Sri Lanka time; null = open around the clock.
+    val openTime: String? = null,
+    val closeTime: String? = null
+) {
+    val hoursLabel: String get() = if (openTime != null && closeTime != null) "$openTime-$closeTime" else "24 hours"
+}
 
 data class Reservation(
     val id: String,
@@ -63,7 +68,9 @@ data class ReservationFilter(
     val nodeId: String? = null,
     val status: ReservationStatus? = null,
     val from: Instant? = null,
-    val to: Instant? = null
+    val to: Instant? = null,
+    // Free text the API matches against node name, NIC, booking reference and status.
+    val search: String? = null
 )
 
 // Raised when a deactivated prosumer tries to sign in (API returns 403).

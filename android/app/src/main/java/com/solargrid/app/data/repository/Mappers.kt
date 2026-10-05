@@ -55,7 +55,9 @@ internal fun NodeDto.toDomain(): MicrogridNode = MicrogridNode(
     longitude = longitude ?: 0.0,
     capacityKWh = capacityKWh ?: 0.0,
     batterySlots = batterySlots ?: 0,
-    isActive = isActive ?: false
+    isActive = isActive ?: false,
+    openTime = openTime,
+    closeTime = closeTime
 )
 
 internal fun ReservationDto.toDomain(): Reservation = Reservation(
