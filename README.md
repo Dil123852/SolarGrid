@@ -58,13 +58,22 @@ The API follows clean architecture, and dependencies only point inward:
 
 | Project | Role | Depends on |
 |---|---|---|
-| `SolarGrid.Domain` | Entities, enums, `ReservationPolicy` business rules. Pure C#, no MongoDB | – |
+| `SolarGrid.Domain` | Entities, enums and business rules (`ReservationPolicy`, `NodeSchedule`, `BookingSlotPolicy`). Pure C#, no MongoDB | – |
 | `SolarGrid.Application` | Services (all business logic), DTOs, `Result` type, repository/security ports | Domain |
 | `SolarGrid.Infrastructure` | MongoDB repositories and class maps, JWT issuing, password hashing | Application |
 | `SolarGrid.Api` | Thin controllers, role-based `[Authorize]`, Swagger, composition root | Application, Infrastructure |
-| `SolarGrid.Tests` | 61 xUnit tests: domain rules, every application service (in-memory fakes) and the layer dependency rules | Domain, Application |
+| `SolarGrid.Tests` | 99 xUnit tests: domain rules, every application service (in-memory fakes) and the layer dependency rules | Domain, Application |
 
 The web and Android clients hold no business rules. They show whatever `{ message }` the API returns.
+
+### Database (MongoDB Atlas, `SolarGridDB`)
+| Collection | Holds | Key |
+|---|---|---|
+| `Users` | Staff accounts (Backoffice, Grid Operator) | ObjectId; unique `Username`, `Email` |
+| `Prosumers` | Prosumer accounts | **NIC** is the document `_id` |
+| `Nodes` | Solar stations: location, capacity, battery slots, opening hours | ObjectId |
+| `EnergyBookingSlots` | Bookable time windows a station publishes, each with a capacity | ObjectId; index `(NodeId, StartTime)` |
+| `Reservations` | Energy bookings: prosumer NIC, node, slot time, optional `SlotId`, status, QR token | ObjectId; indexes on `(ProsumerNIC, SlotTime)`, `(NodeId, SlotTime)`, `QrToken`, `SlotId` |
 
 ### Business rules (enforced in `SolarGrid.Application` / `SolarGrid.Domain`)
 - A reservation must be in the future and no more than **7 days** ahead (on create and on reschedule).
@@ -73,6 +82,10 @@ The web and Android clients hold no business rules. They show whatever `{ messag
 - Rescheduling an approved booking sends it back to Pending and invalidates its QR token.
 - A node's **battery slots** cap how many live bookings it accepts for the same time slot.
 - A node's **opening hours** (Sri Lanka time, optional) are enforced: bookings outside them are refused.
+- **Energy booking slots:** staff publish time windows (15 minutes to 24 hours) per station. A slot must be in the future,
+  inside the opening hours, must not overlap another slot of the same station, and its capacity is 1 to the station's battery slots.
+  Once a station has upcoming slots, bookings are accepted **only inside a slot** with room left (a full slot returns 409).
+  A slot holding live bookings can't be deleted, its window can't move, and its capacity can't drop below the bookings in it.
 - Grid Operators keep **battery slots** current and may **cancel** a booking on a prosumer's behalf (12-hour rule still applies).
 - A node can't be **deactivated** while it has live (pending/approved) upcoming bookings.
 - A QR scan completes the transfer exactly once, as an atomic find-and-update.
@@ -81,9 +94,9 @@ The web and Android clients hold no business rules. They show whatever `{ messag
 ### Roles
 | Role | Signs in via | Can |
 |---|---|---|
-| Backoffice | Web (`/api/auth/login`) | Manage staff users; create/edit/deactivate/reactivate prosumers; manage nodes and their schedules; create/reschedule/cancel/approve bookings |
-| Grid Operator | Web and Android (one sign-in, username) | Update battery slots, monitor and search bookings, cancel on a prosumer's behalf; on mobile, scan and verify QR codes |
-| Prosumer | Android (one sign-in, NIC + password) | Register, edit profile, deactivate account, create/update/cancel/search own bookings, dashboard, map, booking QR |
+| Backoffice | Web (`/api/auth/login`) | Manage staff users; create/edit/deactivate/reactivate prosumers; manage nodes, their schedules and booking slots; create/reschedule/cancel/approve bookings |
+| Grid Operator | Web and Android (one sign-in, username) | Publish and maintain booking slots, update battery slots, monitor and search bookings, cancel on a prosumer's behalf; on mobile, scan and verify QR codes |
+| Prosumer | Android (one sign-in, NIC + password) | Register, edit profile, deactivate account, book inside a station's published slots, update/cancel/search own bookings, dashboard, map, booking QR |
 
 ## Running the API
 

@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1120" viewBox="0 0 1800 1120">
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3A3A38"/></marker>
+  <marker id="arrowStart" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3A3A38"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+
+<path d="M289.7,155.0 L191.0,489.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowStart)"/>
+<path d="M312.7,155.0 L434.7,490.5" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M335.8,155.0 L697.1,508.3" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M358.9,155.0 L976.4,522.2" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M381.9,155.0 L1261.9,530.9" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowStart)"/>
+<path d="M841.9,155.0 L233.4,521.8" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowStart)"/>
+<path d="M865.0,155.0 L512.3,507.7" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M934.2,155.0 L1278.3,507.1" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowStart)"/>
+<path d="M1394.2,155.0 L240.3,536.8" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowStart)"/>
+<path d="M1440.3,155.0 L813.8,522.6" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M1463.4,155.0 L1093.5,508.8" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M1486.5,155.0 L1356.7,491.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowStart)"/>
+<path d="M1510.3,155.0 L1609.0,489.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowStart)"/>
+<path d="M170.0,634.0 L170.0,936.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M213.4,619.9 L442.6,936.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M416.6,619.9 L187.4,936.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowStart)"/>
+<path d="M460.0,634.0 L460.0,936.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowStart)"/>
+<path d="M750.0,634.0 L750.0,936.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowStart)"/>
+<path d="M813.0,598.8 L1361.0,936.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M996.6,619.9 L767.4,936.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M1040.0,634.0 L1040.0,936.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowStart)"/>
+<path d="M1089.5,615.0 L1378.4,936.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M1269.1,602.0 L784.8,936.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M1286.6,619.9 L1057.4,936.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M1342.8,632.9 L1395.8,936.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowStart)"/>
+<path d="M1593.1,624.2 L1413.8,936.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowStart)"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="900" y="32" font-size="20" font-weight="700" fill="#0B0B0B">Data flow diagram - level 1</tspan></text>
+<rect x="185" y="85" width="230" height="70" rx="0" fill="#F5F5F3" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="300" y="120" font-size="17" font-weight="700" fill="#0B0B0B">Backoffice</tspan></text>
+<rect x="785" y="85" width="230" height="70" rx="0" fill="#F5F5F3" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="900" y="120" font-size="17" font-weight="700" fill="#0B0B0B">Prosumer</tspan></text>
+<rect x="1385" y="85" width="230" height="70" rx="0" fill="#F5F5F3" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1500" y="120" font-size="17" font-weight="700" fill="#0B0B0B">Grid Operator</tspan></text>
+<circle cx="170" cy="560" r="74" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.8"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="170" y="550.25" font-size="15" font-weight="700" fill="#0B0B0B">1.0</tspan><tspan x="170" y="569.75" font-size="15" font-weight="400" fill="#0B0B0B">Authenticate</tspan></text>
+<circle cx="460" cy="560" r="74" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.8"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="460" y="540.5" font-size="15" font-weight="700" fill="#0B0B0B">2.0</tspan><tspan x="460" y="560" font-size="15" font-weight="400" fill="#0B0B0B">Manage</tspan><tspan x="460" y="579.5" font-size="15" font-weight="400" fill="#0B0B0B">accounts</tspan></text>
+<circle cx="750" cy="560" r="74" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.8"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="750" y="540.5" font-size="15" font-weight="700" fill="#0B0B0B">3.0</tspan><tspan x="750" y="560" font-size="15" font-weight="400" fill="#0B0B0B">Manage</tspan><tspan x="750" y="579.5" font-size="15" font-weight="400" fill="#0B0B0B">stations</tspan></text>
+<circle cx="1040" cy="560" r="74" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.8"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1040" y="540.5" font-size="15" font-weight="700" fill="#0B0B0B">4.0</tspan><tspan x="1040" y="560" font-size="15" font-weight="400" fill="#0B0B0B">Manage</tspan><tspan x="1040" y="579.5" font-size="15" font-weight="400" fill="#0B0B0B">booking slots</tspan></text>
+<circle cx="1330" cy="560" r="74" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.8"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1330" y="540.5" font-size="15" font-weight="700" fill="#0B0B0B">5.0</tspan><tspan x="1330" y="560" font-size="15" font-weight="400" fill="#0B0B0B">Manage</tspan><tspan x="1330" y="579.5" font-size="15" font-weight="400" fill="#0B0B0B">reservations</tspan></text>
+<circle cx="1630" cy="560" r="74" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.8"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1630" y="540.5" font-size="15" font-weight="700" fill="#0B0B0B">6.0</tspan><tspan x="1630" y="560" font-size="15" font-weight="400" fill="#0B0B0B">Verify QR</tspan><tspan x="1630" y="579.5" font-size="15" font-weight="400" fill="#0B0B0B">transfer</tspan></text>
+<rect x="60" y="936" width="220" height="48" fill="#FFFFFF" stroke="none"/><path d="M280,936 H60 V984 H280" fill="none" stroke="#0B0B0B" stroke-width="1.6"/><line x1="114" y1="936" x2="114" y2="984" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="87" y="960" font-size="15" font-weight="600" fill="#0B0B0B">D1</tspan></text>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="197" y="960" font-size="15" font-weight="400" fill="#0B0B0B">Users</tspan></text>
+<rect x="350" y="936" width="220" height="48" fill="#FFFFFF" stroke="none"/><path d="M570,936 H350 V984 H570" fill="none" stroke="#0B0B0B" stroke-width="1.6"/><line x1="404" y1="936" x2="404" y2="984" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="377" y="960" font-size="15" font-weight="600" fill="#0B0B0B">D2</tspan></text>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="487" y="960" font-size="15" font-weight="400" fill="#0B0B0B">Prosumers</tspan></text>
+<rect x="640" y="936" width="220" height="48" fill="#FFFFFF" stroke="none"/><path d="M860,936 H640 V984 H860" fill="none" stroke="#0B0B0B" stroke-width="1.6"/><line x1="694" y1="936" x2="694" y2="984" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="667" y="960" font-size="15" font-weight="600" fill="#0B0B0B">D3</tspan></text>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="777" y="960" font-size="15" font-weight="400" fill="#0B0B0B">Nodes</tspan></text>
+<rect x="915" y="936" width="250" height="48" fill="#FFFFFF" stroke="none"/><path d="M1165,936 H915 V984 H1165" fill="none" stroke="#0B0B0B" stroke-width="1.6"/><line x1="969" y1="936" x2="969" y2="984" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="942" y="960" font-size="15" font-weight="600" fill="#0B0B0B">D4</tspan></text>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1067" y="960" font-size="15" font-weight="400" fill="#0B0B0B">EnergyBookingSlots</tspan></text>
+<rect x="1275" y="936" width="250" height="48" fill="#FFFFFF" stroke="none"/><path d="M1525,936 H1275 V984 H1525" fill="none" stroke="#0B0B0B" stroke-width="1.6"/><line x1="1329" y1="936" x2="1329" y2="984" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1302" y="960" font-size="15" font-weight="600" fill="#0B0B0B">D5</tspan></text>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1427" y="960" font-size="15" font-weight="400" fill="#0B0B0B">Reservations</tspan></text>
+<rect x="163.90537549533298" y="350.65026755425765" width="129.13" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="228.47037549533297" y="362.10026755425764">credentials / JWT</tspan></text>
+<rect x="309.43589115029056" y="378.36870066329897" width="177.36" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="398.11589115029057" y="389.81870066329896">staff &amp; prosumer details</tspan></text>
+<rect x="541.6971719477115" y="397.90101257109575" width="108.46000000000001" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="595.9271719477115" y="409.35101257109574">station, hours</tspan></text>
+<rect x="793.1975885434475" y="429.950728323131" width="94.68" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="840.5375885434476" y="441.400728323131">slot windows</tspan></text>
+<rect x="1027.1111961240456" y="449.57167601415546" width="170.47" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1112.3461961240455" y="461.02167601415545">bookings, approval / QR</tspan></text>
+<rect x="584.4655956904802" y="253.58991492628587" width="149.8" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="659.3655956904802" y="265.03991492628586">NIC + password / JWT</tspan></text>
+<rect x="575.7044689400584" y="326.94053105994163" width="211.81" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="681.6094689400584" y="338.3905310599416">register, profile, deactivate</tspan></text>
+<rect x="996.8917536586358" y="319.5880735111621" width="218.70000000000002" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1106.2417536586358" y="331.0380735111621">booking requests / summary, QR</tspan></text>
+<rect x="1121.928664831641" y="212.26638155945705" width="129.13" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1186.4936648316411" y="223.71638155945703">credentials / JWT</tspan></text>
+<rect x="1001.1171881311003" y="371.4340496297545" width="101.57000000000001" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1051.9021881311003" y="382.8840496297545">battery slots</tspan></text>
+<rect x="1186.710262951391" y="362.9367050030174" width="94.68" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1234.050262951391" y="374.38670500301737">slot windows</tspan></text>
+<rect x="1344.0276370874851" y="345.1337628323915" width="129.13" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1408.5926370874852" y="356.58376283239147">cancel / bookings</tspan></text>
+<rect x="1500.0562211515007" y="327.2679792820028" width="129.13" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1564.6212211515008" y="338.7179792820028">QR token / result</tspan></text>
+<rect x="150.22" y="773.55" width="39.56" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="170" y="785">read</tspan></text>
+<rect x="262.4049202016762" y="703.2878209678292" width="39.56" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="282.1849202016762" y="714.7378209678293">read</tspan></text>
+<rect x="412.65999999999997" y="773.55" width="94.68" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="460" y="785">read / write</tspan></text>
+<rect x="702.66" y="773.55" width="94.68" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="750" y="785">read / write</tspan></text>
+<rect x="895.7870365771021" y="671.6374071243705" width="108.46000000000001" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="950.0170365771021" y="683.0874071243705">live bookings?</tspan></text>
+<rect x="847.2236398271348" y="734.8967036867108" width="115.35000000000001" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="904.8986398271347" y="746.3467036867108">hours, capacity</tspan></text>
+<rect x="992.66" y="773.55" width="94.68" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1040" y="785">read / write</tspan></text>
+<rect x="1143.27720359104" y="715.9024484344886" width="94.68" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1190.61720359104" y="727.3524484344887">booked count</tspan></text>
+<rect x="1149.000803073814" y="657.3597909835767" width="46.45" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1172.225803073814" y="668.8097909835767">hours</tspan></text>
+<rect x="1121.1971998559454" y="766.5055864055923" width="101.57000000000001" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1171.9821998559455" y="777.9555864055924">slot capacity</tspan></text>
+<rect x="1321.938072274833" y="772.9961272847611" width="94.68" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1369.278072274833" y="784.4461272847611">read / write</tspan></text>
+<rect x="1428.556568402451" y="768.6255332131287" width="149.8" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1503.456568402451" y="780.0755332131288">Approved → Completed</tspan></text>
+</svg>

@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="980" viewBox="0 0 1640 980">
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3A3A38"/></marker>
+  <marker id="arrowStart" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3A3A38"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+
+<path d="M440.0,507.0 L620.0,507.0" fill="none" stroke="#3A3A38" stroke-width="1.8"/>
+<path d="M1200.0,147.0 L1090.0,147.0 L1090.0,537.0 L1020.0,537.0" fill="none" stroke="#3A3A38" stroke-width="1.8"/>
+<path d="M1400.0,406.0 L1400.0,560.0" fill="none" stroke="#3A3A38" stroke-width="1.8"/>
+<path d="M1200.0,637.0 L1140.0,637.0 L1140.0,567.0 L1020.0,567.0" fill="none" stroke="#3A3A38" stroke-width="1.8"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="820" y="32" font-size="20" font-weight="700" fill="#0B0B0B">Database design - MongoDB Atlas (SolarGridDB)</tspan></text>
+<rect x="40" y="70" width="400" height="276" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.6"/>
+<rect x="40" y="70" width="400" height="58" fill="#0B0B0B"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="92" font-size="17" font-weight="700" fill="#FFFFFF">Users</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="113" font-size="12" font-weight="400" fill="#CFCFCB">User's detail - staff (Backoffice, Grid Operator)</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="147" font-size="12" font-weight="700" fill="#9A6700">PK</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="147" font-size="14" font-weight="600" fill="#0B0B0B">_id</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="147" font-size="13" font-weight="400" fill="#5F5F5B">ObjectId</tspan></text>
+<rect x="41" y="162" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="177" font-size="12" font-weight="700" fill="#1F5C3A">UQ</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="177" font-size="14" font-weight="600" fill="#0B0B0B">Username</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="177" font-size="13" font-weight="400" fill="#5F5F5B">string · unique</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="207" font-size="12" font-weight="700" fill="#1F5C3A">UQ</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="207" font-size="14" font-weight="600" fill="#0B0B0B">Email</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="207" font-size="13" font-weight="400" fill="#5F5F5B">string · unique</tspan></text>
+<rect x="41" y="222" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="237" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="237" font-size="14" font-weight="400" fill="#0B0B0B">PasswordHash</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="237" font-size="13" font-weight="400" fill="#5F5F5B">string (PBKDF2)</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="267" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="267" font-size="14" font-weight="400" fill="#0B0B0B">Role</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="267" font-size="13" font-weight="400" fill="#5F5F5B">Backoffice | GridOperator</tspan></text>
+<rect x="41" y="282" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="297" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="297" font-size="14" font-weight="400" fill="#0B0B0B">IsActive</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="297" font-size="13" font-weight="400" fill="#5F5F5B">bool</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="327" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="327" font-size="14" font-weight="400" fill="#0B0B0B">CreatedAt</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="327" font-size="13" font-weight="400" fill="#5F5F5B">date (UTC)</tspan></text>
+<rect x="40" y="430" width="400" height="306" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.6"/>
+<rect x="40" y="430" width="400" height="58" fill="#0B0B0B"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="452" font-size="17" font-weight="700" fill="#FFFFFF">Prosumers</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="473" font-size="12" font-weight="400" fill="#CFCFCB">User's detail - prosumers (NIC is the primary key)</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="507" font-size="12" font-weight="700" fill="#9A6700">PK</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="507" font-size="14" font-weight="600" fill="#0B0B0B">_id (NIC)</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="507" font-size="13" font-weight="400" fill="#5F5F5B">string</tspan></text>
+<rect x="41" y="522" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="537" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="537" font-size="14" font-weight="400" fill="#0B0B0B">Name</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="537" font-size="13" font-weight="400" fill="#5F5F5B">string</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="567" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="567" font-size="14" font-weight="400" fill="#0B0B0B">Email</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="567" font-size="13" font-weight="400" fill="#5F5F5B">string</tspan></text>
+<rect x="41" y="582" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="597" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="597" font-size="14" font-weight="400" fill="#0B0B0B">Phone</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="597" font-size="13" font-weight="400" fill="#5F5F5B">string</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="627" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="627" font-size="14" font-weight="400" fill="#0B0B0B">Address</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="627" font-size="13" font-weight="400" fill="#5F5F5B">string</tspan></text>
+<rect x="41" y="642" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="657" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="657" font-size="14" font-weight="400" fill="#0B0B0B">PasswordHash</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="657" font-size="13" font-weight="400" fill="#5F5F5B">string (PBKDF2)</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="687" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="687" font-size="14" font-weight="400" fill="#0B0B0B">IsActive</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="687" font-size="13" font-weight="400" fill="#5F5F5B">bool</tspan></text>
+<rect x="41" y="702" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="717" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="98" y="717" font-size="14" font-weight="400" fill="#0B0B0B">CreatedAt</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="424" y="717" font-size="13" font-weight="400" fill="#5F5F5B">date (UTC)</tspan></text>
+<rect x="620" y="400" width="400" height="336" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.6"/>
+<rect x="620" y="400" width="400" height="58" fill="#0B0B0B"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="636" y="422" font-size="17" font-weight="700" fill="#FFFFFF">Reservations</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="636" y="443" font-size="12" font-weight="400" fill="#CFCFCB">Energy Reservation</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="636" y="477" font-size="12" font-weight="700" fill="#9A6700">PK</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="678" y="477" font-size="14" font-weight="600" fill="#0B0B0B">_id</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1004" y="477" font-size="13" font-weight="400" fill="#5F5F5B">ObjectId</tspan></text>
+<rect x="621" y="492" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="636" y="507" font-size="12" font-weight="700" fill="#1F5C3A">FK</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="678" y="507" font-size="14" font-weight="600" fill="#0B0B0B">ProsumerNIC</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1004" y="507" font-size="13" font-weight="400" fill="#5F5F5B">string → Prosumers</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="636" y="537" font-size="12" font-weight="700" fill="#1F5C3A">FK</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="678" y="537" font-size="14" font-weight="600" fill="#0B0B0B">NodeId</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1004" y="537" font-size="13" font-weight="400" fill="#5F5F5B">string → Nodes</tspan></text>
+<rect x="621" y="552" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="636" y="567" font-size="12" font-weight="700" fill="#1F5C3A">FK</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="678" y="567" font-size="14" font-weight="600" fill="#0B0B0B">SlotId</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1004" y="567" font-size="13" font-weight="400" fill="#5F5F5B">string? → EnergyBookingSlots</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="636" y="597" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="678" y="597" font-size="14" font-weight="400" fill="#0B0B0B">SlotTime</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1004" y="597" font-size="13" font-weight="400" fill="#5F5F5B">date (UTC)</tspan></text>
+<rect x="621" y="612" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="636" y="627" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="678" y="627" font-size="14" font-weight="400" fill="#0B0B0B">Status</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1004" y="627" font-size="13" font-weight="400" fill="#5F5F5B">Pending|Approved|Cancelled|Completed</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="636" y="657" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="678" y="657" font-size="14" font-weight="400" fill="#0B0B0B">QrToken</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1004" y="657" font-size="13" font-weight="400" fill="#5F5F5B">string? (one-time)</tspan></text>
+<rect x="621" y="672" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="636" y="687" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="678" y="687" font-size="14" font-weight="400" fill="#0B0B0B">CreatedAt</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1004" y="687" font-size="13" font-weight="400" fill="#5F5F5B">date (UTC)</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="636" y="717" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="678" y="717" font-size="14" font-weight="400" fill="#0B0B0B">UpdatedAt</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1004" y="717" font-size="13" font-weight="400" fill="#5F5F5B">date? (UTC)</tspan></text>
+<rect x="1200" y="70" width="400" height="336" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.6"/>
+<rect x="1200" y="70" width="400" height="58" fill="#0B0B0B"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="92" font-size="17" font-weight="700" fill="#FFFFFF">Nodes</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="113" font-size="12" font-weight="400" fill="#CFCFCB">SolarStationInfo - solar microgrid hubs</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="147" font-size="12" font-weight="700" fill="#9A6700">PK</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="147" font-size="14" font-weight="600" fill="#0B0B0B">_id</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="147" font-size="13" font-weight="400" fill="#5F5F5B">ObjectId</tspan></text>
+<rect x="1201" y="162" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="177" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="177" font-size="14" font-weight="400" fill="#0B0B0B">Name</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="177" font-size="13" font-weight="400" fill="#5F5F5B">string</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="207" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="207" font-size="14" font-weight="400" fill="#0B0B0B">Latitude</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="207" font-size="13" font-weight="400" fill="#5F5F5B">double (GPS)</tspan></text>
+<rect x="1201" y="222" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="237" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="237" font-size="14" font-weight="400" fill="#0B0B0B">Longitude</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="237" font-size="13" font-weight="400" fill="#5F5F5B">double (GPS)</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="267" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="267" font-size="14" font-weight="400" fill="#0B0B0B">CapacityKWh</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="267" font-size="13" font-weight="400" fill="#5F5F5B">double</tspan></text>
+<rect x="1201" y="282" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="297" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="297" font-size="14" font-weight="400" fill="#0B0B0B">BatterySlots</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="297" font-size="13" font-weight="400" fill="#5F5F5B">int</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="327" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="327" font-size="14" font-weight="400" fill="#0B0B0B">OpenTime</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="327" font-size="13" font-weight="400" fill="#5F5F5B">string? HH:mm</tspan></text>
+<rect x="1201" y="342" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="357" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="357" font-size="14" font-weight="400" fill="#0B0B0B">CloseTime</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="357" font-size="13" font-weight="400" fill="#5F5F5B">string? HH:mm</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="387" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="387" font-size="14" font-weight="400" fill="#0B0B0B">IsActive</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="387" font-size="13" font-weight="400" fill="#5F5F5B">bool</tspan></text>
+<rect x="1200" y="560" width="400" height="276" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.6"/>
+<rect x="1200" y="560" width="400" height="58" fill="#0B0B0B"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="582" font-size="17" font-weight="700" fill="#FFFFFF">EnergyBookingSlots</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="603" font-size="12" font-weight="400" fill="#CFCFCB">Bookable time windows per station</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="637" font-size="12" font-weight="700" fill="#9A6700">PK</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="637" font-size="14" font-weight="600" fill="#0B0B0B">_id</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="637" font-size="13" font-weight="400" fill="#5F5F5B">ObjectId</tspan></text>
+<rect x="1201" y="652" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="667" font-size="12" font-weight="700" fill="#1F5C3A">FK</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="667" font-size="14" font-weight="600" fill="#0B0B0B">NodeId</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="667" font-size="13" font-weight="400" fill="#5F5F5B">string → Nodes</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="697" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="697" font-size="14" font-weight="400" fill="#0B0B0B">StartTime</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="697" font-size="13" font-weight="400" fill="#5F5F5B">date (UTC)</tspan></text>
+<rect x="1201" y="712" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="727" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="727" font-size="14" font-weight="400" fill="#0B0B0B">EndTime</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="727" font-size="13" font-weight="400" fill="#5F5F5B">date (UTC)</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="757" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="757" font-size="14" font-weight="400" fill="#0B0B0B">Capacity</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="757" font-size="13" font-weight="400" fill="#5F5F5B">int (1..BatterySlots)</tspan></text>
+<rect x="1201" y="772" width="398" height="30" fill="#F7F7F5"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="787" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="787" font-size="14" font-weight="400" fill="#0B0B0B">IsActive</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="787" font-size="13" font-weight="400" fill="#5F5F5B">bool</tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1216" y="817" font-size="12" font-weight="700" fill="#1F5C3A"></tspan></text>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1258" y="817" font-size="14" font-weight="400" fill="#0B0B0B">CreatedAt</tspan></text>
+<text text-anchor="end" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1584" y="817" font-size="13" font-weight="400" fill="#5F5F5B">date (UTC)</tspan></text>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="820" y="896.55" font-size="13" font-weight="400" fill="#5F5F5B">Indexes: Users.Username and Users.Email (unique) · Reservations (ProsumerNIC, SlotTime), (NodeId, SlotTime), QrToken, SlotId · EnergyBookingSlots (NodeId, StartTime)</tspan><tspan x="820" y="913.4499999999999" font-size="13" font-weight="400" fill="#5F5F5B">Prosumers are keyed by NIC; references between collections are stored as string ids and resolved by the API (no client touches the database).</tspan></text>
+<rect x="482.65999999999997" y="479.55" width="94.68" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="530" y="491">1 ── * books</tspan></text>
+<rect x="1095.66" y="119.55" width="94.68" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1143" y="131">1 ── * hosts</tspan></text>
+<rect x="1408.88" y="471.55" width="122.24000000000001" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1470" y="483">1 ── * publishes</tspan></text>
+<rect x="1052.325" y="647.55" width="115.35000000000001" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1110" y="659">0..1 ── * holds</tspan></text>
+</svg>

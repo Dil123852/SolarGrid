@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="820" viewBox="0 0 1560 820">
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3A3A38"/></marker>
+  <marker id="arrowStart" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3A3A38"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<rect x="40" y="70" width="420" height="700" fill="#FAFAF8" stroke="#8E8E89" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="56" y="92" font-size="15" font-weight="600" fill="#5F5F5B">Clients (UI layer only)</tspan></text>
+<rect x="540" y="70" width="640" height="700" fill="#FAFAF8" stroke="#8E8E89" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text text-anchor="start" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="556" y="92" font-size="15" font-weight="600" fill="#5F5F5B">Windows Server · IIS  -  SolarGrid Web API (ASP.NET Core, .NET 10)</tspan></text>
+<path d="M420.0,190.0 L580.0,190.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M420.0,470.0 L500.0,470.0 L500.0,215.0 L580.0,215.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M160.0,535.0 L160.0,620.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrowStart)"/>
+<path d="M310.0,535.0 L330.0,625.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M860.0,230.0 L860.0,295.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M760.0,395.0 L760.0,465.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M1010.0,465.0 L1010.0,395.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M1150.0,500.0 L1240.0,470.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="780" y="34" font-size="20" font-weight="700" fill="#0B0B0B">SolarGrid - high-level architecture (client-server, FAT service)</tspan></text>
+<rect x="80" y="145" width="340" height="130" rx="0" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="250" y="180.75" font-size="17" font-weight="700" fill="#0B0B0B">Web application</tspan><tspan x="250" y="200.25" font-size="15" font-weight="400" fill="#0B0B0B">React 19 + TypeScript</tspan><tspan x="250" y="219.75" font-size="15" font-weight="400" fill="#0B0B0B">Bootstrap 5 · Circum Icons</tspan><tspan x="250" y="239.25" font-size="15" font-weight="400" fill="#5F5F5B">Backoffice · Grid Operator</tspan></text>
+<rect x="80" y="405" width="340" height="130" rx="0" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="250" y="440.75" font-size="17" font-weight="700" fill="#0B0B0B">Android application</tspan><tspan x="250" y="460.25" font-size="15" font-weight="400" fill="#0B0B0B">Kotlin · Jetpack Compose (pure native)</tspan><tspan x="250" y="479.75" font-size="15" font-weight="400" fill="#0B0B0B">Retrofit · ZXing QR</tspan><tspan x="250" y="499.25" font-size="15" font-weight="400" fill="#5F5F5B">Prosumer · Grid Operator</tspan></text>
+<path d="M75,632 A85,12 0 0 1 245,632 V708 A85,12 0 0 1 75,708 Z" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.6"/><path d="M75,632 A85,12 0 0 0 245,632" fill="none" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="160" y="656.5" font-size="15" font-weight="700" fill="#0B0B0B">SQLite</tspan><tspan x="160" y="676" font-size="15" font-weight="400" fill="#0B0B0B">session +</tspan><tspan x="160" y="695.5" font-size="15" font-weight="400" fill="#0B0B0B">node cache</tspan></text>
+<rect x="265" y="625" width="170" height="90" rx="0" fill="#F5F5F3" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="350" y="660.25" font-size="15" font-weight="700" fill="#0B0B0B">Google Maps</tspan><tspan x="350" y="679.75" font-size="15" font-weight="400" fill="#0B0B0B">SDK for Android</tspan></text>
+<rect x="580" y="130" width="560" height="100" rx="0" fill="#F5F5F3" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="860" y="170.25" font-size="17" font-weight="700" fill="#0B0B0B">SolarGrid.Api</tspan><tspan x="860" y="189.75" font-size="15" font-weight="400" fill="#0B0B0B">REST controllers · JWT bearer auth · role policies · Swagger</tspan></text>
+<rect x="580" y="295" width="560" height="100" rx="0" fill="#F5F5F3" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="860" y="335.25" font-size="17" font-weight="700" fill="#0B0B0B">SolarGrid.Application</tspan><tspan x="860" y="354.75" font-size="15" font-weight="400" fill="#0B0B0B">Services - ALL business logic · DTOs · Result type · ports</tspan></text>
+<rect x="580" y="465" width="280" height="110" rx="0" fill="#F5F5F3" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="720" y="500.5" font-size="17" font-weight="700" fill="#0B0B0B">SolarGrid.Domain</tspan><tspan x="720" y="520" font-size="15" font-weight="400" fill="#0B0B0B">Entities · enums</tspan><tspan x="720" y="539.5" font-size="15" font-weight="400" fill="#0B0B0B">business rules</tspan></text>
+<rect x="870" y="465" width="280" height="110" rx="0" fill="#F5F5F3" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1010" y="500.5" font-size="17" font-weight="700" fill="#0B0B0B">SolarGrid.Infrastructure</tspan><tspan x="1010" y="520" font-size="15" font-weight="400" fill="#0B0B0B">MongoDB repositories</tspan><tspan x="1010" y="539.5" font-size="15" font-weight="400" fill="#0B0B0B">JWT issuing · hashing</tspan></text>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="860" y="671.55" font-size="13" font-weight="400" fill="#5F5F5B">SolarGrid.Tests: 99 xUnit tests (domain rules, every service, layer rules)</tspan><tspan x="860" y="688.4499999999999" font-size="13" font-weight="400" fill="#5F5F5B">Dependencies point inward only - enforced by ArchitectureTests</tspan></text>
+<path d="M1240,347 A120,12 0 0 1 1480,347 V493 A120,12 0 0 1 1240,493 Z" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.6"/><path d="M1240,347 A120,12 0 0 0 1480,347" fill="none" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1360" y="387" font-size="17" font-weight="700" fill="#0B0B0B">MongoDB Atlas</tspan><tspan x="1360" y="406.5" font-size="15" font-weight="400" fill="#0B0B0B">SolarGridDB</tspan><tspan x="1360" y="426" font-size="13" font-weight="400" fill="#5F5F5B">Users · Prosumers · Nodes</tspan><tspan x="1360" y="445.5" font-size="13" font-weight="400" fill="#5F5F5B">EnergyBookingSlots</tspan><tspan x="1360" y="465" font-size="13" font-weight="400" fill="#5F5F5B">Reservations</tspan></text>
+<rect x="449.215" y="146.1" width="101.57000000000001" height="39.800000000000004" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="500" y="157.55">HTTPS / JSON</tspan><tspan x="500" y="174.45000000000002">+ JWT (fetch)</tspan></text>
+<rect x="438.88" y="272.8" width="122.24000000000001" height="39.800000000000004" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="500" y="284.25">HTTP / JSON</tspan><tspan x="500" y="301.15">+ JWT (Retrofit)</tspan></text>
+<rect x="96.88" y="566.05" width="122.24000000000001" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="158" y="577.5">SQLiteOpenHelper</tspan></text>
+<rect x="322.995" y="568.55" width="74.01" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="360" y="580">map tiles</tspan></text>
+<rect x="875.77" y="251.05" width="108.46000000000001" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="930" y="262.5">calls services</tspan></text>
+<rect x="770.22" y="418.55" width="39.56" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="790" y="430">uses</tspan></text>
+<rect x="1018.88" y="418.55" width="122.24000000000001" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1080" y="430">implements ports</tspan></text>
+<rect x="1140.77" y="425.1" width="108.46000000000001" height="39.800000000000004" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1195" y="436.55">MongoDB.Driver</tspan><tspan x="1195" y="453.45">(TLS)</tspan></text>
+</svg>
