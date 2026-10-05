@@ -4,7 +4,7 @@
 Android application, diagrams and report) is 100% my own (Dilsara).
 
 - Repository: https://github.com/Dil123852/SolarGrid
-- Walkthrough video: _add link_
+- Walkthrough video: https://youtu.be/G1qmLQRniNI
 
 ## Structure
 
