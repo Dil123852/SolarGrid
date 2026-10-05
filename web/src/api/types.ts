@@ -55,9 +55,23 @@ export interface MicrogridNode {
   capacityKWh: number;
   batterySlots: number;
   isActive: boolean;
+  // Operating hours, "HH:mm" Sri Lanka time; null means open around the clock.
+  openTime: string | null;
+  closeTime: string | null;
 }
 
 export type NodeRequest = Omit<MicrogridNode, "id" | "isActive">;
+
+export interface RegisterProsumerRequest {
+  nic: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  password: string;
+}
+
+export type UpdateProsumerRequest = Omit<RegisterProsumerRequest, "nic" | "password">;
 
 export interface Reservation {
   id: string;
@@ -77,6 +91,8 @@ export interface ReservationFilter {
   nic?: string;
   from?: string;
   to?: string;
+  // Free text matched by the API against node name, NIC, booking reference and status.
+  search?: string;
 }
 
 export interface CreateReservationRequest {

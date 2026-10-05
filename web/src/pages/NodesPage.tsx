@@ -1,7 +1,8 @@
 /*
  * File: NodesPage.tsx
- * Purpose: Microgrid node management - list/filter nodes; Backoffice can create, edit, activate
- *          and deactivate (the API refuses deactivation while bookings are live).
+ * Purpose: Microgrid node management - list/filter nodes with their opening hours; Backoffice can
+ *          create, edit (incl. schedule), activate and deactivate (the API refuses deactivation while
+ *          bookings are live); Grid Operators keep battery-slot availability current.
  * Project: Smart Solar Microgrid Trading System - Web Application
  * Module: SE4040 Enterprise Application Development - Assignment 1
  */
@@ -16,7 +17,7 @@ import { Modal } from "../components/Modal";
 import { PageHeader } from "../components/PageHeader";
 import { useToast } from "../components/Toasts";
 import { useApiData } from "../hooks/useApiData";
-import { CiCirclePlus, CiEdit, CiMapPin } from "react-icons/ci";
+import { CiBatteryCharging, CiCirclePlus, CiEdit, CiMapPin } from "react-icons/ci";
 
 type ActiveFilter = "" | "true" | "false";
 
@@ -28,9 +29,25 @@ interface NodeForm {
   longitude: string;
   capacityKWh: string;
   batterySlots: string;
+  openTime: string;
+  closeTime: string;
 }
 
-const EMPTY_FORM: NodeForm = { id: null, name: "", latitude: "", longitude: "", capacityKWh: "", batterySlots: "" };
+const EMPTY_FORM: NodeForm = {
+  id: null,
+  name: "",
+  latitude: "",
+  longitude: "",
+  capacityKWh: "",
+  batterySlots: "",
+  openTime: "",
+  closeTime: "",
+};
+
+// "06:00-18:00", or "24 hours" when the node has no schedule.
+function hoursLabel(node: MicrogridNode): string {
+  return node.openTime && node.closeTime ? `${node.openTime}-${node.closeTime}` : "24 hours";
+}
 
 function toForm(node: MicrogridNode): NodeForm {
   return {
@@ -40,12 +57,16 @@ function toForm(node: MicrogridNode): NodeForm {
     longitude: String(node.longitude),
     capacityKWh: String(node.capacityKWh),
     batterySlots: String(node.batterySlots),
+    openTime: node.openTime ?? "",
+    closeTime: node.closeTime ?? "",
   };
 }
 
 export function NodesPage() {
   const { hasRole } = useAuth();
   const canEdit = hasRole("Backoffice");
+  // Grid Operators keep battery-slot availability current but cannot change other node details.
+  const canUpdateSlots = hasRole("Backoffice", "GridOperator");
   const toast = useToast();
   const [filter, setFilter] = useState<ActiveFilter>("");
   const { data: nodes, loading, error, reload } = useApiData(
@@ -55,6 +76,8 @@ export function NodesPage() {
   const [form, setForm] = useState<NodeForm | null>(null);
   const [validated, setValidated] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [slotsNode, setSlotsNode] = useState<MicrogridNode | null>(null);
+  const [slotsValue, setSlotsValue] = useState("");
 
   const openForm = (node?: MicrogridNode) => {
     setValidated(false);
@@ -69,6 +92,8 @@ export function NodesPage() {
     longitude: form.longitude === "" || Math.abs(Number(form.longitude)) > 180,
     capacityKWh: !(Number(form.capacityKWh) > 0),
     batterySlots: !(Number.isInteger(Number(form.batterySlots)) && Number(form.batterySlots) >= 1),
+    // Both hours or neither; opening before closing ("HH:mm" strings compare correctly).
+    schedule: !!form.openTime !== !!form.closeTime || (!!form.openTime && form.openTime >= form.closeTime),
   };
 
   const save = async () => {
@@ -81,6 +106,8 @@ export function NodesPage() {
       longitude: Number(form.longitude),
       capacityKWh: Number(form.capacityKWh),
       batterySlots: Number(form.batterySlots),
+      openTime: form.openTime || null,
+      closeTime: form.closeTime || null,
     };
     setSaving(true);
     try {
@@ -106,8 +133,28 @@ export function NodesPage() {
     }
   };
 
+  const openSlots = (node: MicrogridNode) => {
+    setSlotsNode(node);
+    setSlotsValue(String(node.batterySlots));
+  };
+
+  const saveSlots = async () => {
+    if (!slotsNode) return;
+    setSaving(true);
+    try {
+      await nodesApi.updateSlots(slotsNode.id, Number(slotsValue));
+      toast.success(`Battery slots for ${slotsNode.name} updated.`);
+      setSlotsNode(null);
+      await reload();
+    } catch (err) {
+      toast.error(err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const invalid = (bad: boolean | undefined) => (validated && bad ? " is-invalid" : "");
-  const columns = canEdit ? 6 : 5;
+  const columns = canUpdateSlots ? 7 : 6;
 
   return (
     <>
@@ -148,8 +195,9 @@ export function NodesPage() {
                 <th>Location (lat, lng)</th>
                 <th className="text-end">Capacity (kWh)</th>
                 <th className="text-end">Battery slots</th>
+                <th>Hours</th>
                 <th>Status</th>
-                {canEdit && <th className="text-end">Actions</th>}
+                {canUpdateSlots && <th className="text-end">Actions</th>}
               </tr>
             </thead>
             <tbody>
@@ -168,20 +216,30 @@ export function NodesPage() {
                     </td>
                     <td className="text-end">{n.capacityKWh}</td>
                     <td className="text-end">{n.batterySlots}</td>
+                    <td className="text-nowrap">{hoursLabel(n)}</td>
                     <td>
                       <ActiveBadge active={n.isActive} />
                     </td>
-                    {canEdit && (
+                    {canUpdateSlots && (
                       <td className="text-end text-nowrap">
-                        <button className="btn btn-sm btn-outline-primary me-1" onClick={() => openForm(n)}>
-                          <CiEdit /> Edit
-                        </button>
-                        <BusyButton
-                          className={`btn btn-sm ${n.isActive ? "btn-outline-danger" : "btn-outline-success"}`}
-                          onClick={() => toggle(n)}
-                        >
-                          {n.isActive ? "Deactivate" : "Activate"}
-                        </BusyButton>
+                        <div className="d-inline-flex gap-1">
+                          <button className="btn btn-sm btn-outline-secondary" onClick={() => openSlots(n)}>
+                            <CiBatteryCharging /> Slots
+                          </button>
+                          {canEdit && (
+                            <>
+                              <button className="btn btn-sm btn-outline-primary" onClick={() => openForm(n)}>
+                                <CiEdit /> Edit
+                              </button>
+                              <BusyButton
+                                className={`btn btn-sm ${n.isActive ? "btn-outline-danger" : "btn-outline-success"}`}
+                                onClick={() => toggle(n)}
+                              >
+                                {n.isActive ? "Deactivate" : "Activate"}
+                              </BusyButton>
+                            </>
+                          )}
+                        </div>
                       </td>
                     )}
                   </tr>
@@ -280,6 +338,73 @@ export function NodesPage() {
                 />
               </div>
             </div>
+            <div className="row g-3 mt-0">
+              <div className="col-6">
+                <label className="form-label" htmlFor="nOpen">
+                  Opens
+                </label>
+                <input
+                  id="nOpen"
+                  type="time"
+                  className={`form-control${invalid(errors?.schedule)}`}
+                  value={form.openTime}
+                  onChange={(e) => setField("openTime", e.target.value)}
+                />
+              </div>
+              <div className="col-6">
+                <label className="form-label" htmlFor="nClose">
+                  Closes
+                </label>
+                <input
+                  id="nClose"
+                  type="time"
+                  className={`form-control${invalid(errors?.schedule)}`}
+                  value={form.closeTime}
+                  onChange={(e) => setField("closeTime", e.target.value)}
+                />
+              </div>
+              <div className="col-12 form-text mt-1">
+                Operating schedule in Sri Lanka time. Leave both empty for a 24-hour node; bookings outside these
+                hours are refused.
+              </div>
+            </div>
+          </>
+        )}
+      </Modal>
+
+      <Modal
+        show={slotsNode !== null}
+        title="Update battery slots"
+        size="sm"
+        onClose={() => setSlotsNode(null)}
+        onSubmit={saveSlots}
+        footer={
+          <>
+            <button type="button" className="btn btn-outline-secondary" onClick={() => setSlotsNode(null)}>
+              Cancel
+            </button>
+            <BusyButton type="submit" className="btn btn-primary" busy={saving}>
+              Save
+            </BusyButton>
+          </>
+        }
+      >
+        {slotsNode && (
+          <>
+            <p className="small text-body-secondary mb-3">{slotsNode.name}</p>
+            <label className="form-label" htmlFor="sSlots">
+              Available battery slots
+            </label>
+            <input
+              id="sSlots"
+              type="number"
+              min="1"
+              step="1"
+              className="form-control"
+              value={slotsValue}
+              onChange={(e) => setSlotsValue(e.target.value)}
+              autoFocus
+            />
           </>
         )}
       </Modal>

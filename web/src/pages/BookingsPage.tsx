@@ -1,7 +1,8 @@
 /*
  * File: BookingsPage.tsx
- * Purpose: Slot booking management - filtered booking list for staff; Backoffice can create,
- *          reschedule, cancel and approve bookings and show the approved QR token.
+ * Purpose: Slot booking management - filtered and searchable booking list for staff; Backoffice can
+ *          create, reschedule, cancel and approve bookings and show the approved QR token; Grid
+ *          Operators can cancel bookings on a prosumer's behalf.
  *          All window/notice/capacity rules are enforced by the API; errors are shown as returned.
  * Project: Smart Solar Microgrid Trading System - Web Application
  * Module: SE4040 Enterprise Application Development - Assignment 1
@@ -28,7 +29,7 @@ const BOOKING_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
 interface Filters {
   status: ReservationStatus | "";
   nodeId: string;
-  nic: string;
+  search: string;
   from: string;
   to: string;
 }
@@ -43,6 +44,8 @@ interface BookingForm {
 export function BookingsPage() {
   const { hasRole } = useAuth();
   const canEdit = hasRole("Backoffice");
+  // Cancellations can also be made with the assistance of a Grid Operator.
+  const canCancel = hasRole("Backoffice", "GridOperator");
   const toast = useToast();
   const [searchParams] = useSearchParams();
 
@@ -50,17 +53,17 @@ export function BookingsPage() {
   const [filters, setFilters] = useState<Filters>({
     status: STATUSES.includes(initialStatus as ReservationStatus) ? (initialStatus as ReservationStatus) : "",
     nodeId: "",
-    nic: "",
+    search: "",
     from: "",
     to: "",
   });
 
-  // The NIC box is typed into, so it is debounced before hitting the API.
-  const [nicQuery, setNicQuery] = useState("");
+  // The search box is typed into, so it is debounced before hitting the API.
+  const [searchQuery, setSearchQuery] = useState("");
   useEffect(() => {
-    const timer = window.setTimeout(() => setNicQuery(filters.nic.trim()), 400);
+    const timer = window.setTimeout(() => setSearchQuery(filters.search.trim()), 400);
     return () => window.clearTimeout(timer);
-  }, [filters.nic]);
+  }, [filters.search]);
 
   const { data: nodes } = useApiData(() => nodesApi.list(), []);
   const { data: bookings, loading, error, reload } = useApiData(
@@ -68,11 +71,11 @@ export function BookingsPage() {
       reservationsApi.list({
         status: filters.status,
         nodeId: filters.nodeId,
-        nic: nicQuery,
+        search: searchQuery,
         from: dayStartIso(filters.from),
         to: dayEndIso(filters.to),
       }),
-    [filters.status, filters.nodeId, nicQuery, filters.from, filters.to],
+    [filters.status, filters.nodeId, searchQuery, filters.from, filters.to],
   );
 
   const [form, setForm] = useState<BookingForm | null>(null);
@@ -86,7 +89,7 @@ export function BookingsPage() {
   );
 
   const setFilter = <K extends keyof Filters>(key: K, value: Filters[K]) => setFilters((f) => ({ ...f, [key]: value }));
-  const clearFilters = () => setFilters({ status: "", nodeId: "", nic: "", from: "", to: "" });
+  const clearFilters = () => setFilters({ status: "", nodeId: "", search: "", from: "", to: "" });
 
   const openForm = (booking?: Reservation) => {
     setValidated(false);
@@ -198,14 +201,16 @@ export function BookingsPage() {
             </select>
           </div>
           <div className="col-6 col-md-2">
-            <label className="form-label small mb-1" htmlFor="fNic">
-              Prosumer NIC
+            <label className="form-label small mb-1" htmlFor="fSearch">
+              Search
             </label>
             <input
-              id="fNic"
+              id="fSearch"
+              type="search"
               className="form-control form-control-sm"
-              value={filters.nic}
-              onChange={(e) => setFilter("nic", e.target.value)}
+              placeholder="Node, NIC, ref or status"
+              value={filters.search}
+              onChange={(e) => setFilter("search", e.target.value)}
             />
           </div>
           <div className="col-6 col-md-2">
@@ -285,14 +290,14 @@ export function BookingsPage() {
                             </BusyButton>
                           )}
                           {canEdit && live && (
-                            <>
-                              <button className="btn btn-sm btn-outline-primary" onClick={() => openForm(r)}>
-                                <CiEdit /> Reschedule
-                              </button>
-                              <BusyButton className="btn btn-sm btn-outline-danger" onClick={() => cancel(r)}>
-                                <CiCircleRemove /> Cancel
-                              </BusyButton>
-                            </>
+                            <button className="btn btn-sm btn-outline-primary" onClick={() => openForm(r)}>
+                              <CiEdit /> Reschedule
+                            </button>
+                          )}
+                          {canCancel && live && (
+                            <BusyButton className="btn btn-sm btn-outline-danger" onClick={() => cancel(r)}>
+                              <CiCircleRemove /> Cancel
+                            </BusyButton>
                           )}
                         </div>
                       </td>

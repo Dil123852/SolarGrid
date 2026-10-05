@@ -15,10 +15,12 @@ import type {
   MicrogridNode,
   NodeRequest,
   Prosumer,
+  RegisterProsumerRequest,
   RegisterStaffRequest,
   Reservation,
   ReservationFilter,
   StaffUser,
+  UpdateProsumerRequest,
   UpdateReservationRequest,
 } from "./types";
 
@@ -39,12 +41,16 @@ export const nodesApi = {
   list: (active?: boolean) => http.get<MicrogridNode[]>("/api/nodes", { active }),
   create: (node: NodeRequest) => http.post<MicrogridNode>("/api/nodes", node),
   update: (id: string, node: NodeRequest) => http.put<MicrogridNode>(`/api/nodes/${enc(id)}`, node),
+  updateSlots: (id: string, batterySlots: number) =>
+    http.put<MicrogridNode>(`/api/nodes/${enc(id)}/slots`, { batterySlots }),
   activate: (id: string) => http.put<MessageResponse>(`/api/nodes/${enc(id)}/activate`),
   deactivate: (id: string) => http.put<MessageResponse>(`/api/nodes/${enc(id)}/deactivate`),
 };
 
 export const prosumersApi = {
   list: (active?: boolean) => http.get<Prosumer[]>("/api/prosumers", { active }),
+  create: (prosumer: RegisterProsumerRequest) => http.post<Prosumer>("/api/prosumers", prosumer),
+  update: (nic: string, profile: UpdateProsumerRequest) => http.put<Prosumer>(`/api/prosumers/${enc(nic)}`, profile),
   reactivate: (nic: string) => http.put<MessageResponse>(`/api/prosumers/${enc(nic)}/reactivate`),
   deactivate: (nic: string) => http.put<MessageResponse>(`/api/prosumers/${enc(nic)}/deactivate`),
 };
