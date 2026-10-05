@@ -59,7 +59,7 @@ fun BookingDetailScreen(
     onCancelled: () -> Unit,
     onBack: () -> Unit,
     vm: BookingDetailViewModel = viewModel(factory = factoryOf {
-        BookingDetailViewModel(reservationId, ServiceLocator.reservationRepository)
+        BookingDetailViewModel(reservationId, ServiceLocator.reservationRepository, ServiceLocator.nodeRepository)
     })
 ) {
     LaunchedEffect(Unit) { vm.load() }
@@ -87,6 +87,7 @@ fun BookingDetailScreen(
                 }
                 HorizontalDivider(Modifier.padding(vertical = 10.dp), color = BorderSoft)
                 LabelValue("Slot", r.slotTime.formatLocal())
+                vm.slot?.let { LabelValue("Booking window", it.windowLabel()) }
                 LabelValue("Booked on", r.createdAt.formatLocal())
                 LabelValue("Reference", r.id.takeLast(8).uppercase())
             }

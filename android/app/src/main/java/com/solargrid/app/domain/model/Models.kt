@@ -56,10 +56,27 @@ data class Reservation(
     val slotTime: Instant,
     val status: ReservationStatus,
     val qrToken: String?,
-    val createdAt: Instant
+    val createdAt: Instant,
+    // The published booking slot this reservation sits in (null when the station publishes none).
+    val slotId: String? = null
 ) {
     val isUpcoming: Boolean get() = slotTime.isAfter(Instant.now())
     val isLive: Boolean get() = status == ReservationStatus.Pending || status == ReservationStatus.Approved
+}
+
+// A time window a station takes bookings in; capacity is shared by every booking inside it.
+data class BookingSlot(
+    val id: String,
+    val nodeId: String,
+    val nodeName: String,
+    val start: Instant,
+    val end: Instant,
+    val capacity: Int,
+    val booked: Int,
+    val available: Int
+) {
+    val isFull: Boolean get() = available <= 0
+    fun contains(time: Instant): Boolean = !time.isBefore(start) && time.isBefore(end)
 }
 
 data class DashboardCounts(val pending: Long, val approvedFuture: Long, val completed: Long)

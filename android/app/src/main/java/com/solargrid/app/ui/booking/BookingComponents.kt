@@ -1,6 +1,6 @@
 /*
  * File: BookingComponents.kt
- * Purpose: Reusable booking UI pieces (list row, simple dropdown) shared by booking screens and the dashboard.
+ * Purpose: Reusable booking UI pieces (list row, slot chip, simple dropdown) shared by booking screens and the dashboard.
  * Project: Smart Solar Microgrid Trading System - Android App
  * Module: SE4040 Enterprise Application Development - Assignment 1
  */
@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.solargrid.app.domain.model.BookingSlot
 import com.solargrid.app.domain.model.Reservation
 import com.solargrid.app.ui.common.CircumIcons
 import com.solargrid.app.ui.common.Eyebrow
@@ -40,7 +41,10 @@ import com.solargrid.app.ui.theme.Border
 import com.solargrid.app.ui.theme.BorderSoft
 import com.solargrid.app.ui.theme.Ink
 import com.solargrid.app.ui.theme.Muted
+import com.solargrid.app.ui.theme.StatusApproved
 import com.solargrid.app.ui.theme.White
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ReservationRow(reservation: Reservation, onClick: () -> Unit) {
@@ -57,6 +61,39 @@ fun ReservationRow(reservation: Reservation, onClick: () -> Unit) {
             StatusChip(reservation.status)
         }
         HorizontalDivider(color = BorderSoft)
+    }
+}
+
+private val hhmm = DateTimeFormatter.ofPattern("HH:mm")
+
+// "08:00 - 10:00" in the device time zone.
+fun BookingSlot.windowLabel(): String {
+    val zone = ZoneId.systemDefault()
+    return "${hhmm.format(start.atZone(zone))} - ${hhmm.format(end.atZone(zone))}"
+}
+
+// Square, selectable tile for one published booking slot: window on top, availability below.
+@Composable
+fun SlotChip(slot: BookingSlot, selected: Boolean, enabled: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    val background = if (selected) Ink else White
+    val content = when {
+        selected -> White
+        enabled -> Ink
+        else -> Muted
+    }
+    Column(
+        modifier
+            .background(background)
+            .border(1.dp, if (selected) Ink else Border)
+            .clickable(enabled = enabled, onClick = onClick)
+            .padding(horizontal = 12.dp, vertical = 10.dp)
+    ) {
+        Text(slot.windowLabel(), color = content, style = MaterialTheme.typography.titleSmall)
+        Text(
+            if (slot.isFull) "Full" else "${slot.available} of ${slot.capacity} free",
+            color = if (selected) White.copy(alpha = 0.75f) else if (slot.isFull) Muted else StatusApproved,
+            style = MaterialTheme.typography.labelSmall
+        )
     }
 }
 

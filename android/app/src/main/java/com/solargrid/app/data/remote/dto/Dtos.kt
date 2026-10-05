@@ -76,7 +76,21 @@ data class ReservationDto(
     val slotTime: String?,
     val status: String?,
     val qrToken: String?,
-    val createdAt: String?
+    val createdAt: String?,
+    val slotId: String? = null
+)
+
+// A bookable time window a station has published, with live booked / available counts.
+data class BookingSlotDto(
+    val id: String?,
+    val nodeId: String?,
+    val nodeName: String?,
+    val startTime: String?,
+    val endTime: String?,
+    val capacity: Int?,
+    val booked: Int?,
+    val available: Int?,
+    val isActive: Boolean?
 )
 
 data class DashboardDto(val pendingCount: Long?, val approvedFutureCount: Long?, val completedCount: Long?)

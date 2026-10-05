@@ -8,6 +8,7 @@
 
 package com.solargrid.app.domain.repository
 
+import com.solargrid.app.domain.model.BookingSlot
 import com.solargrid.app.domain.model.DashboardCounts
 import com.solargrid.app.domain.model.MicrogridNode
 import com.solargrid.app.domain.model.Prosumer
@@ -35,6 +36,8 @@ interface ProsumerRepository {
 interface NodeRepository {
     // Falls back to the SQLite cache when the API is unreachable.
     suspend fun getNodes(activeOnly: Boolean = false): Result<List<MicrogridNode>>
+    // Active booking slots a station has published between two instants (live, never cached).
+    suspend fun getSlots(nodeId: String, from: Instant, to: Instant): Result<List<BookingSlot>>
 }
 
 interface ReservationRepository {

@@ -8,6 +8,7 @@
 package com.solargrid.app.data.remote
 
 import com.solargrid.app.data.remote.dto.AuthResponseDto
+import com.solargrid.app.data.remote.dto.BookingSlotDto
 import com.solargrid.app.data.remote.dto.CreateReservationRequest
 import com.solargrid.app.data.remote.dto.DashboardDto
 import com.solargrid.app.data.remote.dto.LoginRequest
@@ -59,6 +60,15 @@ interface ApiService {
     // ---- Nodes ----
     @GET("api/nodes")
     suspend fun getNodes(@Query("active") active: Boolean?): Response<List<NodeDto>>
+
+    // ---- Energy booking slots ----
+    // Slots overlapping [from, to) at a station, with live availability.
+    @GET("api/slots")
+    suspend fun getSlots(
+        @Query("nodeId") nodeId: String?,
+        @Query("from") from: String?,
+        @Query("to") to: String?
+    ): Response<List<BookingSlotDto>>
 
     // ---- Reservations ----
     @GET("api/reservations")

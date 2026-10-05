@@ -15,18 +15,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
+import com.solargrid.app.domain.model.BookingSlot
 import com.solargrid.app.domain.model.Reservation
+import com.solargrid.app.domain.repository.NodeRepository
 import com.solargrid.app.domain.repository.ReservationRepository
 import kotlinx.coroutines.launch
 
 class BookingDetailViewModel(
     private val reservationId: String,
-    private val reservations: ReservationRepository
+    private val reservations: ReservationRepository,
+    private val nodes: NodeRepository
 ) : ViewModel() {
 
     var reservation by mutableStateOf<Reservation?>(null)
         private set
     var qrBitmap by mutableStateOf<Bitmap?>(null)
+        private set
+    // The published booking slot the reservation sits in, when the station uses slots.
+    var slot by mutableStateOf<BookingSlot?>(null)
         private set
     var loading by mutableStateOf(false)
         private set
@@ -48,6 +54,12 @@ class BookingDetailViewModel(
                     }
                 }
                 .onFailure { error = it.message }
+            reservation?.let { r ->
+                if (r.slotId != null) {
+                    nodes.getSlots(r.nodeId, r.slotTime, r.slotTime.plusSeconds(1))
+                        .onSuccess { list -> slot = list.firstOrNull { it.id == r.slotId } }
+                }
+            }
             loading = false
         }
     }

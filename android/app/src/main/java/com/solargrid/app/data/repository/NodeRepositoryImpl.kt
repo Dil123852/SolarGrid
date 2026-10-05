@@ -11,10 +11,12 @@ package com.solargrid.app.data.repository
 import com.solargrid.app.data.local.SolarGridDbHelper
 import com.solargrid.app.data.remote.ApiService
 import com.solargrid.app.data.remote.apiCall
+import com.solargrid.app.domain.model.BookingSlot
 import com.solargrid.app.domain.model.MicrogridNode
 import com.solargrid.app.domain.repository.NodeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.time.Instant
 
 class NodeRepositoryImpl(
     private val api: ApiService,
@@ -33,4 +35,9 @@ class NodeRepositoryImpl(
         val cached = withContext(Dispatchers.IO) { db.loadNodes() }
         return if (cached.isNotEmpty()) Result.success(cached.filter { !activeOnly || it.isActive }) else remote
     }
+
+    // Availability changes with every booking, so slots always come from the API.
+    override suspend fun getSlots(nodeId: String, from: Instant, to: Instant): Result<List<BookingSlot>> =
+        apiCall { api.getSlots(nodeId, from.toString(), to.toString()) }
+            .map { list -> list.filter { it.isActive != false }.map { it.toDomain() }.sortedBy { it.start } }
 }

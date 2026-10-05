@@ -8,10 +8,12 @@
 package com.solargrid.app.data.repository
 
 import com.solargrid.app.data.remote.dto.AuthResponseDto
+import com.solargrid.app.data.remote.dto.BookingSlotDto
 import com.solargrid.app.data.remote.dto.DashboardDto
 import com.solargrid.app.data.remote.dto.NodeDto
 import com.solargrid.app.data.remote.dto.ProsumerDto
 import com.solargrid.app.data.remote.dto.ReservationDto
+import com.solargrid.app.domain.model.BookingSlot
 import com.solargrid.app.domain.model.DashboardCounts
 import com.solargrid.app.domain.model.MicrogridNode
 import com.solargrid.app.domain.model.Prosumer
@@ -68,7 +70,19 @@ internal fun ReservationDto.toDomain(): Reservation = Reservation(
     slotTime = parseInstant(slotTime),
     status = runCatching { ReservationStatus.valueOf(status.orEmpty()) }.getOrDefault(ReservationStatus.Pending),
     qrToken = qrToken,
-    createdAt = parseInstant(createdAt)
+    createdAt = parseInstant(createdAt),
+    slotId = slotId
+)
+
+internal fun BookingSlotDto.toDomain(): BookingSlot = BookingSlot(
+    id = id.orEmpty(),
+    nodeId = nodeId.orEmpty(),
+    nodeName = nodeName.orEmpty(),
+    start = parseInstant(startTime),
+    end = parseInstant(endTime),
+    capacity = capacity ?: 0,
+    booked = booked ?: 0,
+    available = available ?: 0
 )
 
 internal fun DashboardDto.toDomain(): DashboardCounts =
