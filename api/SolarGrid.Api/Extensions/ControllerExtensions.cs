@@ -13,6 +13,7 @@ namespace SolarGrid.Api.Extensions
 {
     public static class ControllerExtensions
     {
+        // Registers MVC controllers with string enums and { message } responses for invalid request bodies.
         public static IServiceCollection AddApiControllers(this IServiceCollection services)
         {
             // Field validation lives in the services, so MVC's implicit [Required] is switched off.

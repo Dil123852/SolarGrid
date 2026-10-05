@@ -18,6 +18,7 @@ namespace SolarGrid.Api.Controllers
     {
         private readonly DashboardService _service;
 
+        // Receives the dashboard service through dependency injection.
         public DashboardController(DashboardService service)
         {
             _service = service;

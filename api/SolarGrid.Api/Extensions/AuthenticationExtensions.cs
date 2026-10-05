@@ -14,6 +14,7 @@ namespace SolarGrid.Api.Extensions
 {
     public static class AuthenticationExtensions
     {
+        // Registers JWT bearer authentication and authorization; throws if the signing key is missing or too short.
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             var jwt = configuration.GetSection("Jwt").Get<JwtSettings>() ?? new JwtSettings();

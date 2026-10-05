@@ -18,22 +18,28 @@ namespace SolarGrid.Infrastructure.Persistence.Repositories
     {
         private readonly IMongoCollection<EnergyReservation> _reservations;
 
+        // Gets the Reservations collection from the shared MongoDB context.
         public ReservationRepository(MongoDbContext context)
         {
             _reservations = context.Reservations;
         }
 
+        // Finds reservations matching the filter, newest slot first.
         public async Task<List<EnergyReservation>> FindAsync(ReservationFilter filter) =>
             await _reservations.Find(Build(filter)).SortByDescending(r => r.SlotTime).ToListAsync();
 
+        // Finds a reservation by id; null for unknown or malformed ids.
         public async Task<EnergyReservation?> GetByIdAsync(string id) =>
             ObjectId.TryParse(id, out _) ? await _reservations.Find(r => r.Id == id).FirstOrDefaultAsync() : null;
 
+        // Counts reservations matching the filter (used by dashboards).
         public async Task<long> CountAsync(ReservationFilter filter) =>
             await _reservations.CountDocumentsAsync(Build(filter));
 
+        // Inserts a new reservation; MongoDB generates its id.
         public async Task CreateAsync(EnergyReservation reservation) => await _reservations.InsertOneAsync(reservation);
 
+        // Replaces the stored reservation document; true if it existed.
         public async Task<bool> ReplaceAsync(EnergyReservation reservation)
         {
             var result = await _reservations.ReplaceOneAsync(r => r.Id == reservation.Id, reservation);
@@ -49,6 +55,7 @@ namespace SolarGrid.Infrastructure.Persistence.Repositories
                     .Set(r => r.UpdatedAt, completedAt),
                 new FindOneAndUpdateOptions<EnergyReservation> { ReturnDocument = ReturnDocument.After });
 
+        // Builds the MongoDB filter from the optional NIC, node, status and date range.
         private static FilterDefinition<EnergyReservation> Build(ReservationFilter f)
         {
             var b = Builders<EnergyReservation>.Filter;

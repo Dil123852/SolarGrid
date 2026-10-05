@@ -21,6 +21,7 @@ namespace SolarGrid.Api
     {
         private const string CorsPolicy = "AllowClients";
 
+        // Application entry point: builds the service container, the HTTP pipeline, initialises the database and runs the API.
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);

@@ -22,11 +22,14 @@ namespace SolarGrid.Tests.Application
         private readonly InMemoryProsumerRepository _prosumers = new();
         private readonly FakeCurrentUser _user = new();
 
+        // Creates the service under test with in-memory fakes.
         private ProsumerService Service() => new(_prosumers, new FakePasswordHasher(), _user);
 
+        // Builds a valid registration request for the given NIC.
         private static RegisterProsumerRequest Registration(string nic = Nic) =>
             new(nic, "Nimal Perera", "nimal@example.com", "0771234567", "Kandy", "secret1");
 
+        // Checks the NIC is upper-cased and the password is stored hashed.
         [Fact]
         public async Task Register_NormalisesNicAndHashesPassword()
         {
@@ -38,6 +41,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal("hashed:secret1", stored.PasswordHash);
         }
 
+        // Checks malformed NICs are refused.
         [Theory]
         [InlineData("12345")]
         [InlineData("99123456VV")]
@@ -47,6 +51,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Validation, result.Error);
         }
 
+        // Checks a second account with the same NIC is a Conflict.
         [Fact]
         public async Task Register_DuplicateNic_IsConflict()
         {
@@ -55,6 +60,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Conflict, second.Error);
         }
 
+        // Checks profile updates keep the password hash and active flag.
         [Fact]
         public async Task Update_KeepsPasswordAndActiveFlag()
         {
@@ -71,6 +77,7 @@ namespace SolarGrid.Tests.Application
             Assert.True(stored.IsActive);
         }
 
+        // Checks a prosumer cannot read another prosumer's profile.
         [Fact]
         public async Task Prosumer_CannotReadAnotherProsumer()
         {
@@ -82,6 +89,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Forbidden, result.Error);
         }
 
+        // Checks deactivate then reactivate toggles the active flag.
         [Fact]
         public async Task Deactivate_ThenReactivate_TogglesActiveFlag()
         {

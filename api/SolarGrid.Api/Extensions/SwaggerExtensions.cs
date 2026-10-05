@@ -13,6 +13,7 @@ namespace SolarGrid.Api.Extensions
     {
         private const string SchemeName = "Bearer";
 
+        // Registers Swagger/OpenAPI generation with a Bearer token security scheme.
         public static IServiceCollection AddSwaggerWithJwt(this IServiceCollection services)
         {
             services.AddEndpointsApiExplorer();

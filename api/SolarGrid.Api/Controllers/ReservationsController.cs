@@ -21,6 +21,7 @@ namespace SolarGrid.Api.Controllers
     {
         private readonly ReservationService _service;
 
+        // Receives the reservation service through dependency injection.
         public ReservationsController(ReservationService service)
         {
             _service = service;

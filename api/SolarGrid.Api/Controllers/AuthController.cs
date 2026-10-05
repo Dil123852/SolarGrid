@@ -20,6 +20,7 @@ namespace SolarGrid.Api.Controllers
     {
         private readonly AuthService _service;
 
+        // Receives the authentication service through dependency injection.
         public AuthController(AuthService service)
         {
             _service = service;

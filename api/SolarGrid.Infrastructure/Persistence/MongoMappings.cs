@@ -21,6 +21,7 @@ namespace SolarGrid.Infrastructure.Persistence
         private static readonly object Gate = new();
         private static bool _registered;
 
+        // Registers BSON class maps and conventions once per process (thread-safe).
         public static void Register()
         {
             lock (Gate)

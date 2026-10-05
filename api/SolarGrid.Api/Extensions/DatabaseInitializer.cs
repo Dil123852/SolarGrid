@@ -13,6 +13,7 @@ namespace SolarGrid.Api.Extensions
 {
     public static class DatabaseInitializer
     {
+        // Creates MongoDB indexes and seeds the first Backoffice account at startup; logs instead of crashing on failure.
         public static async Task InitialiseDatabaseAsync(this WebApplication app)
         {
             using var scope = app.Services.CreateScope();

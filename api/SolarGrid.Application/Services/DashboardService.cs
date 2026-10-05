@@ -19,6 +19,7 @@ namespace SolarGrid.Application.Services
         private readonly IClock _clock;
         private readonly ICurrentUser _currentUser;
 
+        // Receives the reservation repository, clock and current caller.
         public DashboardService(IReservationRepository reservations, IClock clock, ICurrentUser currentUser)
         {
             _reservations = reservations;
@@ -26,6 +27,7 @@ namespace SolarGrid.Application.Services
             _currentUser = currentUser;
         }
 
+        // Counts pending, approved-upcoming and completed reservations (prosumers only see their own).
         public async Task<DashboardResponse> GetAsync(string? nic)
         {
             nic = _currentUser.Role == UserRole.Prosumer

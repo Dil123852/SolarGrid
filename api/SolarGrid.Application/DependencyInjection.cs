@@ -12,6 +12,7 @@ namespace SolarGrid.Application
 {
     public static class DependencyInjection
     {
+        // Registers the application services (all business logic) with the DI container.
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddScoped<AuthService>();

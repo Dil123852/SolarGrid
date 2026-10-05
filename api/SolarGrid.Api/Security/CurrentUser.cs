@@ -15,6 +15,7 @@ namespace SolarGrid.Api.Security
     {
         private readonly IHttpContextAccessor _accessor;
 
+        // Receives the HTTP context accessor so the current request's claims can be read.
         public CurrentUser(IHttpContextAccessor accessor)
         {
             _accessor = accessor;

@@ -20,8 +20,10 @@ namespace SolarGrid.Tests.Application
         private readonly InMemoryUserRepository _users = new();
         private readonly InMemoryProsumerRepository _prosumers = new();
 
+        // Creates the service under test with in-memory fakes.
         private AuthService Service() => new(_users, _prosumers, new FakePasswordHasher(), new FakeTokenService());
 
+        // Checks staff usernames are case-insensitive and the role is returned.
         [Fact]
         public async Task StaffLogin_CaseInsensitiveUsername_ReturnsRole()
         {
@@ -33,6 +35,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(UserRole.GridOperator, result.Value!.Role);
         }
 
+        // Checks a wrong staff password is Unauthorized.
         [Fact]
         public async Task StaffLogin_WrongPassword_IsUnauthorized()
         {
@@ -41,6 +44,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Unauthorized, result.Error);
         }
 
+        // Checks a deactivated prosumer gets AccountInactive with the pending-activation message.
         [Fact]
         public async Task ProsumerLogin_DeactivatedAccount_IsInactiveWithPendingMessage()
         {
@@ -52,6 +56,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(AuthService.PendingActivationMessage, result.Message);
         }
 
+        // Checks an active prosumer signs in and gets their NIC back.
         [Fact]
         public async Task ProsumerLogin_Active_ReturnsNic()
         {
@@ -64,6 +69,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(UserRole.Prosumer, result.Value.Role);
         }
 
+        // Checks staff registration refuses the Prosumer role.
         [Fact]
         public async Task RegisterStaff_WithProsumerRole_IsRejected()
         {
@@ -71,6 +77,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Validation, result.Error);
         }
 
+        // Checks duplicate usernames are refused regardless of case.
         [Fact]
         public async Task RegisterStaff_DuplicateUsername_IsConflict()
         {
@@ -79,6 +86,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Conflict, second.Error);
         }
 
+        // Checks the Backoffice seed only runs when no users exist.
         [Fact]
         public async Task Seed_OnlyRunsWhenNoUsersExist()
         {
@@ -89,6 +97,7 @@ namespace SolarGrid.Tests.Application
 
         // ---- Mobile sign-in: one form, the service decides the account type ----
 
+        // Checks a NIC on mobile sign-in is routed to prosumer login.
         [Fact]
         public async Task MobileLogin_NicIdentifier_SignsInProsumer()
         {
@@ -101,6 +110,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal("991234567V", result.Value.Nic);
         }
 
+        // Checks a username on mobile sign-in is routed to Grid Operator login.
         [Fact]
         public async Task MobileLogin_Username_SignsInGridOperator()
         {
@@ -112,6 +122,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(UserRole.GridOperator, result.Value!.Role);
         }
 
+        // Checks Backoffice accounts are sent to the web portal on mobile.
         [Fact]
         public async Task MobileLogin_Backoffice_IsSentToWebPortal()
         {
@@ -123,6 +134,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(AuthService.BackofficeUsesWebMessage, result.Message);
         }
 
+        // Checks a deactivated prosumer on mobile gets AccountInactive.
         [Fact]
         public async Task MobileLogin_DeactivatedProsumer_IsAccountInactive()
         {
@@ -133,6 +145,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.AccountInactive, result.Error);
         }
 
+        // Checks a wrong password on mobile sign-in is Unauthorized.
         [Fact]
         public async Task MobileLogin_WrongPassword_IsUnauthorized()
         {
@@ -141,6 +154,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Unauthorized, result.Error);
         }
 
+        // Checks staff usernames cannot be in NIC format.
         [Fact]
         public async Task RegisterStaff_NicShapedUsername_IsRejected()
         {

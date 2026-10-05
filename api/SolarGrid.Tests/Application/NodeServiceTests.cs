@@ -21,13 +21,16 @@ namespace SolarGrid.Tests.Application
         private readonly InMemoryNodeRepository _nodes = new();
         private readonly InMemoryReservationRepository _reservations = new();
 
+        // Seeds one active node for each test.
         public NodeServiceTests()
         {
             _nodes.Items.Add(new MicrogridNode { Id = "node1", Name = "Galle Hub", BatterySlots = 2, CapacityKWh = 40, IsActive = true });
         }
 
+        // Creates the service under test with in-memory fakes and a fixed clock.
         private NodeService Service() => new(_nodes, _reservations, new FixedClock(Now));
 
+        // Checks a valid node is created and active.
         [Fact]
         public async Task Create_ValidNode_Succeeds()
         {
@@ -38,6 +41,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(2, _nodes.Items.Count);
         }
 
+        // Checks invalid names, coordinates, capacity and slot counts are refused.
         [Theory]
         [InlineData("", 7, 80, 50, 4)]      // no name
         [InlineData("Hub", 95, 80, 50, 4)]  // latitude out of range
@@ -50,6 +54,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Validation, result.Error);
         }
 
+        // Checks a node with a pending upcoming booking cannot be deactivated.
         [Fact]
         public async Task Deactivate_WithPendingUpcomingBooking_IsConflict()
         {
@@ -61,6 +66,7 @@ namespace SolarGrid.Tests.Application
             Assert.True(_nodes.Items[0].IsActive);
         }
 
+        // Checks completed or cancelled bookings do not block deactivation.
         [Fact]
         public async Task Deactivate_WithOnlyCompletedOrCancelledBookings_Succeeds()
         {
@@ -73,6 +79,7 @@ namespace SolarGrid.Tests.Application
             Assert.False(_nodes.Items[0].IsActive);
         }
 
+        // Checks deactivating an unknown node is NotFound.
         [Fact]
         public async Task Deactivate_UnknownNode_IsNotFound()
         {
@@ -80,6 +87,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.NotFound, result.Error);
         }
 
+        // Adds a reservation for node1 to the in-memory store.
         private void AddReservation(ReservationStatus status, DateTime slot) =>
             _reservations.Items.Add(new EnergyReservation
             {

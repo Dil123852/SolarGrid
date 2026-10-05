@@ -21,6 +21,7 @@ namespace SolarGrid.Application.Services
         private readonly IReservationRepository _reservations;
         private readonly IClock _clock;
 
+        // Receives the node and reservation repositories and the clock.
         public NodeService(INodeRepository nodes, IReservationRepository reservations, IClock clock)
         {
             _nodes = nodes;
@@ -28,15 +29,18 @@ namespace SolarGrid.Application.Services
             _clock = clock;
         }
 
+        // Lists nodes, optionally only active or only inactive ones.
         public async Task<List<NodeResponse>> GetAllAsync(bool? isActive) =>
             (await _nodes.GetAllAsync(isActive)).Select(n => n.ToResponse()).ToList();
 
+        // Returns one node by id, or NotFound.
         public async Task<Result<NodeResponse>> GetAsync(string id)
         {
             var node = await _nodes.GetByIdAsync(id);
             return node == null ? Result.NotFound<NodeResponse>("Node not found.") : Result.Ok(node.ToResponse());
         }
 
+        // Validates and creates a new microgrid node.
         public async Task<Result<NodeResponse>> CreateAsync(NodeRequest request)
         {
             var error = Validate(request);
@@ -48,6 +52,7 @@ namespace SolarGrid.Application.Services
             return Result.Ok(node.ToResponse(), "Node created.");
         }
 
+        // Validates and updates a node's details and operating schedule.
         public async Task<Result<NodeResponse>> UpdateAsync(string id, NodeRequest request)
         {
             var error = Validate(request);
@@ -88,11 +93,13 @@ namespace SolarGrid.Application.Services
             return Result.Ok(node.ToResponse(), "Battery slots updated.");
         }
 
+        // Re-activates a node so it accepts reservations again.
         public async Task<Result> ActivateAsync(string id) =>
             await _nodes.SetActiveAsync(id, true)
                 ? Result.Ok("Node activated.")
                 : Result.Fail(ErrorType.NotFound, "Node not found.");
 
+        // Checks node fields: name, GPS range, capacity, battery slots and opening hours.
         private static string? Validate(NodeRequest r)
         {
             if (string.IsNullOrWhiteSpace(r.Name)) return "Node name is required.";
@@ -105,6 +112,7 @@ namespace SolarGrid.Application.Services
             return null;
         }
 
+        // Copies validated request fields onto the node entity.
         private static void Apply(MicrogridNode node, NodeRequest r)
         {
             node.Name = r.Name.Trim();

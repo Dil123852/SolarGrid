@@ -17,6 +17,7 @@ namespace SolarGrid.Tests.Domain
     {
         private static readonly DateTime Now = new(2026, 9, 29, 12, 0, 0, DateTimeKind.Utc);
 
+        // Checks only slots within the next 7 days are bookable.
         [Theory]
         [InlineData(1, true)]           // one hour ahead
         [InlineData(24 * 7, true)]      // exactly 7 days ahead
@@ -26,6 +27,7 @@ namespace SolarGrid.Tests.Domain
         public void BookingWindow_AllowsOnlyTheNextSevenDays(int hoursAhead, bool expected) =>
             Assert.Equal(expected, ReservationPolicy.IsWithinBookingWindow(Now.AddHours(hoursAhead), Now));
 
+        // Checks changes need at least 12 hours' notice.
         [Theory]
         [InlineData(12, true)]
         [InlineData(48, true)]
@@ -34,6 +36,7 @@ namespace SolarGrid.Tests.Domain
         public void MinimumNotice_RequiresTwelveHours(double hoursAhead, bool expected) =>
             Assert.Equal(expected, ReservationPolicy.HasMinimumNotice(Now.AddHours(hoursAhead), Now));
 
+        // Checks only Pending reservations can be approved.
         [Theory]
         [InlineData(ReservationStatus.Pending, true)]
         [InlineData(ReservationStatus.Approved, false)]
@@ -42,6 +45,7 @@ namespace SolarGrid.Tests.Domain
         public void CanApprove_OnlyPending(ReservationStatus status, bool expected) =>
             Assert.Equal(expected, ReservationPolicy.CanApprove(status));
 
+        // Checks only live, upcoming reservations block node deactivation.
         [Theory]
         [InlineData(ReservationStatus.Pending, 5, true)]
         [InlineData(ReservationStatus.Approved, 5, true)]
@@ -54,6 +58,7 @@ namespace SolarGrid.Tests.Domain
             Assert.Equal(expected, ReservationPolicy.BlocksNodeDeactivation(reservation, Now));
         }
 
+        // Checks old (9 digits + V/X) and new (12 digits) NIC formats.
         [Theory]
         [InlineData("200012345678", true)]
         [InlineData("991234567V", true)]

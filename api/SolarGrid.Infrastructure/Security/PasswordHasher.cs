@@ -16,8 +16,10 @@ namespace SolarGrid.Infrastructure.Security
         private static readonly object HashUser = new();
         private readonly PasswordHasher<object> _inner = new();
 
+        // Hashes a password with salted PBKDF2.
         public string Hash(string password) => _inner.HashPassword(HashUser, password);
 
+        // Checks a password against a stored hash.
         public bool Verify(string hash, string password) =>
             _inner.VerifyHashedPassword(HashUser, hash, password) != PasswordVerificationResult.Failed;
     }

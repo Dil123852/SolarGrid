@@ -21,6 +21,7 @@ namespace SolarGrid.Api.Controllers
     {
         private readonly NodeService _service;
 
+        // Receives the node service through dependency injection.
         public NodesController(NodeService service)
         {
             _service = service;

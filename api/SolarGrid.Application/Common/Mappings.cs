@@ -12,15 +12,19 @@ namespace SolarGrid.Application.Common
 {
     public static class Mappings
     {
+        // Maps a staff User entity to its API response (no password hash).
         public static UserResponse ToResponse(this User u) =>
             new(u.Id, u.Username, u.Email, u.Role, u.IsActive, u.CreatedAt);
 
+        // Maps a Prosumer entity to its API response (no password hash).
         public static ProsumerResponse ToResponse(this Prosumer p) =>
             new(p.NIC, p.Name, p.Email, p.Phone, p.Address, p.IsActive, p.CreatedAt);
 
+        // Maps a MicrogridNode entity to its API response, including opening hours.
         public static NodeResponse ToResponse(this MicrogridNode n) =>
             new(n.Id, n.Name, n.Latitude, n.Longitude, n.CapacityKWh, n.BatterySlots, n.IsActive, n.OpenTime, n.CloseTime);
 
+        // Maps a reservation to its API response, adding the node name for display.
         public static ReservationResponse ToResponse(this EnergyReservation r, string nodeName) =>
             new(r.Id, r.ProsumerNIC, r.NodeId, nodeName, r.SlotTime, r.Status, r.QrToken, r.CreatedAt, r.UpdatedAt);
     }

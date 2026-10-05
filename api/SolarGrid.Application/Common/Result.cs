@@ -27,21 +27,28 @@ namespace SolarGrid.Application.Common
         public ErrorType Error { get; }
         public string Message { get; }
 
+        // Creates a result with an error type (None means success) and a message.
         protected Result(ErrorType error, string message)
         {
             Error = error;
             Message = message;
         }
 
+        // Creates a successful result without a value.
         public static Result Ok(string message = "OK") => new(ErrorType.None, message);
+        // Creates a failed result without a value.
         public static Result Fail(ErrorType error, string message) => new(error, message);
 
+        // Creates a successful result carrying a value.
         public static Result<T> Ok<T>(T value, string message = "OK") => new(value, ErrorType.None, message);
+        // Creates a failed result for a value-returning operation.
         public static Result<T> Fail<T>(ErrorType error, string message) => new(default, error, message);
 
         // Shorthands for the most common failures.
         public static Result<T> Invalid<T>(string message) => Fail<T>(ErrorType.Validation, message);
+        // Shortcut for a not-found failure.
         public static Result<T> NotFound<T>(string message) => Fail<T>(ErrorType.NotFound, message);
+        // Shortcut for a forbidden failure (the caller may not access the resource).
         public static Result<T> Forbidden<T>(string message = "You are not allowed to access this resource.") =>
             Fail<T>(ErrorType.Forbidden, message);
     }
@@ -50,6 +57,7 @@ namespace SolarGrid.Application.Common
     {
         public T? Value { get; }
 
+        // Creates a result that carries a value on success.
         internal Result(T? value, ErrorType error, string message) : base(error, message)
         {
             Value = value;

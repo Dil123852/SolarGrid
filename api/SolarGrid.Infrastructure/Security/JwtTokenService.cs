@@ -24,11 +24,13 @@ namespace SolarGrid.Infrastructure.Security
 
         private readonly JwtSettings _settings;
 
+        // Receives the JWT settings (key, issuer, audience, lifetime).
         public JwtTokenService(IOptions<JwtSettings> settings)
         {
             _settings = settings.Value;
         }
 
+        // Issues a signed JWT with subject, name, role and (for prosumers) NIC claims.
         public (string Token, DateTime ExpiresAt) CreateToken(string subject, string displayName, UserRole role, string? nic)
         {
             var claims = new List<Claim>
@@ -52,6 +54,7 @@ namespace SolarGrid.Infrastructure.Security
             return (new JsonWebTokenHandler().CreateToken(descriptor), expires);
         }
 
+        // Builds the HMAC signing key from the configured secret.
         public static SymmetricSecurityKey CreateKey(string key) => new(Encoding.UTF8.GetBytes(key));
     }
 }

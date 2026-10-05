@@ -19,6 +19,7 @@ namespace SolarGrid.Application.Services
         private readonly IPasswordHasher _hasher;
         private readonly ICurrentUser _currentUser;
 
+        // Receives the prosumer repository, password hasher and current caller.
         public ProsumerService(IProsumerRepository prosumers, IPasswordHasher hasher, ICurrentUser currentUser)
         {
             _prosumers = prosumers;
@@ -30,6 +31,7 @@ namespace SolarGrid.Application.Services
         public async Task<List<ProsumerResponse>> GetAllAsync(bool? isActive) =>
             (await _prosumers.GetAllAsync(isActive)).Select(p => p.ToResponse()).ToList();
 
+        // Returns one prosumer profile; prosumers may only read their own.
         public async Task<Result<ProsumerResponse>> GetAsync(string nic)
         {
             nic = Validation.NormalizeNic(nic);
@@ -106,6 +108,7 @@ namespace SolarGrid.Application.Services
                 ? Result.Ok("Account reactivated.")
                 : Result.Fail(ErrorType.NotFound, "Prosumer not found.");
 
+        // Checks the editable profile fields (name, email, phone).
         private static string? ValidateProfile(string? name, string? email, string? phone)
         {
             if (string.IsNullOrWhiteSpace(name)) return "Name is required.";

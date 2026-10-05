@@ -21,6 +21,7 @@ namespace SolarGrid.Api.Controllers
     {
         private readonly ProsumerService _service;
 
+        // Receives the prosumer service through dependency injection.
         public ProsumersController(ProsumerService service)
         {
             _service = service;

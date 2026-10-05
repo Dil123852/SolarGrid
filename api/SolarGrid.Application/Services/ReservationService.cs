@@ -24,6 +24,7 @@ namespace SolarGrid.Application.Services
         private readonly IClock _clock;
         private readonly ICurrentUser _currentUser;
 
+        // Receives the repositories, clock and current caller used by the reservation rules.
         public ReservationService(
             IReservationRepository reservations,
             INodeRepository nodes,
@@ -63,6 +64,7 @@ namespace SolarGrid.Application.Services
             return results.ToList();
         }
 
+        // Returns one reservation if the caller is allowed to see it.
         public async Task<Result<ReservationResponse>> GetByIdAsync(string id)
         {
             var reservation = await _reservations.GetByIdAsync(id);
@@ -198,23 +200,28 @@ namespace SolarGrid.Application.Services
             return null;
         }
 
+        // Staff can view any reservation; a prosumer only their own.
         private bool CanView(EnergyReservation r) =>
             _currentUser.Role is UserRole.Backoffice or UserRole.GridOperator || _currentUser.CanAccessProsumer(r.ProsumerNIC);
 
+        // Only Backoffice or the owning prosumer can change a reservation.
         private bool CanModify(EnergyReservation r) => _currentUser.CanAccessProsumer(r.ProsumerNIC);
 
         // Cancellations can also be made with the assistance of a Grid Operator (assignment scenario).
         private bool CanCancel(EnergyReservation r) => CanModify(r) || _currentUser.Role == UserRole.GridOperator;
 
+        // Builds the API response for one reservation, looking up its node name.
         private async Task<ReservationResponse> ToResponseAsync(EnergyReservation r)
         {
             var node = await _nodes.GetByIdAsync(r.NodeId);
             return r.ToResponse(node?.Name ?? "Unknown node");
         }
 
+        // Loads a node id -> name lookup for list responses.
         private async Task<Dictionary<string, string>> GetNodeNamesAsync() =>
             (await _nodes.GetAllAsync()).ToDictionary(n => n.Id, n => n.Name);
 
+        // Returns the node name for an id, or a placeholder if the node no longer exists.
         private static string NameOf(Dictionary<string, string> names, string id) =>
             names.TryGetValue(id, out var name) ? name : "Unknown node";
     }

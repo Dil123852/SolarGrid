@@ -27,6 +27,7 @@ namespace SolarGrid.Application.Services
         private readonly IPasswordHasher _hasher;
         private readonly ITokenService _tokens;
 
+        // Receives the user/prosumer repositories, password hasher and token service.
         public AuthService(IUserRepository users, IProsumerRepository prosumers, IPasswordHasher hasher, ITokenService tokens)
         {
             _users = users;
@@ -119,6 +120,7 @@ namespace SolarGrid.Application.Services
             return Result.Ok(user.ToResponse(), "User created.");
         }
 
+        // Lists all staff accounts.
         public async Task<List<UserResponse>> GetStaffAsync() =>
             (await _users.GetAllAsync()).Select(u => u.ToResponse()).ToList();
 

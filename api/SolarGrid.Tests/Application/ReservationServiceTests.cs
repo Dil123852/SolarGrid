@@ -25,14 +25,17 @@ namespace SolarGrid.Tests.Application
         private readonly InMemoryProsumerRepository _prosumers = new();
         private readonly FakeCurrentUser _user = new() { Role = UserRole.Prosumer, Nic = Nic };
 
+        // Seeds one active node and one active prosumer for each test.
         public ReservationServiceTests()
         {
             _nodes.Items.Add(new MicrogridNode { Id = "node1", Name = "Kandy Hub", BatterySlots = 1, IsActive = true });
             _prosumers.Items.Add(new Prosumer { NIC = Nic, Name = "Test", IsActive = true });
         }
 
+        // Creates the service under test with in-memory fakes and a fixed clock.
         private ReservationService Service() => new(_reservations, _nodes, _prosumers, new FixedClock(Now), _user);
 
+        // Checks a booking inside 7 days is Pending and carries the node name.
         [Fact]
         public async Task Create_WithinWindow_IsPendingWithNodeName()
         {
@@ -43,6 +46,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal("Kandy Hub", result.Value.NodeName);
         }
 
+        // Checks a booking 8 days ahead is refused.
         [Fact]
         public async Task Create_EightDaysOut_IsRejected()
         {
@@ -50,6 +54,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Validation, result.Error);
         }
 
+        // Checks bookings at an inactive node are refused.
         [Fact]
         public async Task Create_AtInactiveNode_IsRejected()
         {
@@ -58,6 +63,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Validation, result.Error);
         }
 
+        // Checks deactivated prosumers cannot book.
         [Fact]
         public async Task Create_ByDeactivatedProsumer_IsRejected()
         {
@@ -66,6 +72,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Validation, result.Error);
         }
 
+        // Checks a slot is refused once all battery slots are taken.
         [Fact]
         public async Task Create_WhenBatterySlotsFull_IsConflict()
         {
@@ -76,6 +83,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Conflict, second.Error);
         }
 
+        // Checks rescheduling beyond 7 days is refused.
         [Fact]
         public async Task Update_NewSlotBeyondSevenDays_IsRejected()
         {
@@ -84,6 +92,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Validation, result.Error);
         }
 
+        // Checks rescheduling an approved booking returns it to Pending and drops the QR token.
         [Fact]
         public async Task Update_ApprovedReservation_ReturnsToPendingAndDropsQr()
         {
@@ -98,6 +107,7 @@ namespace SolarGrid.Tests.Application
             Assert.Null(result.Value.QrToken);
         }
 
+        // Checks cancelling within 12 hours of the slot is refused.
         [Fact]
         public async Task Cancel_InsideTwelveHours_IsRejected()
         {
@@ -106,6 +116,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Validation, result.Error);
         }
 
+        // Checks a cancelled booking cannot be approved.
         [Fact]
         public async Task Approve_CancelledReservation_IsRejected()
         {
@@ -116,6 +127,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Validation, result.Error);
         }
 
+        // Checks approving a pending booking issues a QR token.
         [Fact]
         public async Task Approve_Pending_IssuesQrToken()
         {
@@ -129,6 +141,7 @@ namespace SolarGrid.Tests.Application
             Assert.False(string.IsNullOrEmpty(result.Value.QrToken));
         }
 
+        // Checks a prosumer cannot cancel someone else's booking.
         [Fact]
         public async Task Prosumer_CannotCancelSomeoneElsesReservation()
         {
@@ -140,6 +153,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal(ErrorType.Forbidden, result.Error);
         }
 
+        // Checks a prosumer only ever lists their own bookings.
         [Fact]
         public async Task Prosumer_ListOnlyReturnsOwnReservations()
         {
@@ -154,6 +168,7 @@ namespace SolarGrid.Tests.Application
             Assert.Equal("mine", Assert.Single(list).Id);
         }
 
+        // Checks a QR token completes the transfer only once.
         [Fact]
         public async Task VerifyQr_SecondScan_Fails()
         {
@@ -166,6 +181,7 @@ namespace SolarGrid.Tests.Application
             Assert.False((await Service().VerifyQrAsync(new VerifyQrRequest("token"))).IsSuccess);
         }
 
+        // Builds a reservation for the test prosumer at node1.
         private static EnergyReservation Reservation(string id, DateTime slot, ReservationStatus status) =>
             new() { Id = id, ProsumerNIC = Nic, NodeId = "node1", SlotTime = slot, Status = status };
 

@@ -14,6 +14,7 @@ namespace SolarGrid.Api.Extensions
 {
     public static class SeedTestData
     {
+        // Creates the development test users (2 Backoffice, 2 Grid Operator, 3 prosumers); existing ones are skipped.
         public static async Task SeedTestUsersAsync(this WebApplication app)
         {
             using var scope = app.Services.CreateScope();

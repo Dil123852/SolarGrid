@@ -16,6 +16,7 @@ namespace SolarGrid.Infrastructure
 {
     public static class DependencyInjection
     {
+        // Registers MongoDB, repositories, JWT, password hashing and the clock with the DI container.
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<MongoDbSettings>(configuration.GetSection("MongoDB"));
