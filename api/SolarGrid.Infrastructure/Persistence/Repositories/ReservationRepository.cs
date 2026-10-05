@@ -55,7 +55,7 @@ namespace SolarGrid.Infrastructure.Persistence.Repositories
                     .Set(r => r.UpdatedAt, completedAt),
                 new FindOneAndUpdateOptions<EnergyReservation> { ReturnDocument = ReturnDocument.After });
 
-        // Builds the MongoDB filter from the optional NIC, node, status and date range.
+        // Builds the MongoDB filter from the optional NIC, node, booking slot, status and date range.
         private static FilterDefinition<EnergyReservation> Build(ReservationFilter f)
         {
             var b = Builders<EnergyReservation>.Filter;
@@ -63,6 +63,7 @@ namespace SolarGrid.Infrastructure.Persistence.Repositories
 
             if (!string.IsNullOrWhiteSpace(f.ProsumerNic)) filters.Add(b.Eq(r => r.ProsumerNIC, f.ProsumerNic));
             if (!string.IsNullOrWhiteSpace(f.NodeId)) filters.Add(b.Eq(r => r.NodeId, f.NodeId));
+            if (!string.IsNullOrWhiteSpace(f.SlotId)) filters.Add(b.Eq(r => r.SlotId, f.SlotId));
             if (f.Status.HasValue) filters.Add(b.Eq(r => r.Status, f.Status.Value));
             if (f.From.HasValue) filters.Add(b.Gte(r => r.SlotTime, f.From.Value));
             if (f.To.HasValue) filters.Add(b.Lte(r => r.SlotTime, f.To.Value));

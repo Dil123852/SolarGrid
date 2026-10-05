@@ -1,7 +1,7 @@
 /*
  * File: MongoDbContext.cs
- * Purpose: Creates and exposes the MongoDB database connection and the four collections
- *          (Users, Prosumers, Nodes, Reservations), and ensures their indexes exist.
+ * Purpose: Creates and exposes the MongoDB database connection and its five collections
+ *          (Users, Prosumers, Nodes, Reservations, EnergyBookingSlots), and ensures their indexes exist.
  * Project: Smart Solar Microgrid Trading System - Web Service (SolarGrid API)
  * Module: SE4040 Enterprise Application Development - Assignment 1
  */
@@ -33,6 +33,9 @@ namespace SolarGrid.Infrastructure.Persistence
         public IMongoCollection<EnergyReservation> Reservations =>
             _database.GetCollection<EnergyReservation>("Reservations");
 
+        public IMongoCollection<EnergyBookingSlot> BookingSlots =>
+            _database.GetCollection<EnergyBookingSlot>("EnergyBookingSlots");
+
         // Unique usernames/emails for staff, plus lookup indexes for the common reservation queries.
         public async Task EnsureIndexesAsync()
         {
@@ -49,8 +52,12 @@ namespace SolarGrid.Infrastructure.Persistence
                     .Ascending(r => r.ProsumerNIC).Ascending(r => r.SlotTime)),
                 new CreateIndexModel<EnergyReservation>(Builders<EnergyReservation>.IndexKeys
                     .Ascending(r => r.NodeId).Ascending(r => r.SlotTime)),
-                new CreateIndexModel<EnergyReservation>(Builders<EnergyReservation>.IndexKeys.Ascending(r => r.QrToken))
+                new CreateIndexModel<EnergyReservation>(Builders<EnergyReservation>.IndexKeys.Ascending(r => r.QrToken)),
+                new CreateIndexModel<EnergyReservation>(Builders<EnergyReservation>.IndexKeys.Ascending(r => r.SlotId))
             });
+
+            await BookingSlots.Indexes.CreateOneAsync(new CreateIndexModel<EnergyBookingSlot>(
+                Builders<EnergyBookingSlot>.IndexKeys.Ascending(s => s.NodeId).Ascending(s => s.StartTime)));
         }
     }
 }

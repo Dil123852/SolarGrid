@@ -14,5 +14,6 @@ namespace SolarGrid.Application.Abstractions
         string? NodeId = null,
         ReservationStatus? Status = null,
         DateTime? From = null,
-        DateTime? To = null);
+        DateTime? To = null,
+        string? SlotId = null);
 }

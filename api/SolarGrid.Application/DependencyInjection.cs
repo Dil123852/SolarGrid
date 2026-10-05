@@ -19,6 +19,7 @@ namespace SolarGrid.Application
             services.AddScoped<ProsumerService>();
             services.AddScoped<NodeService>();
             services.AddScoped<ReservationService>();
+            services.AddScoped<BookingSlotService>();
             services.AddScoped<DashboardService>();
             return services;
         }

@@ -22,6 +22,7 @@ namespace SolarGrid.Tests.Application
 
         private readonly InMemoryReservationRepository _reservations = new();
         private readonly InMemoryNodeRepository _nodes = new();
+        private readonly InMemoryBookingSlotRepository _slots = new();
         private readonly InMemoryProsumerRepository _prosumers = new();
         private readonly FakeCurrentUser _user = new() { Role = UserRole.Prosumer, Nic = Nic };
 
@@ -33,7 +34,7 @@ namespace SolarGrid.Tests.Application
         }
 
         // Creates the service under test with in-memory fakes and a fixed clock.
-        private ReservationService Service() => new(_reservations, _nodes, _prosumers, new FixedClock(Now), _user);
+        private ReservationService Service() => new(_reservations, _nodes, _slots, _prosumers, new FixedClock(Now), _user);
 
         // Checks a booking inside 7 days is Pending and carries the node name.
         [Fact]

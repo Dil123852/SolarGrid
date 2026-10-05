@@ -22,6 +22,9 @@ namespace SolarGrid.Domain.Entities
         // The requested date/time for the energy slot (UTC).
         public DateTime SlotTime { get; set; }
 
+        // Links to EnergyBookingSlot.Id when the station publishes booking slots (null otherwise).
+        public string? SlotId { get; set; }
+
         public ReservationStatus Status { get; set; } = ReservationStatus.Pending;
 
         // Populated once approved; scanned by a Grid Operator in the mobile app's Operator Mode.

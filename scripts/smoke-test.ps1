@@ -125,6 +125,23 @@ $night = Expect "Create node with opening hours" (Invoke-Api POST "/api/nodes" @
 Expect "Book outside opening hours -> 400" (Invoke-Api POST "/api/reservations" @{ nodeId = $night.Body.id; slotTime = (Slot 2) } $pToken) 400 | Out-Null
 Expect "Deactivate schedule test node" (Invoke-Api PUT "/api/nodes/$($night.Body.id)/deactivate" $null $adminToken) 200 | Out-Null
 
+Write-Host "`nEnergy booking slots"
+# A dedicated station so the other checks are unaffected.
+$slotNode = Expect "Create slot test station" (Invoke-Api POST "/api/nodes" @{ name = "SMOKE Slots $suffix"; latitude = 6.9; longitude = 79.9; capacityKWh = 20; batterySlots = 2 } $adminToken) 200
+$slotStart = (Slot 3); $slotEnd = (Get-Date $slotStart).ToUniversalTime().AddHours(2).ToString("yyyy-MM-ddTHH:mm:ssZ")
+$slot = Expect "Operator publishes a 2-hour slot" (Invoke-Api POST "/api/slots" @{ nodeId = $slotNode.Body.id; startTime = $slotStart; endTime = $slotEnd; capacity = 1 } $opToken) 200
+Expect "Prosumer cannot publish slots -> 403" (Invoke-Api POST "/api/slots" @{ nodeId = $slotNode.Body.id; startTime = $slotStart; endTime = $slotEnd; capacity = 1 } $pToken) 403 | Out-Null
+Expect "Overlapping slot -> 400" (Invoke-Api POST "/api/slots" @{ nodeId = $slotNode.Body.id; startTime = $slotStart; endTime = $slotEnd; capacity = 1 } $opToken) 400 | Out-Null
+$inSlot = Expect "Book inside the slot" (Invoke-Api POST "/api/reservations" @{ nodeId = $slotNode.Body.id; slotTime = $slotStart } $pToken) 200
+if ($inSlot.Body.slotId -eq $slot.Body.id) { $script:passed++; Write-Host "  PASS  booking references the slot (SlotId)" -ForegroundColor Green }
+else { $script:failed++; Write-Host "  FAIL  booking slotId was '$($inSlot.Body.slotId)'" -ForegroundColor Red }
+Expect "Slot full -> 409" (Invoke-Api POST "/api/reservations" @{ nodeId = $slotNode.Body.id; slotTime = $slotStart } $pToken) 409 | Out-Null
+Expect "Book outside published slots -> 400" (Invoke-Api POST "/api/reservations" @{ nodeId = $slotNode.Body.id; slotTime = (Slot 5) } $pToken) 400 | Out-Null
+Expect "Delete slot with a live booking -> 409" (Invoke-Api DELETE "/api/slots/$($slot.Body.id)" $null $opToken) 409 | Out-Null
+Expect "Cancel the slot booking" (Invoke-Api DELETE "/api/reservations/$($inSlot.Body.id)" $null $pToken) 200 | Out-Null
+Expect "Delete empty slot -> 200" (Invoke-Api DELETE "/api/slots/$($slot.Body.id)" $null $opToken) 200 | Out-Null
+Expect "Deactivate slot test station" (Invoke-Api PUT "/api/nodes/$($slotNode.Body.id)/deactivate" $null $adminToken) 200 | Out-Null
+
 Write-Host "`nNode deactivation rule"
 $r3 = Expect "Book 5 days out (pending)" (Invoke-Api POST "/api/reservations" @{ nodeId = $nodeId; slotTime = (Slot 5) } $pToken) 200
 Expect "Deactivate node with pending booking -> 409" (Invoke-Api PUT "/api/nodes/$nodeId/deactivate" $null $adminToken) 409 | Out-Null

@@ -43,6 +43,7 @@ namespace SolarGrid.Infrastructure.Persistence
                 BsonClassMap.RegisterClassMap<User>(MapObjectId<User>(u => u.Id));
                 BsonClassMap.RegisterClassMap<MicrogridNode>(MapObjectId<MicrogridNode>(n => n.Id));
                 BsonClassMap.RegisterClassMap<EnergyReservation>(MapObjectId<EnergyReservation>(r => r.Id));
+                BsonClassMap.RegisterClassMap<EnergyBookingSlot>(MapObjectId<EnergyBookingSlot>(s => s.Id));
 
                 _registered = true;
             }

@@ -27,6 +27,7 @@ namespace SolarGrid.Infrastructure
             services.AddScoped<IProsumerRepository, ProsumerRepository>();
             services.AddScoped<INodeRepository, NodeRepository>();
             services.AddScoped<IReservationRepository, ReservationRepository>();
+            services.AddScoped<IBookingSlotRepository, BookingSlotRepository>();
 
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             services.AddSingleton<ITokenService, JwtTokenService>();

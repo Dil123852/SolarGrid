@@ -149,6 +149,7 @@ namespace SolarGrid.Tests.Fakes
         // Filters fake reservations the same way the MongoDB repository does.
         public Task<List<EnergyReservation>> FindAsync(ReservationFilter f) => Task.FromResult(Items.Where(r =>
             (f.ProsumerNic == null || r.ProsumerNIC == f.ProsumerNic) &&
+            (f.SlotId == null || r.SlotId == f.SlotId) &&
             (f.NodeId == null || r.NodeId == f.NodeId) &&
             (f.Status == null || r.Status == f.Status) &&
             (f.From == null || r.SlotTime >= f.From) &&
@@ -186,5 +187,39 @@ namespace SolarGrid.Tests.Fakes
             }
             return Task.FromResult(r);
         }
+    }
+
+    public class InMemoryBookingSlotRepository : IBookingSlotRepository
+    {
+        public List<EnergyBookingSlot> Items { get; } = new();
+
+        // Returns fake slots overlapping the range, earliest first.
+        public Task<List<EnergyBookingSlot>> FindAsync(string? nodeId = null, DateTime? from = null, DateTime? to = null) =>
+            Task.FromResult(Items.Where(s =>
+                (nodeId == null || s.NodeId == nodeId) &&
+                (from == null || s.EndTime > from) &&
+                (to == null || s.StartTime < to)).OrderBy(s => s.StartTime).ToList());
+
+        // Finds a fake slot by id.
+        public Task<EnergyBookingSlot?> GetByIdAsync(string id) => Task.FromResult(Items.FirstOrDefault(s => s.Id == id));
+
+        // Adds a fake slot with a generated id.
+        public Task CreateAsync(EnergyBookingSlot slot)
+        {
+            slot.Id = Guid.NewGuid().ToString("N");
+            Items.Add(slot);
+            return Task.CompletedTask;
+        }
+
+        // Replaces a fake slot by id.
+        public Task<bool> ReplaceAsync(EnergyBookingSlot slot)
+        {
+            var index = Items.FindIndex(s => s.Id == slot.Id);
+            if (index >= 0) Items[index] = slot;
+            return Task.FromResult(index >= 0);
+        }
+
+        // Removes a fake slot by id.
+        public Task<bool> DeleteAsync(string id) => Task.FromResult(Items.RemoveAll(s => s.Id == id) > 0);
     }
 }

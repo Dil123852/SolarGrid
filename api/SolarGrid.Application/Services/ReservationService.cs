@@ -20,6 +20,7 @@ namespace SolarGrid.Application.Services
     {
         private readonly IReservationRepository _reservations;
         private readonly INodeRepository _nodes;
+        private readonly IBookingSlotRepository _slots;
         private readonly IProsumerRepository _prosumers;
         private readonly IClock _clock;
         private readonly ICurrentUser _currentUser;
@@ -28,12 +29,14 @@ namespace SolarGrid.Application.Services
         public ReservationService(
             IReservationRepository reservations,
             INodeRepository nodes,
+            IBookingSlotRepository slots,
             IProsumerRepository prosumers,
             IClock clock,
             ICurrentUser currentUser)
         {
             _reservations = reservations;
             _nodes = nodes;
+            _slots = slots;
             _prosumers = prosumers;
             _clock = clock;
             _currentUser = currentUser;
@@ -86,7 +89,7 @@ namespace SolarGrid.Application.Services
 
             var now = _clock.UtcNow;
             var slotTime = request.SlotTime.AsUtc();
-            var slotError = await ValidateSlotAsync(request.NodeId, slotTime, now, excludeReservationId: null);
+            var (slotError, bookingSlotId) = await ValidateSlotAsync(request.NodeId, slotTime, now, excludeReservationId: null);
             if (slotError != null) return slotError;
 
             var reservation = new EnergyReservation
@@ -94,6 +97,7 @@ namespace SolarGrid.Application.Services
                 ProsumerNIC = nic,
                 NodeId = request.NodeId,
                 SlotTime = slotTime,
+                SlotId = bookingSlotId,
                 Status = ReservationStatus.Pending,
                 CreatedAt = now
             };
@@ -117,11 +121,12 @@ namespace SolarGrid.Application.Services
 
             var nodeId = string.IsNullOrWhiteSpace(request.NodeId) ? reservation.NodeId : request.NodeId;
             var slotTime = request.SlotTime.AsUtc();
-            var slotError = await ValidateSlotAsync(nodeId, slotTime, now, excludeReservationId: reservation.Id);
+            var (slotError, bookingSlotId) = await ValidateSlotAsync(nodeId, slotTime, now, excludeReservationId: reservation.Id);
             if (slotError != null) return slotError;
 
             reservation.NodeId = nodeId;
             reservation.SlotTime = slotTime;
+            reservation.SlotId = bookingSlotId;
             reservation.Status = ReservationStatus.Pending;
             reservation.QrToken = null;
             reservation.UpdatedAt = now;
@@ -179,25 +184,43 @@ namespace SolarGrid.Application.Services
                 : Result.Ok(await ToResponseAsync(completed), "Energy transfer finalized.");
         }
 
-        // Shared checks for a new or moved slot: window, node active, battery-slot capacity.
-        private async Task<Result<ReservationResponse>?> ValidateSlotAsync(
+        // Shared checks for a new or moved booking: 7-day window, active station, opening hours, and
+        // capacity - from the published booking slot it falls into, or the station's battery slots
+        // when the station publishes no slots. Returns an error, or the matching slot id (if any).
+        private async Task<(Result<ReservationResponse>? Error, string? SlotId)> ValidateSlotAsync(
             string nodeId, DateTime slotTime, DateTime now, string? excludeReservationId)
         {
             if (!ReservationPolicy.IsWithinBookingWindow(slotTime, now))
-                return Result.Invalid<ReservationResponse>("Reservations must be scheduled within the next 7 days.");
+                return (Result.Invalid<ReservationResponse>("Reservations must be scheduled within the next 7 days."), null);
 
             var node = string.IsNullOrWhiteSpace(nodeId) ? null : await _nodes.GetByIdAsync(nodeId);
-            if (node == null) return Result.NotFound<ReservationResponse>("Microgrid node not found.");
-            if (!node.IsActive) return Result.Invalid<ReservationResponse>("This microgrid node is not accepting reservations.");
+            if (node == null) return (Result.NotFound<ReservationResponse>("Microgrid node not found."), null);
+            if (!node.IsActive) return (Result.Invalid<ReservationResponse>("This microgrid node is not accepting reservations."), null);
             if (!NodeSchedule.IsWithinOperatingHours(slotTime, node.OpenTime, node.CloseTime))
-                return Result.Invalid<ReservationResponse>($"{node.Name} is open {node.OpenTime}-{node.CloseTime} (Sri Lanka time). Choose a slot within those hours.");
+                return (Result.Invalid<ReservationResponse>($"{node.Name} is open {node.OpenTime}-{node.CloseTime} (Sri Lanka time). Choose a slot within those hours."), null);
 
-            var sameSlot = await _reservations.FindAsync(new ReservationFilter(NodeId: nodeId, From: slotTime, To: slotTime));
-            var taken = sameSlot.Count(r => r.Id != excludeReservationId && ReservationPolicy.IsModifiable(r.Status));
+            // Stations that publish booking slots only take bookings inside one of them.
+            var publishedSlots = (await _slots.FindAsync(nodeId, now, null)).Where(s => s.IsActive).ToList();
+            if (publishedSlots.Count > 0)
+            {
+                var slot = publishedSlots.FirstOrDefault(s => BookingSlotPolicy.Contains(s, slotTime));
+                if (slot == null)
+                    return (Result.Invalid<ReservationResponse>($"{node.Name} only takes bookings in its published slots. Choose a time inside one of them."), null);
+
+                var inSlot = await _reservations.FindAsync(new ReservationFilter(SlotId: slot.Id));
+                var booked = inSlot.Count(r => r.Id != excludeReservationId && ReservationPolicy.IsModifiable(r.Status));
+                if (booked >= slot.Capacity)
+                    return (Result.Fail<ReservationResponse>(ErrorType.Conflict, "This booking slot is full. Choose another slot."), null);
+                return (null, slot.Id);
+            }
+
+            // No published slots: the station's battery slots cap bookings at the same time.
+            var sameTime = await _reservations.FindAsync(new ReservationFilter(NodeId: nodeId, From: slotTime, To: slotTime));
+            var taken = sameTime.Count(r => r.Id != excludeReservationId && ReservationPolicy.IsModifiable(r.Status));
             if (taken >= node.BatterySlots)
-                return Result.Fail<ReservationResponse>(ErrorType.Conflict, "All battery slots at this node are booked for that time.");
+                return (Result.Fail<ReservationResponse>(ErrorType.Conflict, "All battery slots at this node are booked for that time."), null);
 
-            return null;
+            return (null, null);
         }
 
         // Staff can view any reservation; a prosumer only their own.

@@ -26,6 +26,6 @@ namespace SolarGrid.Application.Common
 
         // Maps a reservation to its API response, adding the node name for display.
         public static ReservationResponse ToResponse(this EnergyReservation r, string nodeName) =>
-            new(r.Id, r.ProsumerNIC, r.NodeId, nodeName, r.SlotTime, r.Status, r.QrToken, r.CreatedAt, r.UpdatedAt);
+            new(r.Id, r.ProsumerNIC, r.NodeId, nodeName, r.SlotTime, r.Status, r.QrToken, r.CreatedAt, r.UpdatedAt, r.SlotId);
     }
 }

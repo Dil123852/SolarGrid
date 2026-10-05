@@ -28,7 +28,8 @@ namespace SolarGrid.Application.DTOs
         ReservationStatus Status,
         string? QrToken,
         DateTime CreatedAt,
-        DateTime? UpdatedAt);
+        DateTime? UpdatedAt,
+        string? SlotId = null);
 
     public record VerifyQrRequest(string QrToken);
 
