@@ -2,7 +2,8 @@
  * File: BookingsPage.tsx
  * Purpose: Slot booking management - filtered and searchable booking list for staff; Backoffice can
  *          create, reschedule, cancel and approve bookings and show the approved QR token; Grid
- *          Operators can cancel bookings on a prosumer's behalf.
+ *          Operators can cancel bookings on a prosumer's behalf. The booking form offers the station's
+ *          published booking slots for the chosen day as quick picks.
  *          All window/notice/capacity rules are enforced by the API; errors are shown as returned.
  * Project: Smart Solar Microgrid Trading System - Web Application
  * Module: SE4040 Enterprise Application Development - Assignment 1
@@ -11,8 +12,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
-import { nodesApi, reservationsApi } from "../api/endpoints";
-import type { Reservation, ReservationStatus } from "../api/types";
+import { nodesApi, reservationsApi, slotsApi } from "../api/endpoints";
+import type { BookingSlot, Reservation, ReservationStatus } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 import { EmptyRow, LoadingRow, StatusBadge } from "../components/Badges";
 import { BusyButton } from "../components/BusyButton";
@@ -25,6 +26,9 @@ import { CiBarcode, CiCircleCheck, CiCirclePlus, CiCircleRemove, CiEdit } from "
 
 const STATUSES: ReservationStatus[] = ["Pending", "Approved", "Completed", "Cancelled"];
 const BOOKING_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+
+// HH:mm in local time.
+const hhmm = (iso: string) => new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
 
 interface Filters {
   status: ReservationStatus | "";
@@ -82,6 +86,17 @@ export function BookingsPage() {
   const [validated, setValidated] = useState(false);
   const [saving, setSaving] = useState(false);
   const [qrBooking, setQrBooking] = useState<Reservation | null>(null);
+
+  // Published booking slots at the chosen station on the chosen day, offered as quick picks.
+  const formNodeId = form?.nodeId ?? "";
+  const formDay = form?.slot.slice(0, 10) ?? "";
+  const { data: daySlots } = useApiData(
+    () =>
+      formNodeId && formDay
+        ? slotsApi.list({ nodeId: formNodeId, from: dayStartIso(formDay), to: dayEndIso(formDay) })
+        : Promise.resolve<BookingSlot[]>([]),
+    [formNodeId, formDay],
+  );
 
   const activeNodes = useMemo(
     () => (nodes ?? []).filter((n) => n.isActive || n.id === form?.nodeId),
@@ -376,6 +391,30 @@ export function BookingsPage() {
               />
               <div className="form-text">Within the next 7 days.</div>
             </div>
+            {daySlots && daySlots.length > 0 && (
+              <div className="mt-3">
+                <div className="form-label mb-2">Published slots on this day</div>
+                <div className="d-flex flex-wrap gap-2">
+                  {daySlots.map((s) => {
+                    const chosen = form.slot ? new Date(form.slot) : null;
+                    const selected = !!chosen && chosen >= new Date(s.startTime) && chosen < new Date(s.endTime);
+                    const closed = s.available <= 0 || new Date(s.endTime) <= now;
+                    return (
+                      <button
+                        type="button"
+                        key={s.id}
+                        className={`btn btn-sm ${selected ? "btn-primary" : "btn-outline-secondary"}`}
+                        disabled={closed && !selected}
+                        onClick={() => setForm({ ...form, slot: toLocalInput(s.startTime) })}
+                      >
+                        {hhmm(s.startTime)} - {hhmm(s.endTime)} · {s.available > 0 ? `${s.available} free` : "Full"}
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="form-text">This station only takes bookings inside its published slots.</div>
+              </div>
+            )}
           </>
         )}
       </Modal>
