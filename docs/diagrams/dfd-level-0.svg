@@ -1,35 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="700" viewBox="0 0 1500 700">
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="860" viewBox="0 0 1100 860">
 <defs>
   <marker id="arrow" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3A3A38"/></marker>
   <marker id="arrowStart" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3A3A38"/></marker>
 </defs>
 <rect width="100%" height="100%" fill="#FFFFFF"/>
 
-<path d="M280.0,190.0 L630.0,300.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
-<path d="M615.0,335.0 L280.0,225.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
-<path d="M280.0,555.0 L610.0,445.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
-<path d="M628.0,470.0 L280.0,585.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
-<path d="M1220.0,360.0 L900.0,360.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
-<path d="M900.0,400.0 L1220.0,400.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
-<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="750" y="34" font-size="20" font-weight="700" fill="#0B0B0B">Data flow diagram - level 0 (context)</tspan></text>
-<circle cx="750" cy="380" r="150" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.8"/>
-<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="750" y="350.75" font-size="15" font-weight="700" fill="#0B0B0B">0</tspan><tspan x="750" y="370.25" font-size="19" font-weight="700" fill="#0B0B0B">SolarGrid</tspan><tspan x="750" y="389.75" font-size="19" font-weight="700" fill="#0B0B0B">System</tspan><tspan x="750" y="409.25" font-size="13" font-weight="400" fill="#5F5F5B">(Web API + MongoDB)</tspan></text>
-<rect x="60" y="160" width="220" height="80" rx="0" fill="#F5F5F3" stroke="#0B0B0B" stroke-width="1.6"/>
-<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="170" y="200" font-size="17" font-weight="700" fill="#0B0B0B">Backoffice</tspan></text>
-<rect x="60" y="520" width="220" height="80" rx="0" fill="#F5F5F3" stroke="#0B0B0B" stroke-width="1.6"/>
-<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="170" y="560" font-size="17" font-weight="700" fill="#0B0B0B">Grid Operator</tspan></text>
-<rect x="1220" y="340" width="220" height="80" rx="0" fill="#F5F5F3" stroke="#0B0B0B" stroke-width="1.6"/>
-<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="1330" y="380" font-size="17" font-weight="700" fill="#0B0B0B">Prosumer</tspan></text>
-<rect x="293.7" y="189.6" width="287.6" height="39.800000000000004" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
-<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="437.5" y="201.05">staff, prosumer, station &amp; slot details;</tspan><tspan x="437.5" y="217.95000000000002">booking changes, approvals</tspan></text>
-<rect x="314.51" y="288.6" width="232.48000000000002" height="39.800000000000004" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
-<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="430.75" y="300.05">booking lists, dashboard counts,</tspan><tspan x="430.75" y="316.95">QR tokens, validation messages</tspan></text>
-<rect x="322.595" y="455.6" width="211.81" height="39.800000000000004" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
-<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="428.5" y="467.05">battery slots, booking slots,</tspan><tspan x="428.5" y="483.95">scanned QR token</tspan></text>
-<rect x="330.69500000000005" y="545.8" width="211.81" height="22.900000000000002" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
-<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="436.6" y="557.25">bookings, verification result</tspan></text>
-<rect x="978.21" y="312.1" width="163.58" height="39.800000000000004" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
-<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1060" y="323.55">registration, profile,</tspan><tspan x="1060" y="340.45">booking requests</tspan></text>
-<rect x="936.87" y="410.1" width="246.26000000000002" height="39.800000000000004" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
-<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5F5F5B"><tspan x="1060" y="421.55">slot availability, booking status,</tspan><tspan x="1060" y="438.45">summary, transaction QR</tspan></text>
+<path d="M245.6,188.0 L451.5,346.4" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M432.0,371.7 L193.2,188.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M245.6,712.0 L451.5,553.6" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M432.0,528.3 L193.2,712.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M874.4,188.0 L668.5,346.4" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M688.0,371.7 L926.8,188.0" fill="none" stroke="#3A3A38" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="550" y="34" font-size="22" font-weight="700" fill="#0B0B0B">Data flow diagram - level 0 (context)</tspan></text>
+<circle cx="560" cy="450" r="150" fill="#FFFFFF" stroke="#0B0B0B" stroke-width="1.8"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="560" y="420.75" font-size="15" font-weight="700" fill="#0B0B0B">0</tspan><tspan x="560" y="440.25" font-size="21" font-weight="700" fill="#0B0B0B">SolarGrid</tspan><tspan x="560" y="459.75" font-size="21" font-weight="700" fill="#0B0B0B">System</tspan><tspan x="560" y="479.25" font-size="14" font-weight="400" fill="#5F5F5B">(Web API + MongoDB)</tspan></text>
+<rect x="55" y="112" width="230" height="76" rx="0" fill="#F5F5F3" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="170" y="150" font-size="18" font-weight="700" fill="#0B0B0B">Backoffice</tspan></text>
+<rect x="55" y="712" width="230" height="76" rx="0" fill="#F5F5F3" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="170" y="750" font-size="18" font-weight="700" fill="#0B0B0B">Grid Operator</tspan></text>
+<rect x="835" y="112" width="230" height="76" rx="0" fill="#F5F5F3" stroke="#0B0B0B" stroke-width="1.6"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif"><tspan x="950" y="150" font-size="18" font-weight="700" fill="#0B0B0B">Prosumer</tspan></text>
+<rect x="313.79416577157957" y="192.02093432662218" width="226.65" height="45" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#5F5F5B"><tspan x="427.11916577157956" y="204.77093432662218">staff, prosumer, station</tspan><tspan x="427.11916577157956" y="224.27093432662218">and slot details; approvals</tspan></text>
+<rect x="82.52913829518454" y="265.3239149555041" width="202.8" height="45" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#5F5F5B"><tspan x="183.92913829518454" y="278.0739149555041">booking lists, dashboard</tspan><tspan x="183.92913829518454" y="297.5739149555041">counts, QR tokens</tspan></text>
+<rect x="315.8441657715796" y="658.9790656733778" width="242.55" height="45" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#5F5F5B"><tspan x="437.11916577157956" y="671.7290656733778">battery slots, booking slots,</tspan><tspan x="437.11916577157956" y="691.2290656733778">scanned QR token</tspan></text>
+<rect x="117.18156405529439" y="590.0011421521037" width="163.05" height="45" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#5F5F5B"><tspan x="198.7065640552944" y="602.7511421521037">bookings,</tspan><tspan x="198.7065640552944" y="622.2511421521037">verification result</tspan></text>
+<rect x="793.2538903266513" y="266.7724296356753" width="186.9" height="45" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#5F5F5B"><tspan x="886.7038903266514" y="279.5224296356753">registration, profile,</tspan><tspan x="886.7038903266514" y="299.0224296356753">booking requests</tspan></text>
+<rect x="599.9998715444309" y="214.18621507887684" width="218.70000000000002" height="45" rx="3" fill="#FFFFFF" fill-opacity="0.94"/>
+<text text-anchor="middle" dominant-baseline="central" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#5F5F5B"><tspan x="709.3498715444309" y="226.93621507887684">slot availability, status,</tspan><tspan x="709.3498715444309" y="246.43621507887684">summary, transaction QR</tspan></text>
 </svg>
