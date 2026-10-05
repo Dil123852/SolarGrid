@@ -52,6 +52,7 @@ namespace SolarGrid.Api
             app.MapControllers();
 
             await app.InitialiseDatabaseAsync();
+            await app.SeedTestUsersAsync();
             await app.RunAsync();
         }
     }
